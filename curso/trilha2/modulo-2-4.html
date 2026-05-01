@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 2.4 — Memória, Contexto, Sandbox e Worktrees | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    code, pre, .mono{font-family:'JetBrains Mono', monospace;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-blue-400{color:#2563eb;}
+    html:not(.dark) .bg-blue-500\/20{background-color:rgba(37,99,235,0.12);}
+    html:not(.dark) .bg-blue-500\/10{background-color:rgba(37,99,235,0.08);}
+    html:not(.dark) .border-blue-500\/30{border-color:rgba(37,99,235,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2 — A Linguagem dos Agentes</a><span>/</span>
+      <span class="text-blue-400">Módulo 2.4</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.4</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🪟 Memória, Contexto, Sandbox e Worktrees</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">A camada operacional do agente: como gerenciar a janela de contexto, salvar memória persistente, escolher o sandbox certo e isolar tarefas em worktrees para multiagente real sem conflito.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Core</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Ops</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🪟 Janela de Contexto</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A janela de contexto é <strong class="text-blue-400">o que o agente lembra na sessão atual</strong>. GPT 5.5 Codex tem 1 milhão de tokens. Mas mesmo com isso, ela enche — e Codex compacta automaticamente quando enche. Saber ler os sinais de degradação é importante.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📊 Como o contexto preenche</h3>
+        <svg viewBox="0 0 500 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="50" width="460" height="40" rx="4" fill="#1f2937" stroke="#374151" stroke-width="1"/>
+          <rect x="20" y="50" width="80" height="40" fill="#3b82f6" fill-opacity="0.7"/>
+          <rect x="100" y="50" width="60" height="40" fill="#8b5cf6" fill-opacity="0.7"/>
+          <rect x="160" y="50" width="40" height="40" fill="#ec4899" fill-opacity="0.7"/>
+          <rect x="200" y="50" width="200" height="40" fill="#10b981" fill-opacity="0.7"/>
+          <rect x="400" y="50" width="80" height="40" fill="#374151" stroke="#6b7280" stroke-dasharray="3,2"/>
+          <text x="60" y="35" text-anchor="middle" fill="#3b82f6" font-size="9" font-weight="bold">AGENTS.md</text>
+          <text x="130" y="35" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">Skills</text>
+          <text x="180" y="35" text-anchor="middle" fill="#ec4899" font-size="9" font-weight="bold">Tools</text>
+          <text x="300" y="35" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">Conversa atual</text>
+          <text x="440" y="35" text-anchor="middle" fill="#9ca3af" font-size="9">Folga</text>
+          <text x="60" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">~50k</text>
+          <text x="130" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">~30k</text>
+          <text x="180" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">~20k</text>
+          <text x="300" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">~600k (cresce)</text>
+          <text x="440" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">~300k</text>
+          <text x="20" y="155" fill="#6b7280" font-size="9">0</text>
+          <text x="475" y="155" fill="#6b7280" font-size="9" text-anchor="end">1M tokens</text>
+          <text x="250" y="170" text-anchor="middle" fill="#6b7280" font-size="10">Quando "Conversa atual" passa de 600k, Codex compacta o histórico antigo</text>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🚨 Sinais de contexto degradado</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠️</span><span><strong class="text-neutral-100">Esquecimento de regra recente</strong> — agente reintroduz padrão que você corrigiu há 30 mensagens.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠️</span><span><strong class="text-neutral-100">Contradição com decisão anterior</strong> — sugere abordagem que vocês tinham descartado juntos.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠️</span><span><strong class="text-neutral-100">Perda de tom</strong> — começou direto, virou prolixo e pedindo confirmação a cada passo.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">⚠️</span><span><strong class="text-neutral-100">Re-leitura desnecessária</strong> — abre arquivos que já estavam no contexto.</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Quando abrir nova sessão</h3>
+        <p class="text-neutral-300">Sentiu 2 desses sinais? <strong>Faça handoff e abra sessão nova</strong>. Peça ao agente: <em>"resuma o que foi feito, decisões, próximos passos"</em>. Cole isso na nova sessão. Você perde 2 minutos e ganha 2 horas de produtividade limpa.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">💾 Memory Persistente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Memória que <strong class="text-blue-400">sobrevive entre sessões</strong>. Você salva fatos sobre você (preferências, atalhos, padrões); o agente recupera no próximo chat. Mas memória inchada vira ruído — gerenciar é parte do método.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <h4 class="font-bold text-emerald-400 mb-3">✅ Bom de salvar</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Stack preferida (Bun, Tailwind, Convex)</li>
+            <li>• Tom de comunicação (direto, sem emoji)</li>
+            <li>• Cliente recorrente e contexto comercial</li>
+            <li>• Atalhos pessoais ("PR padrão" = template X)</li>
+            <li>• Fuso horário, idioma, formato de data</li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ Ruim de salvar</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Detalhes de tarefa pontual</li>
+            <li>• Erros temporários ("hoje o servidor caiu")</li>
+            <li>• Decisões de projeto específico (vão pro AGENTS.md)</li>
+            <li>• Rascunhos de texto</li>
+            <li>• Senhas, tokens, secrets (NUNCA)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">comandos de memória — Codex</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-emerald-400">você</span>: lembre que eu uso Bun em todos os projetos novos
+<span class="text-blue-400">agente</span>: ✓ salvo em memória global
+
+<span class="text-emerald-400">você</span>: o que você lembra sobre mim?
+<span class="text-blue-400">agente</span>: 1. Usa Bun em projetos novos
+            2. Tom direto, sem emoji
+            3. Cliente principal: clínicas de estética em SP
+            4. Fuso BRT, formato data DD/MM/AAAA
+
+<span class="text-emerald-400">você</span>: esquece o item 3, mudei de nicho
+<span class="text-blue-400">agente</span>: ✓ removido</code></pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Auditoria mensal</h3>
+        <p class="text-neutral-300">Toda primeira segunda do mês, peça: <em>"liste tudo o que você lembra sobre mim"</em>. Leia. <strong>O que está obsoleto, mande remover</strong>. Memória limpa = agente afiado. Memória poluída = sugestões fora de contexto.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔒 Sandbox: Read-only / Edit / Full-access</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Codex permite restringir o que o agente faz no sistema: <strong class="text-blue-400">só ler, editar arquivos, ou ter acesso total</strong> (rodar comandos, instalar). Calibrar por contexto é segurança operacional.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <div class="text-3xl mb-2">📖</div>
+          <h4 class="font-bold text-emerald-400 mb-2">Read-only</h4>
+          <p class="text-xs text-neutral-300 mb-2">Lê arquivos. Nada além disso.</p>
+          <div class="text-xs text-neutral-400">
+            <span class="text-emerald-400 font-semibold">Quando:</span> auditoria, code review, exploração de codebase desconhecida.
+          </div>
+        </div>
+        <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-5">
+          <div class="text-3xl mb-2">✏️</div>
+          <h4 class="font-bold text-amber-400 mb-2">Edit</h4>
+          <p class="text-xs text-neutral-300 mb-2">Lê + edita arquivos. Não roda comando.</p>
+          <div class="text-xs text-neutral-400">
+            <span class="text-amber-400 font-semibold">Quando:</span> código de cliente, projeto sensível, ambiente compartilhado.
+          </div>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <div class="text-3xl mb-2">🚀</div>
+          <h4 class="font-bold text-red-400 mb-2">Full-access</h4>
+          <p class="text-xs text-neutral-300 mb-2">Tudo: edita, roda shell, instala, deploya.</p>
+          <div class="text-xs text-neutral-400">
+            <span class="text-red-400 font-semibold">Quando:</span> projeto novo, sandbox isolada, worktree dedicada.
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">⚠️ Riscos de full-access em código de cliente</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Agente roda <code class="mono text-blue-400">rm -rf node_modules</code> e tira a app do ar.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Instala lib aleatória que infla bundle e quebra deploy de produção.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Faz <code class="mono text-blue-400">git push --force</code> em <code class="mono text-blue-400">main</code> e perde commits.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-red-400 mt-0.5">→</span><span>Roda <code class="mono text-blue-400">drop table</code> em migration sem rollback testado.</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Heurística do blast radius</h3>
+        <p class="text-neutral-300">Pergunta: <strong>"se o agente fizer besteira agora, o que quebra?"</strong>. Se a resposta é "nada — é projeto novo na minha pasta": full-access. Se é "produção do meu cliente paga R$ 197/mês": edit. Se é "código do cliente de outra agência": read-only.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🌳 Worktrees do Git</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed"><code class="mono text-blue-400">git worktree add</code> cria <strong class="text-blue-400">uma nova pasta com uma branch checada</strong>. Cada agente trabalha numa worktree própria. Sem stash, sem trocar branch, sem conflito.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📁 Layout: 4 agentes, 4 worktrees</h3>
+        <div class="mono text-sm space-y-1">
+          <div class="text-neutral-300">📁 ~/projetos/inboxai/ <span class="text-neutral-500"># worktree principal — main</span></div>
+          <div class="text-neutral-300">📁 ~/projetos/inboxai-feature-auth/ <span class="text-neutral-500"># agente 1 — feat/auth</span></div>
+          <div class="text-neutral-300">📁 ~/projetos/inboxai-feature-billing/ <span class="text-neutral-500"># agente 2 — feat/billing</span></div>
+          <div class="text-neutral-300">📁 ~/projetos/inboxai-bugfix-email/ <span class="text-neutral-500"># agente 3 — fix/email-parser</span></div>
+          <div class="text-neutral-300">📁 ~/projetos/inboxai-refactor-db/ <span class="text-neutral-500"># agente 4 — refactor/queries</span></div>
+        </div>
+      </div>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">terminal — comandos práticos</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-neutral-500"># criar uma worktree em pasta nova com branch nova</span>
+<span class="text-emerald-400">$</span> git worktree add ../inboxai-feature-auth feat/auth
+
+<span class="text-neutral-500"># listar worktrees</span>
+<span class="text-emerald-400">$</span> git worktree list
+  /home/nei/projetos/inboxai            abc1234 [main]
+  /home/nei/projetos/inboxai-feature-auth   def5678 [feat/auth]
+  /home/nei/projetos/inboxai-feature-billing 9876fed [feat/billing]
+
+<span class="text-neutral-500"># quando terminar, remover</span>
+<span class="text-emerald-400">$</span> git worktree remove ../inboxai-feature-auth
+
+<span class="text-neutral-500"># prune se algo ficou orfao</span>
+<span class="text-emerald-400">$</span> git worktree prune</code></pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Por que isso é game changer</h3>
+        <p class="text-neutral-300">Sem worktree, multiagente é teoria. <strong>Com worktree, é prática diária</strong>: você abre 4 abas do app Codex, cada uma apontando pra uma pasta diferente, cada uma com um agente trabalhando em paralelo. À noite, faz merge das 4 branches. Seu output 4x.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🤖 Sub-agents</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Sub-agente é um <strong class="text-blue-400">agente filho que recebe uma tarefa fechada e devolve o resultado</strong>. Útil para paralelismo e isolamento de contexto. Tem overhead — saber a hora certa é a diferença entre 4x mais rápido e 2x mais lento.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🎯 Quando delegar a um sub-agent</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-neutral-400 border-b border-dark-600">
+              <th class="py-2">Cenário</th>
+              <th class="py-2 text-center">Delegar?</th>
+              <th class="py-2">Por quê</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-700">
+            <tr><td class="py-2 text-neutral-300">Pesquisar 5 arquivos em paralelo</td><td class="py-2 text-center text-emerald-400">✓ sim</td><td class="py-2 text-neutral-400">Paralelismo real, ganha tempo</td></tr>
+            <tr><td class="py-2 text-neutral-300">Tarefa que polui contexto principal</td><td class="py-2 text-center text-emerald-400">✓ sim</td><td class="py-2 text-neutral-400">Sub-agent isola, devolve só resumo</td></tr>
+            <tr><td class="py-2 text-neutral-300">Auditoria longa de codebase</td><td class="py-2 text-center text-emerald-400">✓ sim</td><td class="py-2 text-neutral-400">Resultado caberia em 30k tokens; resumo em 1k</td></tr>
+            <tr><td class="py-2 text-neutral-300">Editar 1 arquivo simples</td><td class="py-2 text-center text-red-400">✗ não</td><td class="py-2 text-neutral-400">Overhead de delegar &gt; benefício</td></tr>
+            <tr><td class="py-2 text-neutral-300">Tarefa interativa que precisa de você</td><td class="py-2 text-center text-red-400">✗ não</td><td class="py-2 text-neutral-400">Sub-agent não te pergunta, vai assumir</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">⚖️ Custo do sub-agent</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">⏱️</span><span><strong class="text-neutral-100">Setup:</strong> ~5–10s para spin-up. Tarefa de 30s não compensa.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">📡</span><span><strong class="text-neutral-100">Sem contexto compartilhado:</strong> precisa receber tudo no prompt inicial.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-amber-400 mt-0.5">💸</span><span><strong class="text-neutral-100">Custo de tokens:</strong> sub-agent reabre contexto, AGENTS.md, skills.</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span><strong class="text-neutral-100">Ganho:</strong> isolamento + paralelismo + contexto principal limpo.</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Regra dos 5 minutos</h3>
+        <p class="text-neutral-300">Tarefa que demoraria <strong>menos de 5 minutos</strong> no agente principal: faça lá. Tarefa que demoraria <strong>mais de 5 minutos</strong> e dá pra paralelizar ou poluiria contexto: delega pra sub-agent. É a heurística mais simples e funciona em 90% dos casos.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">⚠️ Erros Caros Multiagente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Os três acidentes clássicos. Cada um pode <strong class="text-blue-400">custar horas de retrabalho ou pior</strong> — perda de dados de cliente. Reconhecer o padrão antes de cometer é proteção barata.</p>
+
+      <div class="space-y-4 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">💥</span> Erro 1: Dois agentes na mesma branch</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="text-red-400 font-semibold mb-1">O que acontece</div>
+              <p class="text-neutral-300">Dois agentes editam, fazem commit e push. O segundo recebe rejeição ou pior — sobrescreve trabalho.</p>
+            </div>
+            <div>
+              <div class="text-emerald-400 font-semibold mb-1">Prevenção</div>
+              <p class="text-neutral-300">1 agente = 1 worktree = 1 branch. Sempre. Sem exceção.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">💥</span> Erro 2: Dois agentes no mesmo arquivo</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="text-red-400 font-semibold mb-1">O que acontece</div>
+              <p class="text-neutral-300">Mesmo em worktrees diferentes, se ambos editam <code class="mono text-xs">app/page.tsx</code>, o merge vira pesadelo. Você perde 30 minutos resolvendo conflito.</p>
+            </div>
+            <div>
+              <div class="text-emerald-400 font-semibold mb-1">Prevenção</div>
+              <p class="text-neutral-300">Quebra a tarefa por área. Agente A em <code class="mono text-xs">/billing</code>, agente B em <code class="mono text-xs">/dashboard</code>. Sem overlap.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-3 flex items-center"><span class="mr-2">💥</span> Erro 3: Sandbox errado deleta coisa</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+            <div>
+              <div class="text-red-400 font-semibold mb-1">O que acontece</div>
+              <p class="text-neutral-300">Agente em full-access "limpa" arquivos achando que são lixo — apaga <code class="mono text-xs">.env</code> ou pasta de uploads do cliente.</p>
+            </div>
+            <div>
+              <div class="text-emerald-400 font-semibold mb-1">Prevenção</div>
+              <p class="text-neutral-300">Lista <code class="mono text-xs">.env*</code>, <code class="mono text-xs">/uploads</code>, <code class="mono text-xs">/data</code> em "Não Faça" do AGENTS.md. Use edit (não full) em código de cliente.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🛡️ Checklist anti-acidente multiagente</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Cada agente tem worktree própria</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Cada agente tem branch própria, nomeada por feature</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Tarefas particionadas por área (sem overlap de arquivos)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Sandbox calibrado por blast radius do projeto</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>AGENTS.md tem seção "Não Faça" listando paths sensíveis</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Pre-commit hook bloqueia <code class="mono text-blue-400">.env*</code> e <code class="mono text-blue-400">*.key</code></span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">✓</span><span>Backup do <code class="mono text-blue-400">main</code> antes de mergear sessão multiagente</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A regra do "primeiro multiagente"</h3>
+        <p class="text-neutral-300">No seu primeiro projeto multiagente, faça <strong>2 agentes em paralelo, não 4</strong>. Aprenda a coreografia. Quando 2 agentes funcionam fluidos, suba pra 4. Pular direto pra 4 multiplica os erros antes de você desenvolver intuição.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Janela de contexto enche e degrada</strong><span class="text-neutral-400"> — reconheça os sinais (esquecimento, contradição, prolixidade) e abra sessão nova com handoff.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Memory persistente: salve preferências, não tarefas</strong><span class="text-neutral-400"> — auditoria mensal mantém o agente afiado.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Sandbox por blast radius</strong><span class="text-neutral-400"> — read-only para auditoria, edit para cliente, full só em pasta isolada própria.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Worktrees são a base do multiagente</strong><span class="text-neutral-400"> — 1 agente = 1 worktree = 1 branch, sempre.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Sub-agent: regra dos 5 minutos</strong><span class="text-neutral-400"> — tarefa &gt; 5min e paralelizável → delega; senão, faz no agente principal.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Erros caros multiagente: mesma branch, mesmo arquivo, sandbox errado</strong><span class="text-neutral-400"> — checklist anti-acidente previne tudo.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Próxima Trilha:</h3>
+          <p class="text-neutral-300">Trilha 3 — Frontend Agentic. Componentes, design system, animações, browser embutido pra QA visual, deploy de landing em 1h. A linguagem dos agentes vira produto vendável.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Reverse + Plan + DoD</a>
+          <a href="../trilha3/index.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">Próximo: Trilha 3 →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 2.4 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 3.1 — Image Gen 2: 5 Direções de UI Antes de Codar | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-purple-400{color:#7c3aed;}
+    html:not(.dark) .bg-purple-500\/20{background-color:rgba(124,58,237,0.12);}
+    html:not(.dark) .bg-purple-500\/10{background-color:rgba(124,58,237,0.08);}
+    html:not(.dark) .border-purple-500\/30{border-color:rgba(124,58,237,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3 — Frontend</a><span>/</span>
+      <span class="text-purple-400">Módulo 3.1</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎨 Image Gen 2: 5 Direções de UI Antes de Codar</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">UI errada custa horas pra refatorar; imagem custa segundos pra trocar. O fluxo de gerar 5 mockups com hierarquia, paleta e densidade distintas — escolher a direção — só então transformar em Next.js + Tailwind.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Inter</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Design</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🤔 Por que Gerar Imagem Antes de Código</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A pergunta certa antes de qualquer projeto frontend não é "que stack vou usar?" É <strong class="text-purple-400">"qual versão do que estou construindo é a certa?"</strong> — e essa pergunta se responde em pixels, não em código.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⏱️ Custo de Iteração por Estágio</h3>
+        <svg viewBox="0 0 500 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <line x1="50" y1="20" x2="50" y2="150" stroke="#374151" stroke-width="1"/>
+          <line x1="50" y1="150" x2="480" y2="150" stroke="#374151" stroke-width="1"/>
+          <text x="40" y="25" text-anchor="end" fill="#6b7280" font-size="9">8h</text>
+          <text x="40" y="80" text-anchor="end" fill="#6b7280" font-size="9">30min</text>
+          <text x="40" y="135" text-anchor="end" fill="#6b7280" font-size="9">30s</text>
+          <text x="100" y="170" fill="#6b7280" font-size="9">Imagem</text>
+          <text x="220" y="170" fill="#6b7280" font-size="9">Protótipo HTML</text>
+          <text x="380" y="170" fill="#6b7280" font-size="9">Código produção</text>
+          <rect x="80" y="135" width="60" height="15" fill="#7c3aed" opacity="0.8"/>
+          <rect x="200" y="80" width="80" height="70" fill="#a78bfa" opacity="0.7"/>
+          <rect x="360" y="20" width="80" height="130" fill="#f87171" opacity="0.7"/>
+          <text x="110" y="148" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">barato</text>
+          <text x="240" y="120" text-anchor="middle" fill="#fff" font-size="9">médio</text>
+          <text x="400" y="90" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold">caro</text>
+        </svg>
+        <p class="text-sm text-neutral-400 mt-4">Trocar uma imagem custa segundos. Refatorar código de produção custa horas. <strong class="text-purple-400">Faça as decisões caras no estágio barato.</strong></p>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">💡 O princípio do "barato falha, caro acerta"</h3>
+        <p class="text-neutral-300">Em qualquer pipeline criativo, você quer falhar muito no estágio barato e errar pouco no estágio caro. Imagem é o estágio mais barato que existe — gere 5, escolha 1, ainda gastou menos tempo do que escrever a primeira linha de JSX. <strong>Isso não é processo de design, é gestão de risco.</strong></p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📝 Prompt Template para 5 Direções</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Pedir "5 opções de UI" sem especificar produz 5 quase-clones. <strong class="text-purple-400">A diversidade tem que ser forçada por eixo</strong> — hierarquia, paleta, densidade — pra você ter um espaço de decisão real.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">📋 Template autoral — copia e usa</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>Gere 5 mockups de UI para um {tipo de produto} chamado {nome}.
+Funcionalidade central: {descrição em 1 frase}.
+
+Cada mockup deve ser RADICALMENTE DIFERENTE nos seguintes eixos:
+
+1. DENSO &amp; PROFISSIONAL
+   - Hierarquia: 4 níveis tipográficos
+   - Paleta: dark mode, neutros + 1 accent saturado
+   - Densidade: alta — operador power-user
+
+2. LIMPO &amp; ARSEAL
+   - Hierarquia: 2 níveis, muito espaço em branco
+   - Paleta: light mode, beges quentes + accent terroso
+   - Densidade: baixa — foco em uma ação por tela
+
+3. PLAYFUL &amp; FRIENDLY
+   - Hierarquia: bordas arredondadas, ilustrações
+   - Paleta: pastéis suaves, accent vibrante
+   - Densidade: média, com micro-animações sugeridas
+
+4. ENTERPRISE &amp; SÓBRIO
+   - Hierarquia: tabelas, dropdowns, breadcrumbs
+   - Paleta: azul corporativo, cinzas
+   - Densidade: alta, sem decoração
+
+5. MOBILE-FIRST &amp; TÁTIL
+   - Hierarquia: bottom nav, cards grandes
+   - Paleta: vibrante, fundo escuro
+   - Densidade: baixa, touch targets 44px+
+
+Para cada um, descreva também:
+- Sensação ao primeiro olhar (1 frase)
+- Que tipo de cliente assina embaixo</code></pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 Por que esse template funciona</h3>
+        <p class="text-neutral-300">Ele força a IA a explorar o <strong>espaço de design real</strong> em vez de variar superficialmente. As 5 direções não são "bonitas vs feias" — são <strong>cenários de produto distintos</strong>, e geralmente pelo menos 2 te surpreendem com algo que você não consideraria sozinho.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🎯 Critérios de Avaliação</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Sem critério, escolher entre 5 mockups vira "qual é mais bonito". Com critério, vira <strong class="text-purple-400">decisão técnica defensável</strong> que sobrevive ao primeiro contato com o cliente.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Critério</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Pergunta-teste</th>
+              <th class="text-center p-3 text-neutral-400 font-semibold">Peso</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-purple-400 font-semibold">Densidade de info</td><td class="p-3 text-neutral-300">Operador atende 200 conv/dia consegue trabalhar?</td><td class="p-3 text-center text-purple-400">Alto</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">Hierarquia visual</td><td class="p-3 text-neutral-300">Em 1 segundo eu sei o que olhar primeiro?</td><td class="p-3 text-center text-purple-400">Alto</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">Consistência interna</td><td class="p-3 text-neutral-300">Os 3 botões parecem da mesma família?</td><td class="p-3 text-center text-purple-400">Médio</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">Clareza de CTA</td><td class="p-3 text-neutral-300">Qual a próxima ação está óbvia?</td><td class="p-3 text-center text-purple-400">Alto</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">Escalabilidade dark</td><td class="p-3 text-neutral-300">Inverte cores e ainda funciona?</td><td class="p-3 text-center text-purple-400">Médio</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">Mobile readiness</td><td class="p-3 text-neutral-300">Quebra em 375px sem virar lixo?</td><td class="p-3 text-center text-purple-400">Médio</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-3">✅ Checklist rápido — 30 segundos por mockup</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <div class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">☐</span><span class="text-neutral-300">Identifico o título principal sem procurar</span></div>
+          <div class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">☐</span><span class="text-neutral-300">Sei qual é a ação primária e a secundária</span></div>
+          <div class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">☐</span><span class="text-neutral-300">Espaço em branco parece intencional, não preguiça</span></div>
+          <div class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">☐</span><span class="text-neutral-300">Cores têm propósito semântico (não só decoração)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">☐</span><span class="text-neutral-300">Tipografia segue 3-4 tamanhos no máximo</span></div>
+          <div class="flex items-start space-x-2"><span class="text-purple-400 mt-0.5">☐</span><span class="text-neutral-300">Eu mostraria isso pro cliente sem vergonha</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🌐 Referências Visuais para Inbox</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Você não inventa do zero. Copia o que funciona, mistura, adapta. <strong class="text-purple-400">Saber quais referências valem o estudo</strong> poupa semanas de tentativa e erro.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-bold text-purple-400">Intercom</h4>
+            <span class="text-xs text-neutral-500">densidade alta</span>
+          </div>
+          <p class="text-sm text-neutral-300 mb-3">Padrão-ouro de inbox profissional. Lateral esquerda super densa, thread central, painel direito com tudo do contato.</p>
+          <div class="text-xs text-purple-400">📌 Copiar: hierarquia da lista de conversas, badge de canal, painel lateral.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-bold text-purple-400">Crisp</h4>
+            <span class="text-xs text-neutral-500">limpeza</span>
+          </div>
+          <p class="text-sm text-neutral-300 mb-3">Visual mais leve, menos info por tela. Bom pra quem atende menos volume mas com cuidado maior por conversa.</p>
+          <div class="text-xs text-purple-400">📌 Copiar: balões de mensagem, espaço em branco, microcopy.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-bold text-purple-400">Drift</h4>
+            <span class="text-xs text-neutral-500">CTA agressivo</span>
+          </div>
+          <p class="text-sm text-neutral-300 mb-3">Pensado pra venda — botões grandes, atalhos de resposta rápida, integrações de calendário em destaque.</p>
+          <div class="text-xs text-purple-400">📌 Copiar: quick replies, agendar reunião inline, sugestões IA.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="flex items-center justify-between mb-3">
+            <h4 class="font-bold text-purple-400">HelpScout</h4>
+            <span class="text-xs text-neutral-500">foco humano</span>
+          </div>
+          <p class="text-sm text-neutral-300 mb-3">Estética email-like, parece carta. Bom pra suporte de produto onde tom calmo e respostas longas dominam.</p>
+          <div class="text-xs text-purple-400">📌 Copiar: thread em formato email, assinatura, anexos.</div>
+        </div>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🔍 Como estudar referência sem virar cópia</h3>
+        <p class="text-neutral-300">Abra cada uma, faça <strong>screenshot anotado</strong>, marque "isso funciona porque..." em 5–10 elementos. Você não está copiando UI — está construindo intuição. <strong>InboxAI vai pegar densidade do Intercom, balões do Crisp, quick replies do Drift</strong>. O remix é sua autoria.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">💻 Da Imagem ao Código</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A tradução imagem→código é onde mais se perde fidelidade. <strong class="text-purple-400">Prompt bem feito mantém 90% da intenção visual</strong>; mal feito, joga 50% fora e você passa o dia ajustando padding.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🛠️ Prompt de transformação imagem→código</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>Anexei a UI escolhida (Direção 1: densa &amp; profissional).
+
+Construa o frontend correspondente em:
+- Next.js 15 App Router + TypeScript
+- Tailwind v4 + shadcn/ui
+- Estrutura: app/inbox/page.tsx + components/inbox/*
+
+Decompose em componentes:
+1. &lt;ConversationList /&gt;          — coluna esquerda
+2. &lt;ConversationItem /&gt;          — cada linha da lista
+3. &lt;MessageThread /&gt;             — coluna central
+4. &lt;MessageBubble /&gt;             — cada balão
+5. &lt;ContactPanel /&gt;              — coluna direita
+
+Regras:
+- Sem dependências externas além das listadas
+- Tipos explícitos em todas as props
+- Mock data em lib/mock-conversations.ts
+- Dark mode pronto (usa apenas classes Tailwind semânticas)
+- Mobile: lista vira full-width, thread esconde
+
+Não implemente lógica de envio ainda — só estrutura visual + props.
+Termine listando o que ficou faltando vs a imagem.</code></pre>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ Prompt fraco</h4>
+          <p class="text-sm text-neutral-300 italic">"Faz esse design em React com Tailwind"</p>
+          <p class="text-xs text-neutral-400 mt-3">Resultado: 1 arquivo gigante, props genéricas, sem tipos, sem mobile. 4h ajustando.</p>
+        </div>
+        <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-5">
+          <h4 class="font-bold text-purple-400 mb-3">✅ Prompt forte</h4>
+          <p class="text-sm text-neutral-300 italic">Stack + decomposição + regras + critério de "faltou" no final.</p>
+          <p class="text-xs text-neutral-400 mt-3">Resultado: 5 componentes tipados, mock data isolado, mobile pensado. 30min de polish.</p>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> O segredo do "termine listando o que faltou"</h3>
+        <p class="text-neutral-300">Esse final do prompt é ouro. Em vez de você descobrir o que faltou rodando o app, o agente já lista — geralmente acerta 80% do gap. Você lê a lista, decide o que vale agora e o que vai pra Trilha 4.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🌗 Iterando: Dark Mode, Mobile, Paleta</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Mudar paleta no código é fácil; mudar layout não. <strong class="text-purple-400">Saber o que tentar na imagem e o que já está bom pra implementar</strong> evita iteração infinita e cliente pedindo "mais uma versãozinha".</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🔀 O que iterar onde</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-purple-900/20 rounded-lg p-4 border border-purple-500/30">
+            <div class="text-purple-400 font-bold text-sm mb-2">🖼️ ITERA NA IMAGEM</div>
+            <ul class="text-sm text-neutral-300 space-y-1">
+              <li>✓ Layout (3 colunas vs 2)</li>
+              <li>✓ Hierarquia (qual elemento domina)</li>
+              <li>✓ Densidade (info por tela)</li>
+              <li>✓ Vibe geral (sério vs playful)</li>
+              <li>✓ Sidebar à esquerda vs à direita</li>
+            </ul>
+          </div>
+          <div class="bg-blue-900/20 rounded-lg p-4 border border-blue-500/30">
+            <div class="text-blue-400 font-bold text-sm mb-2">💻 ITERA NO CÓDIGO</div>
+            <ul class="text-sm text-neutral-300 space-y-1">
+              <li>✓ Paleta exata (#7c3aed → #8b5cf6)</li>
+              <li>✓ Border radius (4px → 8px)</li>
+              <li>✓ Espaçamentos finos</li>
+              <li>✓ Dark mode toggle</li>
+              <li>✓ Microcopy</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🧪 Mockup ASCII — quando iterar volta pra imagem</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed">┌─────────┬──────────────────┬─────────┐
+│ Conv    │  Thread          │ Contato │
+│         │                  │         │
+│ ◉ Ana   │  ┌──────────┐    │  Avatar │
+│ ○ Joao  │  │ Mensagem │    │  Nome   │
+│ ○ Maria │  └──────────┘    │  Email  │
+│         │       ┌────────┐ │  Tags   │
+│         │       │ Resp.  │ │         │
+│         │       └────────┘ │  Notas  │
+│         │  [ Digitar... ]  │         │
+└─────────┴──────────────────┴─────────┘
+   1 fr        2 fr            1 fr</pre>
+        <p class="text-sm text-neutral-400 mt-3">Se você consegue desenhar assim em ASCII, está pronto pra código. Se ainda está duvidando da estrutura, <strong class="text-purple-400">volta pra imagem</strong>.</p>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 Regra do white-label</h3>
+        <p class="text-neutral-300">InboxAI vai ter clientes querendo a marca deles na cara. <strong>Estruture a paleta como design tokens</strong> (--color-accent, --color-bg-1) já no primeiro componente. Trocar marca depois = trocar 2 arquivos. Não estruturar = trocar 80.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Imagem antes de código é gestão de risco</strong><span class="text-neutral-400"> — falhe muito no estágio barato pra errar pouco no caro.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">5 direções com diversidade forçada</strong><span class="text-neutral-400"> — eixos de hierarquia, paleta e densidade evitam 5 quase-clones.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Critérios objetivos derrotam "qual é mais bonito"</strong><span class="text-neutral-400"> — checklist de 30 segundos por mockup torna decisão defensável.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Intercom, Crisp, Drift, HelpScout são patrimônio</strong><span class="text-neutral-400"> — remix do que funciona &gt; inventar do zero.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Prompt de tradução imagem→código com decomposição explícita</strong><span class="text-neutral-400"> — pede stack, componentes, regras e o "que faltou" no final.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Itera layout na imagem, paleta no código</strong><span class="text-neutral-400"> — design tokens desde o início destravam white-label.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">3.2 — Construindo o Inbox Unificado: três colunas, componentes React, estado com Zustand/Convex, real-time mockado, multi-canal e atalhos de teclado.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha 3</a>
+          <a href="modulo-3-2.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Próximo: Inbox Unificado →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 3.1 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4.1 — Stack + Modelagem do Banco | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-amber-400{color:#92400e;}
+    html:not(.dark) .bg-amber-500\/20{background-color:rgba(146,64,14,0.12);}
+    html:not(.dark) .bg-amber-500\/10{background-color:rgba(146,64,14,0.08);}
+    html:not(.dark) .border-amber-500\/30{border-color:rgba(146,64,14,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+    pre{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4 — Backend</a><span>/</span>
+      <span class="text-amber-400">Módulo 4.1</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🗄️ Stack + Modelagem do Banco</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Convex, Supabase ou Postgres puro? Modele as tabelas do InboxAI, defina índices, faça migrations sem dor e popule dados de teste — base sólida pra escalar pra 100 clientes.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">75</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Backend</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🤔 Convex vs Supabase vs Postgres puro</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A escolha do banco no dia zero define <strong class="text-amber-400">o quanto você vai sofrer nos próximos 6 meses</strong>. Não tem "melhor" — tem certo pro perfil. Pra o InboxAI da Trilha 4, vamos com Convex; mas você precisa saber comparar pra defender a escolha quando o cliente perguntar.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Critério</th>
+              <th class="text-center p-3 text-amber-400 font-semibold">Convex</th>
+              <th class="text-center p-3 text-neutral-400 font-semibold">Supabase</th>
+              <th class="text-center p-3 text-neutral-400 font-semibold">Postgres puro</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">Curva de setup</td><td class="p-3 text-center text-emerald-400">10 min</td><td class="p-3 text-center text-emerald-400">15 min</td><td class="p-3 text-center text-yellow-400">2h</td></tr>
+            <tr><td class="p-3 text-neutral-300">Reatividade nativa</td><td class="p-3 text-center text-emerald-400">✓ built-in</td><td class="p-3 text-center text-yellow-400">realtime extra</td><td class="p-3 text-center text-red-400">✗</td></tr>
+            <tr><td class="p-3 text-neutral-300">SQL puro</td><td class="p-3 text-center text-red-400">✗ TS</td><td class="p-3 text-center text-emerald-400">✓ Postgres</td><td class="p-3 text-center text-emerald-400">✓ total</td></tr>
+            <tr><td class="p-3 text-neutral-300">RLS / segurança</td><td class="p-3 text-center text-emerald-400">code-level</td><td class="p-3 text-center text-emerald-400">SQL policy</td><td class="p-3 text-center text-yellow-400">você implementa</td></tr>
+            <tr><td class="p-3 text-neutral-300">Free tier real</td><td class="p-3 text-center text-emerald-400">generoso</td><td class="p-3 text-center text-emerald-400">generoso</td><td class="p-3 text-center text-yellow-400">depende host</td></tr>
+            <tr><td class="p-3 text-neutral-300">Lock-in</td><td class="p-3 text-center text-red-400">alto</td><td class="p-3 text-center text-yellow-400">médio</td><td class="p-3 text-center text-emerald-400">baixo</td></tr>
+            <tr><td class="p-3 text-neutral-300">Ecossistema</td><td class="p-3 text-center text-yellow-400">novo</td><td class="p-3 text-center text-emerald-400">amplo</td><td class="p-3 text-center text-emerald-400">universal</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Regra de bolso</h3>
+        <p class="text-neutral-300"><strong>Convex</strong> pra MVP em 1 fim de semana e produto reativo (chat ao vivo, dashboard). <strong>Supabase</strong> pra quando seu cliente é técnico e exige Postgres com RLS clássico. <strong>Postgres puro</strong> só quando você tem time DevOps ou previsão de escala extrema. Pro InboxAI, Convex destrava velocidade — e a Trilha 6 ensina migrar se um dia precisar.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📋 Schema do InboxAI</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O schema é a coluna do produto. Toda tabela aqui tem motivo operacional: <strong class="text-amber-400">cada campo justificado por uma decisão real</strong> da clínica, imobiliária ou agência que vai pagar.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🗺️ Diagrama de Entidades</h3>
+        <svg viewBox="0 0 600 280" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="240" y="10" width="120" height="50" rx="6" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+          <text x="300" y="30" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">organizations</text>
+          <text x="300" y="48" text-anchor="middle" fill="#9ca3af" font-size="8">tenant raiz</text>
+          <rect x="60" y="100" width="120" height="50" rx="6" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="120" y="120" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">users</text>
+          <text x="120" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">membros do time</text>
+          <rect x="240" y="100" width="120" height="50" rx="6" fill="#1f2937" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="300" y="120" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="bold">contacts</text>
+          <text x="300" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">leads/clientes</text>
+          <rect x="420" y="100" width="120" height="50" rx="6" fill="#1f2937" stroke="#0ea5e9" stroke-width="1.5"/>
+          <text x="480" y="120" text-anchor="middle" fill="#0ea5e9" font-size="11" font-weight="bold">deals</text>
+          <text x="480" y="138" text-anchor="middle" fill="#9ca3af" font-size="8">pipeline de venda</text>
+          <rect x="150" y="200" width="120" height="50" rx="6" fill="#1f2937" stroke="#ec4899" stroke-width="1.5"/>
+          <text x="210" y="220" text-anchor="middle" fill="#ec4899" font-size="11" font-weight="bold">conversations</text>
+          <text x="210" y="238" text-anchor="middle" fill="#9ca3af" font-size="8">threads</text>
+          <rect x="330" y="200" width="120" height="50" rx="6" fill="#1f2937" stroke="#facc15" stroke-width="1.5"/>
+          <text x="390" y="220" text-anchor="middle" fill="#facc15" font-size="11" font-weight="bold">messages</text>
+          <text x="390" y="238" text-anchor="middle" fill="#9ca3af" font-size="8">cada mensagem</text>
+          <line x1="280" y1="60" x2="160" y2="100" stroke="#6b7280" stroke-width="1"/>
+          <line x1="300" y1="60" x2="300" y2="100" stroke="#6b7280" stroke-width="1"/>
+          <line x1="320" y1="60" x2="440" y2="100" stroke="#6b7280" stroke-width="1"/>
+          <line x1="300" y1="150" x2="220" y2="200" stroke="#6b7280" stroke-width="1"/>
+          <line x1="270" y1="225" x2="330" y2="225" stroke="#6b7280" stroke-width="1"/>
+          <line x1="480" y1="150" x2="420" y2="200" stroke="#6b7280" stroke-width="1"/>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 convex/schema.ts</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">import { defineSchema, defineTable } from "convex/server";
+import { v } from "convex/values";
+
+export default defineSchema({
+  organizations: defineTable({
+    name: v.string(),
+    plan: v.union(v.literal("free"), v.literal("pro"), v.literal("enterprise")),
+    createdAt: v.number(),
+  }),
+
+  users: defineTable({
+    orgId: v.id("organizations"),
+    clerkId: v.string(),
+    email: v.string(),
+    name: v.string(),
+    role: v.union(v.literal("owner"), v.literal("admin"), v.literal("agent")),
+  }).index("by_org", ["orgId"]).index("by_clerk", ["clerkId"]),
+
+  contacts: defineTable({
+    orgId: v.id("organizations"),
+    phone: v.string(),
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    tags: v.array(v.string()),
+    lastSeenAt: v.number(),
+  }).index("by_org_phone", ["orgId", "phone"])
+    .index("by_org_lastSeen", ["orgId", "lastSeenAt"]),
+
+  conversations: defineTable({
+    orgId: v.id("organizations"),
+    contactId: v.id("contacts"),
+    status: v.union(v.literal("open"), v.literal("snoozed"), v.literal("closed")),
+    assignedTo: v.optional(v.id("users")),
+    aiEnabled: v.boolean(),
+    lastMessageAt: v.number(),
+  }).index("by_org_status", ["orgId", "status"])
+    .index("by_contact", ["contactId"]),
+
+  messages: defineTable({
+    orgId: v.id("organizations"),
+    conversationId: v.id("conversations"),
+    direction: v.union(v.literal("inbound"), v.literal("outbound")),
+    sender: v.union(v.literal("contact"), v.literal("agent"), v.literal("ai")),
+    body: v.string(),
+    mediaUrl: v.optional(v.string()),
+    mediaType: v.optional(v.string()),
+    sentAt: v.number(),
+  }).index("by_conversation", ["conversationId", "sentAt"]),
+
+  deals: defineTable({
+    orgId: v.id("organizations"),
+    contactId: v.id("contacts"),
+    title: v.string(),
+    stage: v.union(v.literal("qualified"), v.literal("proposal"),
+                   v.literal("won"), v.literal("lost")),
+    value: v.number(),
+    ownerId: v.id("users"),
+  }).index("by_org_stage", ["orgId", "stage"])
+    .index("by_owner", ["ownerId"]),
+});</pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A regra do orgId</h3>
+        <p class="text-neutral-300"><strong>Toda tabela tem orgId</strong>. Sempre. É a base do multi-tenant da Trilha 4.4 — sem isso, RLS é placebo. Acostume agora: cliente A nunca consegue, sob nenhuma circunstância, ver dado do cliente B.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔗 Relacionamentos e Índices</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">90% dos travamentos em SaaS são <strong class="text-amber-400">query sem índice rodando full table scan</strong>. Aqui você vê quais colunas indexar no InboxAI e por que cada uma.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">RELACIONAMENTO 1:N</div>
+          <div class="text-3xl mb-3">🌳</div>
+          <h4 class="font-bold text-amber-400 mb-2">contact → messages</h4>
+          <p class="text-sm text-neutral-400">Um contato tem várias mensagens. Index <code class="text-amber-400">by_conversation</code> permite carregar últimas 50 em ms.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">RELACIONAMENTO N:N</div>
+          <div class="text-3xl mb-3">🕸️</div>
+          <h4 class="font-bold text-amber-400 mb-2">contacts ↔ tags</h4>
+          <p class="text-sm text-neutral-400">Tags como array no contact resolve N:N sem tabela pivô — Convex lida nativo. Em Postgres, vire join table.</p>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">📊 Índices que importam no InboxAI</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-amber-400 font-mono text-xs flex-shrink-0">by_org_phone</span>
+            <span class="text-neutral-300 text-sm">Buscar contato por telefone na chegada de webhook. Sem isso, full scan a cada mensagem.</span>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-amber-400 font-mono text-xs flex-shrink-0">by_conversation</span>
+            <span class="text-neutral-300 text-sm">Listar mensagens da thread em ordem cronológica. Composto com sentAt evita ordenação custosa.</span>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-amber-400 font-mono text-xs flex-shrink-0">by_org_status</span>
+            <span class="text-neutral-300 text-sm">Inbox de "abertas" do cliente. Filtra dezenas de milhares de fechadas em ms.</span>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-amber-400 font-mono text-xs flex-shrink-0">by_org_lastSeen</span>
+            <span class="text-neutral-300 text-sm">Ranking de "quem falou recente". Painel principal carrega já ordenado.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">⚠️ Sintoma de índice faltando</h3>
+        <p class="text-neutral-300">Se uma tela demorar mais de 500ms com banco quase vazio, é índice. Se piora linearmente conforme entra dado, é índice errado. <strong>Adicione índice ao perceber, não em "otimização futura"</strong> — Convex faz hot-reload do schema sem downtime.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🚧 Migrations sem quebrar dado</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cliente pagando R$ 2k/mês não aceita 10 minutos fora. <strong class="text-amber-400">Padrão expand-then-contract</strong> deixa a migração invisível: usuário nem percebe.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🔄 Fluxo Expand-then-Contract</h3>
+        <div class="space-y-4">
+          <div class="flex items-start space-x-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center">1</span>
+            <div>
+              <h4 class="font-semibold text-emerald-400">EXPAND — adiciona o novo</h4>
+              <p class="text-sm text-neutral-400">Cria a coluna nova (ex: <code class="text-amber-400">stageV2</code>). Schema aceita as duas. Código antigo ignora; código novo já lê e escreve nas duas.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center">2</span>
+            <div>
+              <h4 class="font-semibold text-amber-400">BACKFILL — popula histórico</h4>
+              <p class="text-sm text-neutral-400">Mutation em batches que copia <code class="text-amber-400">stage</code> → <code class="text-amber-400">stageV2</code>. Roda em background, não bloqueia ninguém.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center">3</span>
+            <div>
+              <h4 class="font-semibold text-blue-400">SWITCH — leitura passa pra nova</h4>
+              <p class="text-sm text-neutral-400">Deploy onde a UI lê só de <code class="text-amber-400">stageV2</code>. Escrita ainda dupla. Se der ruim, rollback no painel da Vercel = volta tudo.</p>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-red-500/20 text-red-400 font-bold flex items-center justify-center">4</span>
+            <div>
+              <h4 class="font-semibold text-red-400">CONTRACT — remove o velho</h4>
+              <p class="text-sm text-neutral-400">Depois de 7 dias estável, remove <code class="text-amber-400">stage</code> do schema. Última migration limpa o legado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Como pedir ao agente</h3>
+        <p class="text-neutral-300 text-sm">"Quero renomear <code class="text-amber-400">stage</code> para <code class="text-amber-400">pipelineStage</code> em deals seguindo expand-then-contract. Crie 4 PRs separadas, cada uma com um passo, e me explique o que verificar antes de mergear cada uma." O Codex executa isso direitinho — você só revisa o diff.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🌱 Seed: dados de teste</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Demo pra cliente com banco vazio é tiro no pé. <strong class="text-amber-400">Seed bom faz a UI parecer "cheia de gente usando"</strong> no primeiro screenshot. Aqui está o script que popula 50 contatos, 200 mensagens e 10 deals em segundos.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 convex/seed.ts</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">import { internalMutation } from "./_generated/server";
+
+const NOMES_BR = ["Ana Silva","João Santos","Maria Oliveira","Carlos Pereira",
+                  "Beatriz Costa","Rafael Souza","Juliana Lima","Pedro Rocha"];
+const TAGS = ["lead-quente","cliente","follow-up","perdido","vip"];
+const FRASES = [
+  "Oi, tenho interesse no plano Pro.",
+  "Bom dia, qual o valor?",
+  "Você consegue passar a apresentação?",
+  "Vou falar com meu sócio e retorno.",
+  "Fechado, manda o boleto."
+];
+
+const rand = &lt;T&gt;(arr: T[]) =&gt; arr[Math.floor(Math.random() * arr.length)];
+const phone = () =&gt; "55119" + Math.floor(10000000 + Math.random() * 89999999);
+
+export const seed = internalMutation({
+  args: {},
+  handler: async (ctx) =&gt; {
+    const orgId = await ctx.db.insert("organizations", {
+      name: "Clínica Demo", plan: "pro", createdAt: Date.now(),
+    });
+
+    const ownerId = await ctx.db.insert("users", {
+      orgId, clerkId: "demo_owner", email: "demo@inbox.ai",
+      name: "Demo Owner", role: "owner",
+    });
+
+    const contactIds = [];
+    for (let i = 0; i &lt; 50; i++) {
+      const id = await ctx.db.insert("contacts", {
+        orgId, phone: phone(), name: rand(NOMES_BR),
+        tags: [rand(TAGS)], lastSeenAt: Date.now() - i * 3600_000,
+      });
+      contactIds.push(id);
+    }
+
+    for (const contactId of contactIds.slice(0, 40)) {
+      const convId = await ctx.db.insert("conversations", {
+        orgId, contactId, status: "open", aiEnabled: true,
+        lastMessageAt: Date.now(),
+      });
+      for (let j = 0; j &lt; 5; j++) {
+        await ctx.db.insert("messages", {
+          orgId, conversationId: convId,
+          direction: j % 2 === 0 ? "inbound" : "outbound",
+          sender: j % 2 === 0 ? "contact" : "ai",
+          body: rand(FRASES), sentAt: Date.now() - (5 - j) * 60_000,
+        });
+      }
+    }
+
+    for (let i = 0; i &lt; 10; i++) {
+      await ctx.db.insert("deals", {
+        orgId, contactId: rand(contactIds), title: "Deal #" + (i + 1),
+        stage: rand(["qualified","proposal","won","lost"] as const),
+        value: 1000 + Math.random() * 9000, ownerId,
+      });
+    }
+
+    return { contacts: 50, conversations: 40, deals: 10 };
+  },
+});</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🚀 Rodar o seed</h3>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># dev local
+npx convex run seed:seed
+
+# limpar e re-seedar
+npx convex run reset:wipe &amp;&amp; npx convex run seed:seed</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">⚠️ LGPD no seed</h3>
+        <p class="text-neutral-300">Não use número de telefone real, mesmo de "amigo seu". Use prefixo <code class="text-amber-400">5511 9</code> + dígitos aleatórios. Se cair em produção, ninguém recebe SMS. Mesma lógica pra email — sempre <code class="text-amber-400">demo+id@inbox.test</code>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">💾 Backups e ambiente prod</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Perder dado de cliente é fim de relacionamento e processo no horizonte. <strong class="text-amber-400">Backup só vale se você já testou restore</strong> — senão é placebo digital.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✓ Setup mínimo</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Convex Cloud: backup automático a cada 24h, retenção 30 dias</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Snapshot manual antes de cada deploy crítico</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Export semanal pra storage externo (S3 ou R2)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Drill de restore a cada 30 dias em ambiente staging</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Documento curto explicando como restaurar (passo a passo)</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Erros que destroem cliente</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>"Tem backup automático" sem testar restore</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Backup no mesmo provedor que pode cair junto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Sem snapshot pré-deploy de migration arriscada</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Senha do backup junto com a do banco — ransomware leva os dois</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Confiar que "rollback do deploy" desfaz dado</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">📋 Checklist antes de cada deploy de migration</h3>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Snapshot manual feito e ID anotado</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Migration testada em staging com cópia da prod</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Plano de rollback escrito (qual comando executar)</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Janela de menor uso confirmada (geralmente domingo cedo)</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Cliente avisado se for perceptível</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Monitor aberto pra detectar erro nos primeiros 30 min</div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> RTO e RPO traduzidos</h3>
+        <p class="text-neutral-300 text-sm"><strong>RTO</strong> (Recovery Time Objective): em quanto tempo você volta ao ar — meta sã pra micro-SaaS BR é 4h. <strong>RPO</strong> (Recovery Point Objective): quanto dado pode perder no pior cenário — meta sã é 1h. Vender SLA mais agressivo sem infra adequada é cilada que cobra caro depois.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Convex pra MVP rápido, Supabase pra cliente técnico, Postgres puro só com DevOps</strong><span class="text-neutral-400"> — escolha por perfil, não por hype.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Schema do InboxAI com 6 tabelas core e orgId em todas</strong><span class="text-neutral-400"> — multi-tenant é decisão do dia zero, não retrofit.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Índices em campos de busca evitam full scan</strong><span class="text-neutral-400"> — 500ms é sintoma; resolva ao perceber.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Expand-then-contract = migration invisível</strong><span class="text-neutral-400"> — cliente pagante não aceita downtime de 10 min.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Seed realista vende demo</strong><span class="text-neutral-400"> — 50 contatos com nome BR e mensagens em PT, sem dado real.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Backup só conta se restore foi testado</strong><span class="text-neutral-400"> — drill mensal e snapshot pré-deploy crítico.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-amber-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">4.2 — Integrando Evolution API: Docker, QR code, webhook recebendo mensagem real do WhatsApp e função de envio com texto, áudio e imagem.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha 4</a>
+          <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Próximo: Evolution API →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 4.1 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

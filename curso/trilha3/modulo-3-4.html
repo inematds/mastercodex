@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 3.4 — Browser Embutido + Iteração Visual | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-purple-400{color:#7c3aed;}
+    html:not(.dark) .bg-purple-500\/20{background-color:rgba(124,58,237,0.12);}
+    html:not(.dark) .bg-purple-500\/10{background-color:rgba(124,58,237,0.08);}
+    html:not(.dark) .border-purple-500\/30{border-color:rgba(124,58,237,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3 — Frontend</a><span>/</span>
+      <span class="text-purple-400">Módulo 3.4</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.4</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎯 Browser Embutido + Iteração Visual</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">O recurso exclusivo do Codex App: clicar no que está errado, descrever, e o agente aplica direto. Como cortar tempo de feedback de minutos para segundos — e quando voltar pro plan mode.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Inter</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Polish</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🖥️ O Browser Embutido do Codex App</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Esse recurso <strong class="text-purple-400">não existe no Claude Code nem no Cursor</strong>. É um browser nativo dentro da janela do Codex App, lado a lado com o código. O agente vê o que você vê — clique, scroll, formulário, console.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🪟 Layout side-by-side</h3>
+        <svg viewBox="0 0 600 280" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="280" height="240" rx="6" fill="#1f2937" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="30" y="30" width="260" height="20" rx="3" fill="#374151"/>
+          <text x="40" y="44" fill="#9ca3af" font-size="9" font-family="monospace">app/inbox/page.tsx</text>
+          <rect x="30" y="58" width="260" height="6" fill="#7c3aed" opacity="0.3"/>
+          <rect x="30" y="68" width="200" height="6" fill="#374151"/>
+          <rect x="30" y="78" width="220" height="6" fill="#374151"/>
+          <rect x="30" y="88" width="180" height="6" fill="#7c3aed" opacity="0.5"/>
+          <rect x="30" y="98" width="240" height="6" fill="#374151"/>
+          <rect x="30" y="118" width="260" height="120" rx="3" fill="#111827"/>
+          <text x="40" y="135" fill="#7c3aed" font-size="9" font-family="monospace">&gt; npm run dev</text>
+          <text x="40" y="150" fill="#9ca3af" font-size="9" font-family="monospace">  ✓ Ready in 2.3s</text>
+          <text x="40" y="165" fill="#9ca3af" font-size="9" font-family="monospace">  ○ Local: localhost:3000</text>
+          <text x="160" y="270" text-anchor="middle" fill="#7c3aed" font-size="10" font-weight="bold">CÓDIGO + TERMINAL</text>
+          <rect x="320" y="20" width="260" height="240" rx="6" fill="#1f2937" stroke="#7c3aed" stroke-width="1.5"/>
+          <rect x="330" y="30" width="240" height="20" rx="3" fill="#374151"/>
+          <circle cx="338" cy="40" r="3" fill="#ef4444"/>
+          <circle cx="346" cy="40" r="3" fill="#fbbf24"/>
+          <circle cx="354" cy="40" r="3" fill="#10b981"/>
+          <rect x="365" y="35" width="200" height="10" rx="2" fill="#1f2937"/>
+          <text x="370" y="43" fill="#9ca3af" font-size="8" font-family="monospace">localhost:3000/inbox</text>
+          <rect x="330" y="60" width="60" height="190" rx="3" fill="#374151"/>
+          <rect x="395" y="60" width="100" height="190" rx="3" fill="#374151"/>
+          <rect x="500" y="60" width="65" height="190" rx="3" fill="#374151"/>
+          <circle cx="540" cy="100" r="14" fill="#7c3aed" stroke="#ef4444" stroke-width="2"/>
+          <text x="540" y="105" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">!</text>
+          <text x="450" y="270" text-anchor="middle" fill="#7c3aed" font-size="10" font-weight="bold">BROWSER EMBUTIDO</text>
+        </svg>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-4">
+          <div class="text-xs text-neutral-500 mb-1">RECURSO 1</div>
+          <h4 class="font-bold text-purple-400 mb-1">Hot reload acoplado</h4>
+          <p class="text-sm text-neutral-400">Mudou código → browser recarrega instantâneo. Sem alt-tab.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-4">
+          <div class="text-xs text-neutral-500 mb-1">RECURSO 2</div>
+          <h4 class="font-bold text-purple-400 mb-1">Console capturado</h4>
+          <p class="text-sm text-neutral-400">Erros JS aparecem no chat do agente automaticamente.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-4">
+          <div class="text-xs text-neutral-500 mb-1">RECURSO 3</div>
+          <h4 class="font-bold text-purple-400 mb-1">DOM inspecionável</h4>
+          <p class="text-sm text-neutral-400">Agente vê HTML renderizado, não só o código fonte.</p>
+        </div>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">📌 Por que isso muda o jogo</h3>
+        <p class="text-neutral-300">Em Cursor/Claude Code você descreve o bug em texto e reza. No Codex App o agente <strong>vê o problema com seus olhos</strong>. A diferença em qualidade de fix é gigante — especialmente em CSS e layout, onde palavras falham.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">👆 Anotação Visual</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Descrever um bug visual em texto leva 5 frases. <strong class="text-purple-400">Apontar e dizer "esse botão tá grande demais" leva 2 segundos</strong>. É o "select to fix" do design — point-and-click pra IA.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🔄 Workflow de anotação</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">1</span>
+            <div><strong class="text-purple-400">Ativa modo de anotação</strong> <span class="text-neutral-400">— atalho ⌘⇧A no browser embutido.</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">2</span>
+            <div><strong class="text-purple-400">Clica no elemento problemático</strong> <span class="text-neutral-400">— overlay destaca, captura DOM path.</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">3</span>
+            <div><strong class="text-purple-400">Escreve um comentário</strong> <span class="text-neutral-400">— "padding muito grande, reduzir pela metade".</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">4</span>
+            <div><strong class="text-purple-400">Codex recebe screenshot + DOM + texto</strong> <span class="text-neutral-400">— navega ao componente certo automaticamente.</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex items-center justify-center w-7 h-7 rounded-full bg-purple-500/20 text-purple-400 font-bold text-sm flex-shrink-0">5</span>
+            <div><strong class="text-purple-400">Aplica e hot-reload</strong> <span class="text-neutral-400">— você vê o ajuste em ~10s sem clicar no código.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ Sem anotação visual</h4>
+          <p class="text-sm text-neutral-300 italic">"Tem um botão na lista de conversas, eu acho que é o de arquivar, ele tá com padding-x grande demais e o texto não cabe quando o nome é longo"</p>
+          <p class="text-xs text-neutral-400 mt-3">Agente: 3 perguntas de volta, 2 minutos, fix possivelmente errado.</p>
+        </div>
+        <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-5">
+          <h4 class="font-bold text-purple-400 mb-3">✅ Com anotação visual</h4>
+          <p class="text-sm text-neutral-300 italic">[clica no botão] "padding-x menor"</p>
+          <p class="text-xs text-neutral-400 mt-3">Agente: vai direto no <code class="text-purple-400 bg-dark-700 px-1 rounded">ConversationItem.tsx:42</code>, ajusta, pronto em 8s.</p>
+        </div>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 A regra do "menos palavras, mais cliques"</h3>
+        <p class="text-neutral-300">No fluxo visual, sua descrição tende a ficar curta — "menor", "mais espaço aqui", "alinhar à direita". <strong>Isso é certo</strong>. A imagem fornece o contexto que o texto teria que reconstruir.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">⚡ Iteração Rápida: fix → reload → verifica</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Compressão de tempo de feedback é multiplicador direto de qualidade. <strong class="text-purple-400">12 iterações em 1 hora batem 3 iterações em 1 hora — sempre</strong>. O loop apertado é o que torna polish viável.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⏱️ Comparação de tempo de feedback</h3>
+        <svg viewBox="0 0 500 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <text x="20" y="35" fill="#9ca3af" font-size="11" font-weight="bold">Workflow tradicional</text>
+          <rect x="20" y="42" width="40" height="18" fill="#7c3aed"/>
+          <text x="40" y="55" text-anchor="middle" fill="#fff" font-size="9">edit</text>
+          <rect x="62" y="42" width="60" height="18" fill="#374151"/>
+          <text x="92" y="55" text-anchor="middle" fill="#9ca3af" font-size="9">alt-tab</text>
+          <rect x="124" y="42" width="50" height="18" fill="#fbbf24"/>
+          <text x="149" y="55" text-anchor="middle" fill="#fff" font-size="9">reload</text>
+          <rect x="176" y="42" width="80" height="18" fill="#374151"/>
+          <text x="216" y="55" text-anchor="middle" fill="#9ca3af" font-size="9">olhar/scroll</text>
+          <rect x="258" y="42" width="60" height="18" fill="#374151"/>
+          <text x="288" y="55" text-anchor="middle" fill="#9ca3af" font-size="9">alt-tab</text>
+          <text x="330" y="55" fill="#ef4444" font-size="10" font-weight="bold">≈ 90s/iter</text>
+
+          <text x="20" y="105" fill="#9ca3af" font-size="11" font-weight="bold">Browser embutido + anotação</text>
+          <rect x="20" y="112" width="50" height="18" fill="#7c3aed"/>
+          <text x="45" y="125" text-anchor="middle" fill="#fff" font-size="9">click</text>
+          <rect x="72" y="112" width="60" height="18" fill="#a78bfa"/>
+          <text x="102" y="125" text-anchor="middle" fill="#fff" font-size="9">descrever</text>
+          <rect x="134" y="112" width="60" height="18" fill="#fbbf24"/>
+          <text x="164" y="125" text-anchor="middle" fill="#fff" font-size="9">auto-fix</text>
+          <rect x="196" y="112" width="40" height="18" fill="#10b981"/>
+          <text x="216" y="125" text-anchor="middle" fill="#fff" font-size="9">ver</text>
+          <text x="250" y="125" fill="#10b981" font-size="10" font-weight="bold">≈ 12s/iter</text>
+
+          <text x="20" y="170" fill="#a78bfa" font-size="11" font-weight="bold">Em 1h: 40 iters → ~7 iters tradicionais</text>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🔁 O loop apertado em prática</h3>
+        <ol class="space-y-2 text-sm text-neutral-300">
+          <li><span class="text-purple-400 font-bold">1.</span> Comece pela tela mais visível — landing/inbox/dashboard.</li>
+          <li><span class="text-purple-400 font-bold">2.</span> Faça 1 anotação por vez (não acumula 5 antes do agente rodar).</li>
+          <li><span class="text-purple-400 font-bold">3.</span> Hot-reload aplica → você vê → próximo problema.</li>
+          <li><span class="text-purple-400 font-bold">4.</span> Não pare pra "também vou ajustar isso" — anota e segue.</li>
+          <li><span class="text-purple-400 font-bold">5.</span> Quando atingir "tá ok", commita ANTES de seguir polindo.</li>
+        </ol>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 Polish é exponencial, não linear</h3>
+        <p class="text-neutral-300">O 10º ajuste é o que faz a tela parecer profissional, não o 3º. <strong>Iteração rápida torna o 10º ajuste barato</strong> — sem ela, você desiste no 4º porque dá preguiça. É literalmente o que separa "MVP de aluno" de "produto que paga R$ 25k".</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📱 Responsivo: Toggling Viewport</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Responsivo testado depois é <strong class="text-purple-400">responsivo quebrado</strong>. Testar viewport durante a construção pega 80% dos bugs antes deles existirem.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">📐 Os 3 viewports que importam</h3>
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Viewport</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Largura</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Tailwind</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Comportamento esperado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-purple-400 font-semibold">📱 Mobile</td><td class="p-3 text-neutral-300">375px</td><td class="p-3 text-neutral-300 font-mono">&lt;sm</td><td class="p-3 text-neutral-400">Lista full-width, thread em modal</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">📋 Tablet</td><td class="p-3 text-neutral-300">768px</td><td class="p-3 text-neutral-300 font-mono">md</td><td class="p-3 text-neutral-400">2 colunas (lista + thread), painel some</td></tr>
+            <tr><td class="p-3 text-purple-400 font-semibold">🖥️ Desktop</td><td class="p-3 text-neutral-300">1280px+</td><td class="p-3 text-neutral-300 font-mono">lg</td><td class="p-3 text-neutral-400">3 colunas completas</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⚙️ Tailwind responsivo no inbox</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>&lt;div className="grid grid-cols-1 md:grid-cols-[280px_1fr] lg:grid-cols-[280px_1fr_280px] h-screen"&gt;
+  &lt;ConversationList className="border-r border-neutral-800" /&gt;
+  &lt;MessageThread className="hidden md:flex" /&gt;
+  &lt;ContactPanel  className="hidden lg:block border-l border-neutral-800" /&gt;
+&lt;/div&gt;</code></pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">📌 Touch targets: 44px é mínimo</h3>
+        <p class="text-neutral-300">Apple HIG e Material Design concordam: <strong>botões em mobile precisam de pelo menos 44×44 pixels</strong>. Botão lindo de 24px no desktop vira frustração no celular. Teste no viewport mobile e clique em tudo com o dedo (sim, com o dedo, não com o mouse).</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📸 Capturando Bug com Screenshot Anotado</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Bug descrito em texto vira ping-pong de 6 mensagens. <strong class="text-purple-400">Bug descrito em screenshot anotado é fechado na primeira resposta</strong>. Vale ouro com cliente, com colega, e com o você do dia seguinte.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🎯 Anatomia de um screenshot que resolve</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="space-y-2">
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Seta vermelha</strong> apontando o problema exato</span></div>
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Círculo</strong> em torno da área afetada</span></div>
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Texto curto</strong>: "deveria ser X, está Y"</span></div>
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>URL/rota</strong> na barra do browser visível</span></div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Viewport size</strong> visível (375px / 1280px)</span></div>
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Console</strong> aberto se for bug de JS</span></div>
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Versão/branch</strong> no canto se relevante</span></div>
+            <div class="flex items-start space-x-2"><span class="text-purple-400">✓</span><span class="text-sm text-neutral-300"><strong>Repro steps</strong> em 3 linhas embaixo</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">📋 Template de bug report</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed">## Bug: [resumo de 1 linha]
+
+**Onde:** /inbox (conversation thread)
+**Viewport:** 768px (tablet)
+**Branch:** feat/multi-channel
+
+### Repro
+1. Abrir uma conversa com 50+ mensagens
+2. Scroll até o topo
+3. Receber nova mensagem (mock)
+
+### Esperado
+Manter scroll position se usuário não estiver no fim.
+
+### Atual
+Scrolla pro fim mesmo se eu estiver lendo histórico.
+
+[screenshot-anotado-aqui.png]</pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">💼 Pro cliente: vale a vida útil do contrato</h3>
+        <p class="text-neutral-300">Cliente que recebe bug report bem feito <strong>confia mais e cancela menos</strong>. É um dos rituais que aparenta "só boa educação" mas é estratégia comercial direta. O Codex App captura screenshot + anotação direto no chat — use ABUNDANTEMENTE.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🛑 Quando Voltar pro Plan Mode</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Iteração visual é poderosa pra polir; <strong class="text-purple-400">péssima pra arquitetar</strong>. Saber a hora de parar e replanejar evita acumular 15 fixes em código que precisava de reescrita.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🚨 Sinais de alerta — pare e plan mode</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-red-900/15 rounded-lg border border-red-500/20">
+            <span class="text-red-400 text-xl">⚠️</span>
+            <div><strong class="text-red-400">3 fixes seguidos no mesmo arquivo</strong><span class="text-neutral-400 block text-sm mt-1">— provavelmente o componente está mal estruturado, não com bug pequeno.</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-red-900/15 rounded-lg border border-red-500/20">
+            <span class="text-red-400 text-xl">⚠️</span>
+            <div><strong class="text-red-400">Escopo do problema mudando</strong><span class="text-neutral-400 block text-sm mt-1">— começou "padding errado" e virou "preciso refazer o layout inteiro".</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-red-900/15 rounded-lg border border-red-500/20">
+            <span class="text-red-400 text-xl">⚠️</span>
+            <div><strong class="text-red-400">Mesmo bug volta após "fix"</strong><span class="text-neutral-400 block text-sm mt-1">— sintoma de causa raiz não atacada; aplicar band-aid 4x é pior que parar.</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-red-900/15 rounded-lg border border-red-500/20">
+            <span class="text-red-400 text-xl">⚠️</span>
+            <div><strong class="text-red-400">Você não consegue mais explicar o que mudou</strong><span class="text-neutral-400 block text-sm mt-1">— commit acumulando, mente perdida; pause e mapeie.</span></div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-red-900/15 rounded-lg border border-red-500/20">
+            <span class="text-red-400 text-xl">⚠️</span>
+            <div><strong class="text-red-400">Refatoração emergindo</strong><span class="text-neutral-400 block text-sm mt-1">— "ah, e já que tô aqui..." — não, volta pro plan mode.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-5">
+          <h4 class="font-bold text-purple-400 mb-3">✅ Iteração visual é boa pra:</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Polish de espaçamento, cor, tipografia</li>
+            <li>• Microcopy e labels</li>
+            <li>• Estados visuais (hover, focus, active)</li>
+            <li>• Responsividade incremental</li>
+            <li>• Animações sutis</li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ Iteração visual é ruim pra:</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Mudança de arquitetura de componentes</li>
+            <li>• Refatoração de estado global</li>
+            <li>• Adição de feature nova grande</li>
+            <li>• Performance / re-renders</li>
+            <li>• Migração de biblioteca</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 A regra dos 3 fixes</h3>
+        <p class="text-neutral-300">Se você precisou pedir 3 fixes no mesmo componente nas últimas 10 minutos, <strong>pare</strong>. Abra o plan mode, descreva o que está acontecendo no nível arquitetural ("o componente X está fazendo demais; quero quebrar em Y e Z"), e deixe o agente propor um refactor antes de mais um band-aid. <strong>Custa 5 minutos pensar e economiza 2 horas refazendo</strong>.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Browser embutido é exclusivo do Codex App</strong><span class="text-neutral-400"> — agente vê o que você vê, side-by-side com código.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Anotação visual: clique + 3 palavras = fix</strong><span class="text-neutral-400"> — bate descrever em 5 frases sempre.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Loop fix→reload→ver em ~12s</strong><span class="text-neutral-400"> — habilita 40 iterações/h vs 7 no fluxo tradicional.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Toggling viewport mobile/tablet/desktop pega 80% dos bugs cedo</strong><span class="text-neutral-400"> — touch target mínimo de 44px.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Screenshot anotado é estratégia comercial</strong><span class="text-neutral-400"> — fecha bug na 1ª mensagem, cliente confia mais.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">3 fixes no mesmo arquivo = volta pro plan mode</strong><span class="text-neutral-400"> — pensar 5 min economiza refazer 2h.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Próxima Trilha:</h3>
+          <p class="text-neutral-300">Trilha 4 — Backend e Integrações: Convex no InboxAI real, integrações WhatsApp/Instagram/email/web chat, agentes IA qualificadores, autenticação e deploy.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-3-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: CRM Kanban</a>
+          <a href="../trilha4/index.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Próxima Trilha: Backend →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 3.4 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

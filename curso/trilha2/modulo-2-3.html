@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 2.3 — Reverse Prompting + Plan Mode + Definition of Done | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    code, pre, .mono{font-family:'JetBrains Mono', monospace;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-blue-400{color:#2563eb;}
+    html:not(.dark) .bg-blue-500\/20{background-color:rgba(37,99,235,0.12);}
+    html:not(.dark) .bg-blue-500\/10{background-color:rgba(37,99,235,0.08);}
+    html:not(.dark) .border-blue-500\/30{border-color:rgba(37,99,235,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2 — A Linguagem dos Agentes</a><span>/</span>
+      <span class="text-blue-400">Módulo 2.3</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📐 Reverse Prompting + Plan Mode + Definition of Done</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Os três hábitos que separam quem entrega na primeira tentativa de quem itera 10 vezes. Pedir o briefing reverso, exigir o plano antes do código, definir critério objetivo de pronto.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">3</div><div class="text-xs text-neutral-400">Hábitos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">1</div><div class="text-xs text-neutral-400">Template</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔄 Reverse Prompting</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Antes de pedir X, pergunte: <strong class="text-blue-400">"o que você precisa saber pra fazer X bem feito?"</strong>. O agente lista lacunas. Você preenche. Aí pede X. Essa inversão é a forma mais barata de aumentar a taxa de acerto na primeira tentativa.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-3">❌ Sem reverse</h4>
+          <div class="bg-dark-900 rounded p-3 mb-3 text-sm">
+            <span class="text-neutral-500">você:</span><br>
+            <span class="text-neutral-300">"cria um sistema de login pra clínica"</span>
+          </div>
+          <p class="text-xs text-neutral-400">Agente assume tudo: stack, auth provider, password rules, MFA. Faz. Você descobre nas 10 perguntas que aparecem no review que metade da abordagem não cabe.</p>
+        </div>
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-3">✅ Com reverse</h4>
+          <div class="bg-dark-900 rounded p-3 mb-3 text-sm">
+            <span class="text-neutral-500">você:</span><br>
+            <span class="text-neutral-300">"vou pedir um sistema de login pra clínica. <strong class="text-emerald-400">o que você precisa saber antes pra entregar bem feito?</strong>"</span>
+          </div>
+          <p class="text-xs text-neutral-400">Agente lista 8 perguntas (auth provider, password policy, MFA, sessões, recuperação, RBAC, LGPD, locale). Você responde em 2 minutos. Aí pede.</p>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📋 Exemplo: o que o agente devolve</h3>
+        <div class="bg-dark-900 rounded-lg p-4 text-sm space-y-2">
+          <div class="text-neutral-400">Para o sistema de login da clínica, preciso saber:</div>
+          <div class="text-neutral-300">1. <strong class="text-blue-400">Auth provider</strong>: Clerk? Supabase Auth? Convex Auth próprio?</div>
+          <div class="text-neutral-300">2. <strong class="text-blue-400">Personas</strong>: paciente, recepção, médico — RBAC ou flat?</div>
+          <div class="text-neutral-300">3. <strong class="text-blue-400">MFA</strong>: obrigatório, opcional, só para médicos?</div>
+          <div class="text-neutral-300">4. <strong class="text-blue-400">Recuperação</strong>: e-mail, SMS, ambos?</div>
+          <div class="text-neutral-300">5. <strong class="text-blue-400">Compliance</strong>: LGPD com consent screen explícito?</div>
+          <div class="text-neutral-300">6. <strong class="text-blue-400">Idioma</strong>: pt-BR fixo ou multi-locale?</div>
+          <div class="text-neutral-300">7. <strong class="text-blue-400">Sessão</strong>: tempo de expiração, refresh token?</div>
+          <div class="text-neutral-300">8. <strong class="text-blue-400">Auditoria</strong>: log de login pra auditoria do plano de saúde?</div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 A regra dos 30 segundos</h3>
+        <p class="text-neutral-300">Reverse prompting custa <strong>30 segundos</strong> de chat. Sem ele, a chance de você ter que reabrir o trabalho depois é alta. Em projetos novos, sempre faça. Em rotinas conhecidas, descarte.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📐 Plan Mode</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Plan Mode é o modo onde o agente <strong class="text-blue-400">propõe um plano em 3–7 etapas antes de tocar em qualquer arquivo</strong>. Você lê, ajusta, aprova. Só então ele executa. Discutir abordagem em 30s evita refatorar 200 linhas depois.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🔁 O ciclo plan-approve-execute</h3>
+        <svg viewBox="0 0 500 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="80" width="100" height="40" rx="20" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="70" y="105" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="bold">1. PLAN</text>
+          <path d="M 125 100 L 155 100" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a3)"/>
+          <rect x="160" y="60" width="120" height="80" rx="6" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="220" y="80" text-anchor="middle" fill="#d1d5db" font-size="10" font-weight="bold">Você revisa</text>
+          <text x="220" y="100" text-anchor="middle" fill="#9ca3af" font-size="9">Aprova? Ajusta?</text>
+          <text x="220" y="115" text-anchor="middle" fill="#9ca3af" font-size="9">Pede plano novo?</text>
+          <path d="M 285 100 L 315 100" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#a3)"/>
+          <rect x="320" y="80" width="100" height="40" rx="20" fill="#10b981" stroke="#10b981" stroke-width="1.5"/>
+          <text x="370" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">2. EXECUTE</text>
+          <path d="M 320 105 Q 220 165 120 105" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#a3)"/>
+          <text x="220" y="180" text-anchor="middle" fill="#6b7280" font-size="9">Refazer plano se descobrir gap</text>
+          <defs><marker id="a3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3b82f6"/></marker></defs>
+        </svg>
+      </div>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">Plan mode — exemplo de retorno</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-blue-400">## Plano: sistema de login</span>
+
+<span class="text-emerald-400">[1/5]</span> Adicionar Convex Auth ao schema
+       - convex/auth.ts com 3 providers (email, Google)
+       - convex/schema.ts: tabela users com role enum
+
+<span class="text-emerald-400">[2/5]</span> UI de login + signup
+       - app/(auth)/login/page.tsx (form com Zod)
+       - app/(auth)/signup/page.tsx (consent LGPD)
+
+<span class="text-emerald-400">[3/5]</span> Middleware de RBAC
+       - middleware.ts com matcher por role
+       - lib/auth-guards.ts (helpers)
+
+<span class="text-emerald-400">[4/5]</span> Recuperacao de senha
+       - convex/passwordReset.ts (token TTL 30min)
+       - app/(auth)/reset/[token]/page.tsx
+
+<span class="text-emerald-400">[5/5]</span> Audit log de login
+       - convex/auditLog.ts (insert em cada login)
+
+<span class="text-amber-400">Risco:</span> Convex Auth ainda em beta para Google.
+<span class="text-amber-400">Alternativa:</span> Clerk (3min mais lento, mais maduro).
+
+<span class="text-blue-400">Aprovar para executar?</span></code></pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 O que torna um plano útil</h3>
+        <p class="text-neutral-300">Um bom plano lista <strong>etapas com nome de arquivo</strong>, sinaliza <strong>riscos e alternativas</strong>, termina com pergunta de aprovação. Plano vago ("vou fazer login") não vale nada — exija granularidade que permita você dizer "no passo 3, prefiro X".</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">✅ Definition of Done Explícita</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Critério objetivo de "pronto". Sem DoD, "pronto" é subjetivo — agente para cedo demais ou tarde demais. <strong class="text-blue-400">Com DoD escrita no AGENTS.md</strong>, o critério é claro pra todo mundo, todo PR, todo agente.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📋 Template de DoD universal</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span><code class="mono text-blue-400">bun build</code> passa sem warning</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span><code class="mono text-blue-400">bun lint</code> e <code class="mono text-blue-400">tsc --noEmit</code> zero warning</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span><code class="mono text-blue-400">bun test</code> verde, com cobertura mínima do que mudou</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span>Smoke test manual no browser/API conforme contexto</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span>Diff revisado por humano (você ou par)</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span>PR com Summary + Test plan + screenshots quando aplicável</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400 mt-0.5">☐</span><span>Sem segredo vazado, sem console.log esquecido, sem TODO órfão</span></li>
+        </ul>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-2">❌ "Pronto" sem DoD</h4>
+          <p class="text-sm text-neutral-300">Agente entrega: build quebrado, 3 warnings, sem teste, screenshot só do desktop. Você descobre revisando.</p>
+        </div>
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <h4 class="font-bold text-emerald-400 mb-2">✅ "Pronto" com DoD</h4>
+          <p class="text-sm text-neutral-300">Agente roda checklist sozinho. Se algo falha, ele corrige. Só te chama quando todos os checks passam.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🎨 DoD para Frontend</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Frontend tem armadilhas próprias: hidratação, dark mode, breakpoints, animação que quebra mobile. DoD genérica não cobre. <strong class="text-blue-400">DoD específica de frontend filtra esses bugs antes de virar PR</strong>.</p>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">AGENTS.md — seção DoD frontend</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-blue-400">## Definition of Done — Frontend</span>
+
+<span class="text-emerald-400">[Build]</span>
+- bun build sem warning
+- tsc --noEmit zero erro
+- Bundle nao cresce > 5% (next-bundle-analyzer)
+
+<span class="text-emerald-400">[Visual]</span>
+- Smoke test Chrome 1440px (desktop)
+- Smoke test 375px (iPhone 14 / mobile)
+- Dark mode + light mode validados
+- Sem CLS visivel (animacao de entrada estavel)
+
+<span class="text-emerald-400">[Acessibilidade]</span>
+- Lighthouse a11y >= 90
+- Foco navegavel por Tab
+- aria-label nos botoes-icone
+
+<span class="text-emerald-400">[Prova]</span>
+- Screenshot antes/depois no PR
+- Gif de 5s da interacao principal (se UI nova)</code></pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📸 Os 4 viewports obrigatórios</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div class="bg-dark-700/50 rounded-lg p-4 text-center">
+            <div class="text-xs text-neutral-500 mb-1">MOBILE</div>
+            <div class="text-2xl mb-1">📱</div>
+            <div class="text-sm font-bold text-neutral-100">375px</div>
+            <div class="text-xs text-neutral-400">iPhone 14</div>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4 text-center">
+            <div class="text-xs text-neutral-500 mb-1">TABLET</div>
+            <div class="text-2xl mb-1">📱</div>
+            <div class="text-sm font-bold text-neutral-100">768px</div>
+            <div class="text-xs text-neutral-400">iPad</div>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4 text-center">
+            <div class="text-xs text-neutral-500 mb-1">DESKTOP</div>
+            <div class="text-2xl mb-1">💻</div>
+            <div class="text-sm font-bold text-neutral-100">1440px</div>
+            <div class="text-xs text-neutral-400">MacBook</div>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4 text-center">
+            <div class="text-xs text-neutral-500 mb-1">WIDE</div>
+            <div class="text-2xl mb-1">🖥️</div>
+            <div class="text-sm font-bold text-neutral-100">1920px</div>
+            <div class="text-xs text-neutral-400">Monitor</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Use a skill @qa-visual</h3>
+        <p class="text-neutral-300">Você não precisa abrir 4 tabs e tirar screenshot manual. <strong>@qa-visual roda os 4 viewports automaticamente</strong>, gera comparação antes/depois e anexa no PR. DoD é um clique.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚙️ DoD para Backend</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Backend quebra silenciosamente em produção: query lenta, migration que não rola, race condition. <strong class="text-blue-400">DoD apertada de backend pega tudo em staging</strong>, antes de virar incidente caro.</p>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">AGENTS.md — seção DoD backend</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-blue-400">## Definition of Done — Backend</span>
+
+<span class="text-emerald-400">[Testes]</span>
+- bun test verde (unit + integracao)
+- Cobertura do que mudou >= 80%
+- Pelo menos 1 teste de caminho de erro
+
+<span class="text-emerald-400">[Banco]</span>
+- Migration roda em staging sem erro
+- Migration eh idempotente (rodar duas vezes nao quebra)
+- Rollback testado e documentado
+
+<span class="text-emerald-400">[Performance]</span>
+- Query lenta tem index? Explain analisado
+- Sem N+1 (verificar com query log)
+- Endpoint < 300ms p95 em staging
+
+<span class="text-emerald-400">[Observabilidade]</span>
+- Log estruturado (sem console.log)
+- Metricas no dashboard (latencia, error rate)
+- Alerta configurado se taxa de erro > 1%
+
+<span class="text-emerald-400">[Deploy]</span>
+- Deploy de staging OK
+- Smoke test de API (curl para os 3 endpoints principais)
+- Variavel de ambiente documentada em .env.example</code></pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">⚠️ Os 5 erros mais caros em produção</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-neutral-400 border-b border-dark-600">
+              <th class="py-2">Erro</th>
+              <th class="py-2">Cura na DoD</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-700">
+            <tr><td class="py-2 text-red-400">Migration não idempotente</td><td class="py-2 text-neutral-400">Rodar 2x em staging antes do PR</td></tr>
+            <tr><td class="py-2 text-red-400">N+1 query</td><td class="py-2 text-neutral-400">Query log no smoke test</td></tr>
+            <tr><td class="py-2 text-red-400">.env vazado em commit</td><td class="py-2 text-neutral-400">Pre-commit hook + AGENTS.md "Não Faça"</td></tr>
+            <tr><td class="py-2 text-red-400">Endpoint sem rate limit</td><td class="py-2 text-neutral-400">Checklist explícita de rate limit</td></tr>
+            <tr><td class="py-2 text-red-400">Erro silenciado por catch genérico</td><td class="py-2 text-neutral-400">Lint rule contra catch sem rethrow</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Custo de bug em prod vs staging</h3>
+        <p class="text-neutral-300">Bug pego em <strong>staging</strong>: 30 minutos pra arrumar. Bug em <strong>produção</strong>: hotfix + comunicação + reembolso + reputação. DoD apertada custa 10 minutos a mais por PR e poupa horas no mês.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📜 Template Autoral: A Frase Única</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Frase única que combina <strong class="text-blue-400">Reverse + Plan + DoD</strong>. Você cola no início de qualquer sessão e o agente já entra calibrado nos três eixos. Bônus do Master Codex — cole onde quiser.</p>
+
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/40 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4 flex items-center"><span class="mr-2">🎁</span> O Template Master Codex</h3>
+        <div class="bg-dark-900 rounded-lg p-5 text-sm text-neutral-100 leading-relaxed mono">
+          Antes de escrever código, faça três coisas:<br><br>
+          <span class="text-blue-400">(1) Reverse:</span> liste o que precisa saber pra entregar bem feito. Pare e me pergunte.<br><br>
+          <span class="text-blue-400">(2) Plan:</span> proponha um plano em 3–7 etapas com nome de arquivo, riscos e alternativas. Espere minha aprovação.<br><br>
+          <span class="text-blue-400">(3) DoD:</span> ao final, rode o checklist do AGENTS.md (build, lint, test, smoke, screenshot). Só me chame quando tudo passar.<br><br>
+          <span class="text-emerald-400">Confirma que entendeu antes de começar.</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-4">
+          <div class="text-blue-400 font-bold mb-2">🔄 Reverse</div>
+          <p class="text-xs text-neutral-400">Inverte o trabalho de descobrir lacunas. Agente declara o que precisa, você responde.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-4">
+          <div class="text-blue-400 font-bold mb-2">📐 Plan</div>
+          <p class="text-xs text-neutral-400">Você captura erros de abordagem em 30s — antes de virar 200 linhas de código pra refatorar.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-4">
+          <div class="text-blue-400 font-bold mb-2">✅ DoD</div>
+          <p class="text-xs text-neutral-400">Define "pronto" objetivamente. Agente para no momento certo, não cedo nem tarde.</p>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Onde colar</h3>
+        <p class="text-neutral-300">Cole essa frase no <strong>topo do AGENTS.md</strong> do projeto, ou na primeira mensagem de qualquer sessão. Em 1 ano de uso, vira muscle memory — você nem precisa mais colar, fala naturalmente nessa sequência. <strong>Aí o curso valeu</strong>.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Reverse prompting inverte o trabalho</strong><span class="text-neutral-400"> — em vez de você adivinhar lacunas, o agente declara o que precisa saber.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Plan mode evita refatorar 200 linhas depois</strong><span class="text-neutral-400"> — discute abordagem em 30s; aprova antes de executar.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Definition of Done = critério objetivo de pronto</strong><span class="text-neutral-400"> — escrito no AGENTS.md, agente roda checklist sozinho.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">DoD frontend: 4 viewports + dark/light + screenshots</strong><span class="text-neutral-400"> — pega bugs visuais antes de virar PR.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">DoD backend: testes + migration idempotente + smoke de API</strong><span class="text-neutral-400"> — staging pega o que produção sofreria.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Template autoral combina os 3 em uma frase</strong><span class="text-neutral-400"> — cole no AGENTS.md ou no topo da sessão. Vira muscle memory.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">2.4 — Memória, contexto, sandbox e worktrees: a camada operacional que destrava multiagente real e protege seu projeto de acidentes caros.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Skills</a>
+          <a href="modulo-2-4.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">Próximo: Memória & Sandbox →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 2.3 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

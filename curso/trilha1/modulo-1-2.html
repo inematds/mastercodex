@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.2 — As 4 Faces do Codex (App, CLI, IDE, Cloud) | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .bg-emerald-500\/20{background-color:rgba(5,150,105,0.12);}
+    html:not(.dark) .border-emerald-500\/30{border-color:rgba(5,150,105,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1 — Fundamentos</a><span>/</span>
+      <span class="text-emerald-400">Módulo 1.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🧩 As 4 Faces do Codex (App, CLI, IDE, Cloud)</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Cada superfície do Codex serve a um propósito diferente. Saber qual usar quando — e qual modelo escolher dentro de cada uma — é o que separa amador de profissional.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Base</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Tour</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">💻 Codex App (Desktop) — Onde Você Vai Morar</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">App nativo Mac/Windows com sessões paralelas, browser embutido, image gen integrado, anotação visual e plugins. <strong class="text-emerald-400">É onde você passa 80% do tempo construindo produtos do zero</strong>. Recursos exclusivos como anotação visual no browser embutido só existem aqui.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🗺️ Anatomia do App em uma tela</h3>
+        <svg viewBox="0 0 520 240" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="10" y="10" width="500" height="220" rx="8" fill="#1f2937" stroke="#374151"/>
+          <rect x="10" y="10" width="500" height="28" rx="8" fill="#111827"/>
+          <circle cx="28" cy="24" r="5" fill="#ef4444"/>
+          <circle cx="46" cy="24" r="5" fill="#fbbf24"/>
+          <circle cx="64" cy="24" r="5" fill="#10b981"/>
+          <text x="260" y="29" text-anchor="middle" fill="#9ca3af" font-size="10">Codex — sessão ativa</text>
+          <rect x="20" y="50" width="120" height="170" rx="6" fill="#111827" stroke="#374151"/>
+          <text x="80" y="68" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">SESSÕES</text>
+          <rect x="28" y="78" width="104" height="22" rx="4" fill="#10b98133"/>
+          <text x="80" y="92" text-anchor="middle" fill="#10b981" font-size="8">▸ App Notas</text>
+          <rect x="28" y="106" width="104" height="22" rx="4" fill="#374151"/>
+          <text x="80" y="120" text-anchor="middle" fill="#d1d5db" font-size="8">Dashboard</text>
+          <rect x="28" y="134" width="104" height="22" rx="4" fill="#374151"/>
+          <text x="80" y="148" text-anchor="middle" fill="#d1d5db" font-size="8">Refactor API</text>
+          <rect x="28" y="162" width="104" height="22" rx="4" fill="#374151"/>
+          <text x="80" y="176" text-anchor="middle" fill="#d1d5db" font-size="8">Image Gen</text>
+          <rect x="150" y="50" width="220" height="170" rx="6" fill="#0f172a" stroke="#374151"/>
+          <text x="260" y="68" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">CHAT + TOOL USE</text>
+          <rect x="160" y="78" width="200" height="40" rx="4" fill="#1e293b"/>
+          <text x="170" y="94" fill="#d1d5db" font-size="8">› cria componente Note.tsx</text>
+          <text x="170" y="108" fill="#9ca3af" font-size="7">edit_file • 14 linhas alteradas</text>
+          <rect x="160" y="124" width="200" height="40" rx="4" fill="#1e293b"/>
+          <text x="170" y="140" fill="#d1d5db" font-size="8">› npm test</text>
+          <text x="170" y="154" fill="#10b981" font-size="7">✓ 8 passing</text>
+          <rect x="160" y="170" width="200" height="40" rx="4" fill="#1e293b"/>
+          <text x="170" y="186" fill="#d1d5db" font-size="8">› abre browser localhost:3000</text>
+          <text x="170" y="200" fill="#a78bfa" font-size="7">screenshot anexada ↗</text>
+          <rect x="380" y="50" width="120" height="170" rx="6" fill="#111827" stroke="#374151"/>
+          <text x="440" y="68" text-anchor="middle" fill="#10b981" font-size="9" font-weight="bold">BROWSER</text>
+          <rect x="388" y="78" width="104" height="80" rx="4" fill="#1e293b"/>
+          <rect x="395" y="86" width="40" height="6" rx="2" fill="#374151"/>
+          <rect x="395" y="98" width="60" height="4" rx="2" fill="#4b5563"/>
+          <rect x="395" y="108" width="50" height="4" rx="2" fill="#4b5563"/>
+          <circle cx="475" cy="135" r="6" fill="#fbbf24"/>
+          <text x="475" y="138" text-anchor="middle" fill="#111827" font-size="6" font-weight="bold">!</text>
+          <text x="440" y="178" text-anchor="middle" fill="#9ca3af" font-size="7">anotação visual</text>
+          <text x="440" y="192" text-anchor="middle" fill="#9ca3af" font-size="7">na própria UI</text>
+        </svg>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Por que isso importa</h3>
+        <p class="text-neutral-300">No App você roda <strong>4 sessões em paralelo</strong> com modelos diferentes, anota direto no browser embutido ("o botão tá desalinhado, conserta") e gera imagem sem sair da tela. Quem só usa CLI ou IDE perde recursos que o App entrega de graça — e que destravam workflows multiagente desde o primeiro projeto.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🖥️ Codex CLI — Agentes em Scripts e CI</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cliente de linha de comando para invocar agentes a partir de scripts shell, hooks de Git, pipelines de CI ou cron jobs. Headless e scriptável. <strong class="text-emerald-400">É o que transforma agentes em automações recorrentes</strong> — relatórios diários, triagem de issues, geração de changelog.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <div class="flex space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span></div>
+          <span class="text-xs text-neutral-400 font-mono">terminal — automação noturna</span>
+        </div>
+        <div class="p-5 font-mono text-sm space-y-1">
+          <div class="text-neutral-500"># cron rodando 02:00 todo dia</div>
+          <div><span class="text-emerald-400">$</span> <span class="text-neutral-300">cat issues_abertas.json | codex run \</span></div>
+          <div class="pl-6 text-neutral-300">--prompt "triage: priorize por impacto, sugira labels" \</div>
+          <div class="pl-6 text-neutral-300">--model fast --output triage.md</div>
+          <div class="text-emerald-400">→ 47 issues processadas em 38s</div>
+          <div class="text-emerald-400">→ triage.md gerado (1.2k tokens)</div>
+          <div class="mt-3"><span class="text-emerald-400">$</span> <span class="text-neutral-300">codex run --prompt "abra PR com release notes do diff de hoje"</span></div>
+          <div class="text-emerald-400">→ PR #842 aberto: github.com/seu/repo/pull/842</div>
+          <div class="mt-3"><span class="text-neutral-500"># exit code 0 → integra com pipeline CI</span></div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Quando o CLI vira ouro</h3>
+        <p class="text-neutral-300">Toda tarefa que você faria <strong>2x ou mais</strong> pode virar uma linha de CLI. Triagem semanal de PRs, geração de changelog, detecção de TODOs antigos, screenshot regression test. <strong>Cada cron de CLI é R$ 200–800 que você não precisa cobrar de hora</strong> — o agente trabalha enquanto você dorme.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🧩 Codex IDE Extension — Edição Contextual</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Extensão que traz o agente para dentro do editor que você já usa (VS Code, Cursor), com acesso ao buffer aberto, seleção, terminal integrado e file tree. <strong class="text-emerald-400">Para edição contextual e refactor</strong> — quando você precisa do agente atuando exatamente no que está olhando, sem trocar de janela.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">✅ Use a Extensão IDE quando</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Refactor pontual numa função selecionada</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Adicionar testes pra arquivo aberto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Explicar bloco de código desconhecido</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Renomear variável em todo o projeto</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Já está editando código, só precisa de assistência</span></li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">✗ Prefira o App quando</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Construir feature do zero (vários arquivos)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Precisar de browser embutido + screenshot</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Rodar 3+ agentes paralelos no mesmo repo</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Anotação visual em UI</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Image gen integrado ao fluxo</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">🎯 Regra de bolso</h3>
+        <p class="text-neutral-300">A extensão IDE é <strong>cirúrgica</strong>; o App é <strong>obra completa</strong>. Quando você está com um arquivo aberto pensando "preciso só ajustar isso aqui", IDE. Quando o pedido é "constrói uma tela nova", App. Misturar bem economiza 30–40% de troca de contexto.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">☁️ Codex Cloud — Agentes Remotos com PR Automático</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Você delega a tarefa para um ambiente cloud isolado conectado ao seu repositório GitHub. O agente roda lá, abre PR, e te avisa quando termina. <strong class="text-emerald-400">É o que permite multiagente real em escala</strong> — você não precisa do laptop ligado, e tarefas longas não bloqueiam seu ambiente local.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🔄 Fluxo Cloud em 4 etapas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div class="bg-dark-700/50 rounded-lg p-4 border border-dark-600">
+            <div class="text-xs text-emerald-400 font-bold mb-2">1. DELEGAR</div>
+            <div class="text-2xl mb-2">📤</div>
+            <p class="text-xs text-neutral-300">Cria task no Codex Cloud apontando pro repo + branch base + descrição.</p>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4 border border-dark-600">
+            <div class="text-xs text-emerald-400 font-bold mb-2">2. EXECUTAR</div>
+            <div class="text-2xl mb-2">⚙️</div>
+            <p class="text-xs text-neutral-300">Sandbox cloud isolado clona, instala, edita, testa. Você fecha o laptop.</p>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4 border border-dark-600">
+            <div class="text-xs text-emerald-400 font-bold mb-2">3. PR</div>
+            <div class="text-2xl mb-2">📥</div>
+            <p class="text-xs text-neutral-300">Agente abre Pull Request com Summary + Test plan estruturados.</p>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4 border border-dark-600">
+            <div class="text-xs text-emerald-400 font-bold mb-2">4. NOTIFICA</div>
+            <div class="text-2xl mb-2">🔔</div>
+            <p class="text-xs text-neutral-300">Push notification + email quando termina. Você só revisa e merge.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> O multiplicador real</h3>
+        <p class="text-neutral-300">Com Cloud, um diretor consegue <strong>8 tarefas rodando em paralelo</strong> enquanto faz outra coisa. Tarefa que demora 40 minutos não bloqueia mais nada. Combinado com <code class="text-emerald-400 bg-dark-700 px-1.5 rounded">@codex review</code>, vira pipeline contínuo: você abre 5 tasks de manhã, no fim do dia tem 5 PRs revisadas esperando merge.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🧠 Modelos: Fast, Standard, High, Extra-High</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">GPT 5.5 Codex tem quatro níveis de intensidade. <strong class="text-emerald-400">Usar Extra-High pra tudo queima usage. Usar Fast pra tarefas complexas dá resultado ruim.</strong> Calibrar é otimização direta de custo e qualidade.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Nível</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Velocidade</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Custo</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Use quando</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr>
+              <td class="p-3 text-emerald-400 font-bold">Fast</td>
+              <td class="p-3 text-neutral-300">⚡⚡⚡ instantâneo</td>
+              <td class="p-3 text-neutral-300">baixíssimo</td>
+              <td class="p-3 text-neutral-300">80% das tarefas: edição, refactor, CRUD, testes</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-emerald-400 font-bold">Standard</td>
+              <td class="p-3 text-neutral-300">⚡⚡ rápido</td>
+              <td class="p-3 text-neutral-300">médio-baixo</td>
+              <td class="p-3 text-neutral-300">Tarefas com lógica média, debugging guiado</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-amber-400 font-bold">High</td>
+              <td class="p-3 text-neutral-300">⚡ moderado</td>
+              <td class="p-3 text-neutral-300">alto</td>
+              <td class="p-3 text-neutral-300">Arquitetura, integração complexa, bugs sutis</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-red-400 font-bold">Extra-High</td>
+              <td class="p-3 text-neutral-300">🐢 lento</td>
+              <td class="p-3 text-neutral-300">muito alto</td>
+              <td class="p-3 text-neutral-300">Raciocínio pesado, plano de sistema inteiro, decisão crítica</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📊 Heurística do diretor</h3>
+        <p class="text-neutral-300">Comece sempre em <strong class="text-emerald-400">Fast</strong>. Se a resposta for fraca, escala pra Standard ou High. Pra <strong>plan mode</strong> ou decisão de arquitetura no início do projeto, vale ir direto em High. Extra-High é raro: reserve pra problemas que vale a pena pagar 10x mais por 5% de qualidade extra — geralmente não vale.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">💰 Plano Ideal: Free, Plus $20, Pro $200</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Escolher mal o plano custa caro: ou você fica travado em limite no meio de um projeto, ou paga $200 sem precisar. <strong class="text-emerald-400">Casar perfil + plano evita os dois extremos</strong>.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">PLANO 1</div>
+          <div class="text-3xl mb-2">🆓</div>
+          <h4 class="font-bold text-neutral-300 mb-1">Free</h4>
+          <div class="text-2xl font-bold text-emerald-400 mb-3">R$ 0</div>
+          <ul class="text-sm text-neutral-400 space-y-1.5">
+            <li>• Modelos Fast/Standard limitados</li>
+            <li>• Sem Cloud</li>
+            <li>• Cap diário baixo</li>
+          </ul>
+          <div class="mt-4 pt-3 border-t border-dark-600 text-xs text-neutral-500"><strong class="text-neutral-300">Pra quem:</strong> testar, decidir se vai entrar de cabeça.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-emerald-500/30 p-5 ring-2 ring-emerald-500/30 relative">
+          <span class="absolute -top-3 right-4 bg-emerald-500 text-dark-900 text-xs font-bold px-2 py-0.5 rounded">RECOMENDADO</span>
+          <div class="text-xs text-emerald-400 mb-1">PLANO 2</div>
+          <div class="text-3xl mb-2">⚡</div>
+          <h4 class="font-bold text-emerald-400 mb-1">Plus</h4>
+          <div class="text-2xl font-bold text-emerald-400 mb-3">$20/mês</div>
+          <ul class="text-sm text-neutral-300 space-y-1.5">
+            <li>• Fast/Standard ilimitado prático</li>
+            <li>• High limitado mas usável</li>
+            <li>• Cloud disponível</li>
+            <li>• Image gen + browser</li>
+          </ul>
+          <div class="mt-4 pt-3 border-t border-dark-600 text-xs text-neutral-500"><strong class="text-emerald-400">Pra quem:</strong> dev solo, freelancer, primeiros clientes.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">PLANO 3</div>
+          <div class="text-3xl mb-2">🚀</div>
+          <h4 class="font-bold text-neutral-300 mb-1">Pro</h4>
+          <div class="text-2xl font-bold text-amber-400 mb-3">$200/mês</div>
+          <ul class="text-sm text-neutral-400 space-y-1.5">
+            <li>• Tudo praticamente ilimitado</li>
+            <li>• High e Extra-High liberados</li>
+            <li>• Cloud sem fila</li>
+            <li>• Multiagente sério</li>
+          </ul>
+          <div class="mt-4 pt-3 border-t border-dark-600 text-xs text-neutral-500"><strong class="text-neutral-300">Pra quem:</strong> vive disso, 3+ projetos paralelos, equipe.</div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A matemática que ninguém faz</h3>
+        <p class="text-neutral-300">Se você cobra <strong>R$ 8.000 por um projeto que entrega em 2 semanas</strong>, $200/mês de Pro é 2% do faturamento. Brigar com limite do Plus em projeto pago é perder 1 dia de produtividade — mais caro que 1 ano de Pro. <strong>Migra pro Pro assim que fechar o segundo cliente</strong>.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">App é onde você passa 80% do tempo</strong><span class="text-neutral-400"> — sessões paralelas, browser embutido, anotação visual e image gen integrados.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">CLI vira automação recorrente</strong><span class="text-neutral-400"> — toda tarefa feita 2x+ pode virar cron e trabalhar enquanto você dorme.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">IDE Extension é cirúrgica, App é obra completa</strong><span class="text-neutral-400"> — refactor pontual no IDE, feature nova no App.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Cloud destrava multiagente em escala</strong><span class="text-neutral-400"> — 8 tarefas em paralelo sem o laptop ligado, PR automática + notificação.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Comece em Fast, escale só quando precisar</strong><span class="text-neutral-400"> — Extra-High é raro; vale para decisão de arquitetura, não para CRUD.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Plus $20 cobre dev solo; Pro $200 quando você vive disso</strong><span class="text-neutral-400"> — migrar no segundo cliente é regra prática.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">1.3 — Setup Completo do Ambiente: conta, GitHub, sandbox, worktrees, banco de dados gratuito e o "hello agentic" que valida tudo de ponta a ponta.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: O Diretor de Agentes</a>
+          <a href="modulo-1-3.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próximo: Setup Completo →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 1.2 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

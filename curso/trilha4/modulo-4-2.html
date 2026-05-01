@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4.2 — Integrando Evolution API (WhatsApp) | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-amber-400{color:#92400e;}
+    html:not(.dark) .bg-amber-500\/20{background-color:rgba(146,64,14,0.12);}
+    html:not(.dark) .bg-amber-500\/10{background-color:rgba(146,64,14,0.08);}
+    html:not(.dark) .border-amber-500\/30{border-color:rgba(146,64,14,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+    pre{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4 — Backend</a><span>/</span>
+      <span class="text-amber-400">Módulo 4.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📱 Integrando Evolution API (WhatsApp)</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Conecte WhatsApp em 10 minutos com Docker, gere QR code, receba mensagens via webhook e envie texto, áudio, imagem e PDF — sem aprovação Meta, com margem de 70%.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">75</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Integração</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🤔 O que é Evolution API e por que escolhemos</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Evolution API é wrapper open-source em volta do <strong class="text-amber-400">Baileys</strong> (cliente WhatsApp Web não-oficial). Você sobe num Docker, conecta um número escaneando QR, e tem WhatsApp programável em minutos — sem a burocracia da Cloud API oficial da Meta.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Critério</th>
+              <th class="text-center p-3 text-amber-400 font-semibold">Evolution API</th>
+              <th class="text-center p-3 text-neutral-400 font-semibold">WhatsApp Cloud (Meta)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">Tempo até funcionar</td><td class="p-3 text-center text-emerald-400">10 min</td><td class="p-3 text-center text-red-400">2 a 6 semanas</td></tr>
+            <tr><td class="p-3 text-neutral-300">Aprovação Meta / BSP</td><td class="p-3 text-center text-emerald-400">não precisa</td><td class="p-3 text-center text-red-400">obrigatória</td></tr>
+            <tr><td class="p-3 text-neutral-300">Custo por mensagem</td><td class="p-3 text-center text-emerald-400">R$ 0</td><td class="p-3 text-center text-yellow-400">R$ 0,02–0,40</td></tr>
+            <tr><td class="p-3 text-neutral-300">Conformidade ToS</td><td class="p-3 text-center text-yellow-400">cinza</td><td class="p-3 text-center text-emerald-400">oficial</td></tr>
+            <tr><td class="p-3 text-neutral-300">Risco de banimento</td><td class="p-3 text-center text-yellow-400">médio</td><td class="p-3 text-center text-emerald-400">zero</td></tr>
+            <tr><td class="p-3 text-neutral-300">Templates aprovados</td><td class="p-3 text-center text-emerald-400">livre</td><td class="p-3 text-center text-yellow-400">só template aprovado</td></tr>
+            <tr><td class="p-3 text-neutral-300">Recomendado pra</td><td class="p-3 text-center text-amber-400">PME, MVP, atendimento</td><td class="p-3 text-center text-amber-400">grande volume, marketing</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 O trade-off honesto</h3>
+        <p class="text-neutral-300">Evolution não é "production-grade enterprise". Existe risco do número ser bloqueado se você fizer disparo em massa indevido. Pra atendimento (cliente fala primeiro, você responde), o risco é baixíssimo. <strong>Pra PME brasileira de até 5k mensagens/mês, é a escolha vencedora hoje</strong> — e quando o cliente crescer pra 100k/mês, migra pra Cloud API mantendo o mesmo backend.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">☁️ Self-host vs cloud</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Você pode rodar Evolution na sua própria VPS por R$ 30/mês ou pagar um serviço gerenciado. <strong class="text-amber-400">Margem do seu SaaS depende dessa decisão</strong>.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h4 class="font-bold text-emerald-400 mb-4">🖥️ Self-host (VPS)</h4>
+          <div class="text-2xl font-bold text-emerald-400 mb-1">R$ 30/mês</div>
+          <div class="text-xs text-neutral-500 mb-4">Hetzner CX22 ou Hostinger VPS 2</div>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Controle total: backup, logs, atualização</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Margem alta — sustenta 5 a 10 clientes na mesma VPS</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Sem dependência de fornecedor que pode mudar regra</span></li>
+            <li class="flex items-start space-x-2"><span class="text-yellow-400">!</span><span>Você responde plantão se cair de madrugada</span></li>
+            <li class="flex items-start space-x-2"><span class="text-yellow-400">!</span><span>Precisa configurar SSL, firewall, backup</span></li>
+          </ul>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h4 class="font-bold text-blue-400 mb-4">☁️ Provedor SaaS</h4>
+          <div class="text-2xl font-bold text-blue-400 mb-1">R$ 100–300/mês</div>
+          <div class="text-xs text-neutral-500 mb-4">UltraMsg, Z-API, Wppconnect Cloud</div>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Sem dor de operação — sobe e usa</span></li>
+            <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Suporte e SLA contratual</span></li>
+            <li class="flex items-start space-x-2"><span class="text-yellow-400">!</span><span>Margem baixa — não sustenta cliente de R$ 200/mês</span></li>
+            <li class="flex items-start space-x-2"><span class="text-yellow-400">!</span><span>Lock-in: trocar depois exige reescrever integração</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Cliente perceptivelmente mais devagar</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A recomendação prática</h3>
+        <p class="text-neutral-300 text-sm">Comece com SaaS pago no primeiro cliente pra validar produto. Quando chegar no terceiro cliente pagante, migre pra self-host. <strong>O ponto de equilíbrio é 3 clientes</strong> — abaixo disso, paga o cloud e foca em vender; acima, opera pra capturar margem.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🐳 Setup local com Docker</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Um arquivo, um comando, dez minutos. <strong class="text-amber-400">docker-compose up</strong> sobe Evolution + Postgres + Redis e expõe um painel web em http://localhost:8080.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 docker-compose.yml</h3>
+          <span class="text-xs text-neutral-500">YAML</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">version: "3.9"
+
+services:
+  evolution:
+    image: atendai/evolution-api:latest
+    container_name: evolution_api
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      AUTHENTICATION_API_KEY: ${EVOLUTION_API_KEY}
+      DATABASE_ENABLED: "true"
+      DATABASE_PROVIDER: postgresql
+      DATABASE_CONNECTION_URI: postgresql://evo:${DB_PASS}@postgres:5432/evolution
+      REDIS_ENABLED: "true"
+      REDIS_URI: redis://redis:6379
+      WEBHOOK_GLOBAL_URL: ${WEBHOOK_URL}
+      WEBHOOK_GLOBAL_ENABLED: "true"
+      QRCODE_LIMIT: "30"
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - evolution_instances:/evolution/instances
+
+  postgres:
+    image: postgres:15-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: evo
+      POSTGRES_PASSWORD: ${DB_PASS}
+      POSTGRES_DB: evolution
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evo"]
+      interval: 10s
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    volumes:
+      - redis_data:/data
+
+volumes:
+  evolution_instances:
+  postgres_data:
+  redis_data:</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 .env</h3>
+          <span class="text-xs text-neutral-500">bash</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">EVOLUTION_API_KEY=troque-isso-por-uuid-forte
+DB_PASS=outro-uuid-forte
+WEBHOOK_URL=https://seu-app.convex.site/webhooks/evolution</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🚀 Subir e validar</h3>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># subir
+docker compose up -d
+
+# verificar saúde
+curl http://localhost:8080/
+
+# logs em tempo real
+docker compose logs -f evolution
+
+# parar tudo
+docker compose down
+
+# reset completo (apaga sessões)
+docker compose down -v</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">⚠️ Uma armadilha comum</h3>
+        <p class="text-neutral-300 text-sm">Webhook usa <code class="text-amber-400">localhost</code> dá pau porque o container não enxerga o seu host. Use <code class="text-amber-400">ngrok</code> em desenvolvimento (<code class="text-amber-400">ngrok http 3000</code>) e coloque a URL HTTPS retornada como <code class="text-amber-400">WEBHOOK_URL</code>. Em produção, é a URL da Vercel ou Convex.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📲 Conectando WhatsApp pessoal</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cada cliente tem uma "instância" no Evolution. Você cria, mostra QR code na sua UI, ele escaneia, e a sessão fica salva. <strong class="text-amber-400">Cair e reconectar deve ser invisível pro cliente</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🔄 Ciclo de vida de uma instância</h3>
+        <div class="space-y-3">
+          <div class="flex items-center space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">1️⃣</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-200 text-sm">Criar instância</div>
+              <code class="text-xs text-amber-400">POST /instance/create { instanceName: "cliente_abc" }</code>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">2️⃣</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-200 text-sm">Buscar QR code</div>
+              <code class="text-xs text-amber-400">GET /instance/connect/cliente_abc</code>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">3️⃣</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-200 text-sm">Cliente escaneia no celular</div>
+              <span class="text-xs text-neutral-400">WhatsApp → Aparelhos conectados → Conectar</span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">4️⃣</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-200 text-sm">Sessão persistida no Postgres</div>
+              <span class="text-xs text-neutral-400">Reinício do container = reconnect automático</span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">5️⃣</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-200 text-sm">Status connected → manda e recebe</div>
+              <code class="text-xs text-amber-400">GET /instance/connectionState/cliente_abc</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">📋 Boas práticas pra não cair</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="space-y-2">
+            <div class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span class="text-neutral-300">Use número dedicado, nunca o pessoal</span></div>
+            <div class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span class="text-neutral-300">Aqueça o número 1–2 semanas antes de volume alto</span></div>
+            <div class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span class="text-neutral-300">Polling de connectionState a cada 5 min com alerta</span></div>
+            <div class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span class="text-neutral-300">UI no painel mostrando status (verde/vermelho)</span></div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-start space-x-2"><span class="text-red-400">✗</span><span class="text-neutral-300">Disparo em massa pra contato que não falou</span></div>
+            <div class="flex items-start space-x-2"><span class="text-red-400">✗</span><span class="text-neutral-300">Mensagem idêntica copiada 100 vezes seguidas</span></div>
+            <div class="flex items-start space-x-2"><span class="text-red-400">✗</span><span class="text-neutral-300">Mais de 1 sessão simultânea no mesmo número</span></div>
+            <div class="flex items-start space-x-2"><span class="text-red-400">✗</span><span class="text-neutral-300">Reescanear QR de hora em hora — algo está errado</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🔔 Webhooks: receber mensagens</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Webhook é o coração do produto. Toda vez que chega mensagem no WhatsApp do cliente, Evolution dá <strong class="text-amber-400">POST no seu endpoint</strong>. Você valida, salva no banco e dispara o agente IA.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🌊 Fluxo do webhook</h3>
+        <svg viewBox="0 0 600 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="60" width="100" height="60" rx="6" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="70" y="85" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">WhatsApp</text>
+          <text x="70" y="100" text-anchor="middle" fill="#9ca3af" font-size="8">cliente envia</text>
+          <line x1="120" y1="90" x2="160" y2="90" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#a)"/>
+          <rect x="160" y="60" width="100" height="60" rx="6" fill="#1f2937" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="210" y="85" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="bold">Evolution</text>
+          <text x="210" y="100" text-anchor="middle" fill="#9ca3af" font-size="8">capta + POST</text>
+          <line x1="260" y1="90" x2="300" y2="90" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#a)"/>
+          <rect x="300" y="60" width="100" height="60" rx="6" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+          <text x="350" y="80" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">Webhook</text>
+          <text x="350" y="95" text-anchor="middle" fill="#9ca3af" font-size="8">valida HMAC</text>
+          <text x="350" y="108" text-anchor="middle" fill="#9ca3af" font-size="8">grava + dispara</text>
+          <line x1="400" y1="90" x2="440" y2="90" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#a)"/>
+          <rect x="440" y="60" width="100" height="60" rx="6" fill="#1f2937" stroke="#0ea5e9" stroke-width="1.5"/>
+          <text x="490" y="85" text-anchor="middle" fill="#0ea5e9" font-size="11" font-weight="bold">Convex</text>
+          <text x="490" y="100" text-anchor="middle" fill="#9ca3af" font-size="8">message + AI</text>
+          <defs>
+            <marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f59e0b"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 convex/http.ts (handler do webhook)</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">import { httpRouter } from "convex/server";
+import { httpAction } from "./_generated/server";
+import { internal } from "./_generated/api";
+
+const http = httpRouter();
+
+http.route({
+  path: "/webhooks/evolution",
+  method: "POST",
+  handler: httpAction(async (ctx, req) =&gt; {
+    // 1. valida segredo no header
+    const auth = req.headers.get("apikey");
+    if (auth !== process.env.EVOLUTION_API_KEY) {
+      return new Response("unauthorized", { status: 401 });
+    }
+
+    const body = await req.json();
+    if (body.event !== "messages.upsert") return new Response("ok");
+
+    const msg = body.data;
+    if (msg.key.fromMe) return new Response("ok"); // ignora as nossas
+
+    // 2. idempotência: se já processei este id, sai
+    const existing = await ctx.runQuery(internal.messages.byExternalId, {
+      externalId: msg.key.id,
+    });
+    if (existing) return new Response("ok");
+
+    // 3. resolve contato e conversa
+    const phone = msg.key.remoteJid.split("@")[0];
+    const { contactId, conversationId } = await ctx.runMutation(
+      internal.contacts.upsertAndOpen,
+      { instanceName: body.instance, phone, name: msg.pushName }
+    );
+
+    // 4. grava mensagem
+    await ctx.runMutation(internal.messages.create, {
+      conversationId,
+      externalId: msg.key.id,
+      direction: "inbound",
+      sender: "contact",
+      body: msg.message?.conversation ?? "[mídia]",
+      sentAt: msg.messageTimestamp * 1000,
+    });
+
+    // 5. agenda agente IA
+    await ctx.scheduler.runAfter(0, internal.ai.respond, { conversationId });
+
+    return new Response("ok");
+  }),
+});
+
+export default http;</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Os 3 pecados capitais do webhook</h3>
+        <p class="text-neutral-300 text-sm"><strong>1) Não validar idempotência</strong> — Evolution reentrega em retry e sua UI mostra mensagem duplicada. <strong>2) Processar tudo no handler</strong> — bloqueia, dá timeout, perde mensagem. Use <code class="text-amber-400">scheduler.runAfter(0, ...)</code>. <strong>3) Engolir erro silenciosamente</strong> — sempre logue com nível ERROR e dispare alerta. Mensagem perdida é a queixa nº 1 de cliente nesse domínio.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📤 Enviando mensagens</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Texto, imagem, áudio, document. Cada tipo tem seu endpoint, mas a função pode ser <strong class="text-amber-400">uma só com switch</strong> — facilita usar do agente IA.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 convex/lib/whatsapp.ts</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">type SendPayload =
+  | { kind: "text"; text: string }
+  | { kind: "image"; url: string; caption?: string }
+  | { kind: "audio"; url: string }
+  | { kind: "document"; url: string; filename: string };
+
+export async function sendMessage(
+  instanceName: string,
+  to: string,
+  payload: SendPayload
+) {
+  const base = process.env.EVOLUTION_BASE_URL!;
+  const headers = {
+    "Content-Type": "application/json",
+    apikey: process.env.EVOLUTION_API_KEY!,
+  };
+
+  const number = to.replace(/\D/g, "") + "@s.whatsapp.net";
+
+  const routes = {
+    text:     { path: "sendText",     body: { number, text: (payload as any).text } },
+    image:    { path: "sendMedia",    body: { number, mediatype: "image",
+                  media: (payload as any).url, caption: (payload as any).caption } },
+    audio:    { path: "sendWhatsAppAudio", body: { number, audio: (payload as any).url } },
+    document: { path: "sendMedia",    body: { number, mediatype: "document",
+                  media: (payload as any).url, fileName: (payload as any).filename } },
+  } as const;
+
+  const route = routes[payload.kind];
+  const res = await fetch(`${base}/message/${route.path}/${instanceName}`, {
+    method: "POST", headers, body: JSON.stringify(route.body),
+  });
+
+  if (!res.ok) throw new Error(`evolution ${res.status}: ${await res.text()}`);
+  return res.json();
+}</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Exemplo de payload JSON (envio de texto)</h3>
+          <span class="text-xs text-neutral-500">JSON</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">{
+  "number": "5511987654321@s.whatsapp.net",
+  "text": "Olá Ana, posso te confirmar a reunião amanhã às 14h?"
+}</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">⚖️ Limites e boas práticas</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <div class="text-emerald-400 font-semibold mb-2">Volume sustentável</div>
+            <ul class="text-neutral-300 space-y-1 text-xs">
+              <li>• Máx 1 msg/segundo por instância</li>
+              <li>• Pausa de 3–8s entre mensagens em sequência</li>
+              <li>• Atrasinho aleatório imita "digitando"</li>
+              <li>• Até 5k msgs/dia em número aquecido</li>
+            </ul>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <div class="text-yellow-400 font-semibold mb-2">Mídia</div>
+            <ul class="text-neutral-300 space-y-1 text-xs">
+              <li>• Imagem: até 5MB, JPEG/PNG</li>
+              <li>• Áudio: ogg/opus pra "voice note"</li>
+              <li>• Documento: até 100MB, PDF preferido</li>
+              <li>• URL pública preferida sobre base64</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Áudio é o segredo brasileiro</h3>
+        <p class="text-neutral-300 text-sm">Cliente brasileiro adora áudio do WhatsApp. Use TTS (ElevenLabs ou OpenAI) pra gerar resposta em ogg/opus quando o lead também mandou áudio. <strong>Taxa de resposta sobe 40%</strong> versus texto puro. Detalhe que faz o produto parecer humano sem ser.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Evolution API destrava WhatsApp em 10 min sem aprovação Meta</strong><span class="text-neutral-400"> — trade-off certo pra PME BR.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Self-host R$ 30/mês compensa a partir do 3º cliente</strong><span class="text-neutral-400"> — antes disso, paga SaaS e foca em vender.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">docker-compose up sobe Evolution + Postgres + Redis num comando</strong><span class="text-neutral-400"> — mesmo arquivo dev e prod.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Sessão persistida sobrevive a restart sem novo QR</strong><span class="text-neutral-400"> — UX invisível pro cliente.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Webhook idempotente e assíncrono é o coração do produto</strong><span class="text-neutral-400"> — mensagem perdida é o pior bug.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Função única sendMessage com switch por tipo</strong><span class="text-neutral-400"> — facilita o agente IA usar.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-amber-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">4.3 — Agente IA dentro do produto: system prompt do qualificador, function calling pra criar deals, handoff humano e otimização de custo via prompt caching.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Stack + Modelagem</a>
+          <a href="modulo-4-3.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Próximo: Agente IA →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 4.2 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

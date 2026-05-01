@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 2 — A Linguagem dos Agentes | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .modal { display: none; }
+    .modal.active { display: flex; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .bg-blue-500\/10 { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:bg-blue-500\/30:hover { background-color: rgba(37,99,235,0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">⚡</span>
+            <span class="font-bold text-lg hidden sm:inline">Master Codex</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10">
+            <span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span>
+          </a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">TRILHA 2</span>
+          <h1 class="text-3xl sm:text-4xl font-bold mb-4">📜 A Linguagem dos Agentes</h1>
+          <p class="text-lg text-neutral-400 max-w-xl mb-6">Sair de prompt improvisado para um agente que entende seu projeto: AGENTS.md, skills, reverse prompting, plan mode, definition of done, sandbox e worktrees.</p>
+          <div class="grid grid-cols-4 gap-4 max-w-lg">
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">~4h</div><div class="text-xs text-neutral-400">Duração</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Core</div><div class="text-xs text-neutral-400">Nível</div></div>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <svg viewBox="0 0 300 220" class="w-full max-w-xs" xmlns="http://www.w3.org/2000/svg">
+            <rect x="60" y="40" width="180" height="140" rx="10" fill="#1f2937" stroke="#3b82f6" stroke-width="2"/>
+            <line x1="60" y1="70" x2="240" y2="70" stroke="#3b82f6" stroke-width="1.5" stroke-opacity="0.6"/>
+            <circle cx="78" cy="55" r="4" fill="#ef4444"/>
+            <circle cx="92" cy="55" r="4" fill="#fbbf24"/>
+            <circle cx="106" cy="55" r="4" fill="#10b981"/>
+            <text x="150" y="60" text-anchor="middle" fill="#9ca3af" font-size="9">AGENTS.md</text>
+            <text x="78" y="88" fill="#3b82f6" font-size="9" font-weight="bold"># Objetivo</text>
+            <text x="78" y="103" fill="#9ca3af" font-size="8">InboxAI: triagem de email</text>
+            <text x="78" y="120" fill="#3b82f6" font-size="9" font-weight="bold"># Stack</text>
+            <text x="78" y="135" fill="#9ca3af" font-size="8">Next.js · Convex · Tailwind</text>
+            <text x="78" y="152" fill="#3b82f6" font-size="9" font-weight="bold"># Comandos</text>
+            <text x="78" y="167" fill="#9ca3af" font-size="8">bun dev · bun test · bun lint</text>
+            <text x="150" y="205" text-anchor="middle" fill="#6b7280" font-size="9">O manual operacional do projeto</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- CARDS SIMPLES -->
+    <div class="mb-12">
+      <h2 class="text-xl font-bold mb-4 text-neutral-300">Módulos desta Trilha</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="modulo-2-1.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-4 transition-all hover:bg-blue-500/5">
+          <div class="text-blue-400 font-bold text-sm mb-1">2.1</div>
+          <div class="font-semibold text-sm group-hover:text-blue-400 transition-colors">📄 AGENTS.md</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-2-2.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-4 transition-all hover:bg-blue-500/5">
+          <div class="text-blue-400 font-bold text-sm mb-1">2.2</div>
+          <div class="font-semibold text-sm group-hover:text-blue-400 transition-colors">🎯 Skills</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-2-3.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-4 transition-all hover:bg-blue-500/5">
+          <div class="text-blue-400 font-bold text-sm mb-1">2.3</div>
+          <div class="font-semibold text-sm group-hover:text-blue-400 transition-colors">📐 Reverse + Plan + DoD</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-2-4.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 p-4 transition-all hover:bg-blue-500/5">
+          <div class="text-blue-400 font-bold text-sm mb-1">2.4</div>
+          <div class="font-semibold text-sm group-hover:text-blue-400 transition-colors">🪟 Memória & Sandbox</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-dark-600 pt-8 mb-6">
+      <h2 class="text-lg font-bold text-neutral-300">Conteúdo Detalhado</h2>
+    </div>
+
+    <!-- MÓDULO 2.1 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-blue-400 font-bold">2.1</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">📄 AGENTS.md: O Manual Operacional do Projeto</h3>
+        <p class="text-neutral-400 text-sm">O arquivo que o Codex (e o Cursor, e o Claude) lê automaticamente antes de cada sessão. Sem ele, você re-explica o projeto toda vez. Com ele, o agente já chega informado.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">📄</span>
+            <div><span class="font-medium">O que é AGENTS.md</span><span class="text-neutral-500 text-sm ml-2">- Contexto durável que vive no repo</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Arquivo de markdown na raiz do projeto que Codex, Cursor e Claude leem automaticamente antes de qualquer sessão. Contém objetivo, stack, comandos, regras e preferências.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem AGENTS.md você re-explica o projeto toda vez — perde tempo e o agente erra padrões básicos. Com AGENTS.md, qualquer agente já chega calibrado.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Contexto durável, system prompt do projeto, memória compartilhada, fonte de verdade.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🏗️</span>
+            <div><span class="font-medium">Estrutura mínima viável</span><span class="text-neutral-500 text-sm ml-2">- Objetivo, Stack, Comandos, Regras, DoD</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cinco seções obrigatórias: Objetivo (uma frase), Stack (versões e libs), Comandos (dev, test, lint, deploy), Regras de código (TS strict, conventional commits) e Critério de pronto.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É o mínimo para o agente operar bem. Mais que isso vira ruído; menos que isso vira improviso. Padronizar essas 5 seções evita 80% dos erros.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Template, seções obrigatórias vs opcionais, comandos canônicos, tone of voice de regras.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🌳</span>
+            <div><span class="font-medium">Hierarquia: global vs subpasta</span><span class="text-neutral-500 text-sm ml-2">- Override por área sem conflito</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">AGENTS.md na raiz vale para todo o projeto. AGENTS.md em subpasta (ex: /backend) override regras só naquela área. O agente combina os dois automaticamente.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Em monorepo ou app cheio de áreas (frontend, backend, infra), regras únicas globais não cobrem tudo. Hierarquia evita poluir o arquivo raiz.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Override, herança, escopo de regra, monorepo, separação por área.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">📋</span>
+            <div><span class="font-medium">Anatomia de um exemplar</span><span class="text-neutral-500 text-sm ml-2">- Walkthrough comentado do AGENTS.md do InboxAI</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Análise linha a linha do AGENTS.md real do projeto InboxAI: cada decisão justificada, com explicação de por que essa regra está ali e o que ela evita.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Ver um AGENTS.md de produção real ensina mais que qualquer template abstrato. Você copia o padrão e adapta para seus projetos.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Estudo de caso, justificativa por linha, cópia consciente, adaptação ao contexto.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">⚠️</span>
+            <div><span class="font-medium">Erros comuns</span><span class="text-neutral-500 text-sm ml-2">- Genérico, datado, longo demais</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Os 3 vícios mais comuns: regras vagas tipo "seja útil"; informação desatualizada (versões antigas, comandos quebrados); prolixidade que faz o agente perder o foco.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cada erro corrói a utilidade do AGENTS.md silenciosamente. Reconhecer os padrões evita que seu arquivo vire ruído ignorado.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Genericidade, drift documental, tamanho ótimo, sinal vs ruído.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">🌱</span>
+            <div><span class="font-medium">Living document</span><span class="text-neutral-500 text-sm ml-2">- Revisar a cada sprint, podar quando vira ruído</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">AGENTS.md não é setup once and forget. Ao notar padrões repetidos, vira regra. Ao virar ruído, sai. A cada sprint, revisar e podar mantém o sinal alto.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Documentos vivos refletem o projeto real. Documentos congelados viram folclore que ninguém respeita — e o agente também ignora.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Cadência de revisão, poda, evolução, gatilhos de update, AGENTS.md changelog.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-2-1.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 2.2 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-blue-400 font-bold">2.2</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🎯 Skills: O que São, Como Instalar, Como Invocar</h3>
+        <p class="text-neutral-400 text-sm">Pacote de instrução durável + recursos. Diferente de prompt (efêmero) e de tool (interface). É o que transforma capacidade pontual em capacidade reusável.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🎯</span>
+            <div><span class="font-medium">O que é uma skill</span><span class="text-neutral-500 text-sm ml-2">- Pacote durável vs prompt vs tool</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Uma skill é um pacote de instrução durável + recursos (scripts, references, templates). Diferente de prompt (efêmero, vive na sessão) e de tool (interface técnica para uma API).</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Skills transformam capacidade pontual em capacidade reusável. Sem skills, você re-prompta a mesma rotina toda semana. Com skills, vira um comando.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Skill vs prompt vs tool, durabilidade, reuso, invocação por nome.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">📦</span>
+            <div><span class="font-medium">Anatomia: SKILL.md, references/, scripts/</span><span class="text-neutral-500 text-sm ml-2">- Estrutura de arquivos e frontmatter</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Toda skill tem SKILL.md (frontmatter com name, description, when_to_use + corpo de instruções), pasta references/ (docs longas, exemplos) e pasta scripts/ (executáveis auxiliares).</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Estrutura padronizada permite que qualquer agente carregue a skill. Frontmatter bem escrito é o que faz o agente decidir invocar a skill no momento certo.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Frontmatter, when_to_use, references, scripts, layout convencional.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🪜</span>
+            <div><span class="font-medium">Progressive disclosure</span><span class="text-neutral-500 text-sm ml-2">- Carrega só o que precisa, economiza contexto</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">O agente vê apenas nome+descrição inicialmente. Carrega SKILL.md ao decidir usar. Carrega references/ só quando o SKILL.md aponta para um arquivo específico. Tudo lazy.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Carregar tudo de uma vez explode a janela de contexto. Progressive disclosure permite ter 50 skills disponíveis sem queimar tokens.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Lazy loading, janela de contexto, decision-time loading, references on-demand.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🛒</span>
+            <div><span class="font-medium">Instalar skills da loja oficial</span><span class="text-neutral-500 text-sm ml-2">- browser-use, computer-use, remotion</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">A loja oficial da OpenAI tem skills prontas: browser-use (navegar sites), computer-use (controlar tela), remotion (animações em vídeo). Instalação em 1 clique.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Antes de criar skill própria, sempre cheque a loja. Skills oficiais são otimizadas e mantidas. Reinventar dá retrabalho.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Loja oficial, instalação, manutenção, skills oficiais vs comunidade.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">👆</span>
+            <div><span class="font-medium">Invocação manual vs automática</span><span class="text-neutral-500 text-sm ml-2">- Quando puxar com @nome, quando deixar o agente decidir</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">O agente pode puxar a skill sozinho quando reconhece o gatilho do when_to_use. Você também pode forçar com @skill-name. Cada modo serve a um cenário diferente.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Invocação automática é fluida mas pode falhar se o gatilho está mal escrito. Manual garante mas exige você lembrar do nome. Saber quando usar cada uma evita frustração.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Auto-invocação, invocação explícita, gatilhos, controle vs fluidez.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">🎁</span>
+            <div><span class="font-medium">As 5 skills do Master Codex</span><span class="text-neutral-500 text-sm ml-2">- landing-page, pr-review, qa-visual, micro-saas-launch, weekly-report</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cinco skills proprietárias entregues no curso: landing-page (gera site em 1h), pr-review (auditoria), qa-visual (screenshots), micro-saas-launch (kit completo), weekly-report (relatório semanal).</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Skills do Master Codex foram desenhadas para tirar você do zero a entregar projeto vendável. São o atalho que justifica os R$ 5k do curso.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Skill proprietária, atalho prático, kit de produtividade, ROI do curso.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-2-2.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 2.3 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-blue-400 font-bold">2.3</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">📐 Reverse Prompting + Definition of Done + Plan Mode</h3>
+        <p class="text-neutral-400 text-sm">Os três hábitos que separam quem entrega na primeira tentativa de quem fica iterando 10 vezes. Pedir o plano antes do código, perguntar o que o agente precisa saber, definir critério objetivo de pronto.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🔄</span>
+            <div><span class="font-medium">Reverse prompting</span><span class="text-neutral-500 text-sm ml-2">- Pedir ao agente o que pedir</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Antes de pedir X, pergunte: "O que você precisa saber pra fazer X bem feito?". O agente lista lacunas. Você preenche. Aí pede X.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Inverte o trabalho de descobrir o que falta. Em vez de você adivinhar, o agente declara. Cobertura de contexto fica muito mais alta na primeira tentativa.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Reverse prompting, gap analysis, contexto declarado, briefing reverso.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">📐</span>
+            <div><span class="font-medium">Plan Mode</span><span class="text-neutral-500 text-sm ml-2">- Plano em N etapas antes do código</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Modo onde o agente propõe um plano em 3–7 etapas antes de tocar em qualquer arquivo. Você lê, ajusta, aprova. Só então ele executa.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Discutir abordagem em 30s evita refatorar 200 linhas depois. É a economia mais barata do fluxo agentic.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Plan mode, ciclo plan-approve-execute, validação prévia, decomposição.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">✅</span>
+            <div><span class="font-medium">Definition of Done explícita</span><span class="text-neutral-500 text-sm ml-2">- Build, lint, testes, browser, diff revisado</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Critério objetivo de "pronto": build passa sem warning, lint clean, testes verdes, smoke test no browser, diff revisado por humano. Tudo declarado no AGENTS.md.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem DoD explícita, "pronto" é subjetivo. Agente para cedo demais ou tarde demais. Com DoD, o critério é claro pra todo mundo.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Definition of Done, checklist objetiva, gate de aceite, contrato verificável.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🎨</span>
+            <div><span class="font-medium">DoD para frontend</span><span class="text-neutral-500 text-sm ml-2">- Build, lint, browser desktop+mobile, screenshots</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">DoD específica para frontend: bun run build sem erro, lint clean, smoke test no Chrome em viewport desktop+mobile, screenshots antes/depois anexados ao PR.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Frontend tem armadilhas próprias (responsividade, hidratação, dark mode). DoD genérica deixa passar bug visual. Específica filtra.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Smoke visual, viewport breakpoints, screenshots como prova, hidratação.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">⚙️</span>
+            <div><span class="font-medium">DoD para backend</span><span class="text-neutral-500 text-sm ml-2">- Testes unit+integração, migrations, staging</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">DoD backend: testes unitários + integração passam, migrations rodadas em staging sem erro, deploy de staging OK, rollback testado, log em ordem.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Backend quebra silenciosamente em produção. Pegar tudo em staging com DoD apertada custa pouco e evita incidente caro.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Migrations idempotentes, rollback, staging, observabilidade, smoke test de API.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">📜</span>
+            <div><span class="font-medium">Template autoral</span><span class="text-neutral-500 text-sm ml-2">- A frase única do Master Codex</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Frase única que combina Reverse + Plan + DoD. Você cola no início de qualquer sessão e o agente já entra calibrado nos três eixos. Bônus do curso.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Reduz a 1 cola o que normalmente exige 3 hábitos manuais. Isso por si só justifica investir tempo no método.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Template autoral, frase mestre, atalho mental, padrão repetível.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-2-3.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 2.4 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-blue-400 font-bold">2.4</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🪟 Memória, Contexto, Sandbox e Worktrees</h3>
+        <p class="text-neutral-400 text-sm">A camada operacional do agente: como gerenciar a janela de contexto, salvar memória persistente, escolher sandbox certo e isolar tarefas em worktrees para multiagente sem conflito.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🪟</span>
+            <div><span class="font-medium">Janela de contexto</span><span class="text-neutral-500 text-sm ml-2">- Definição, compactação, sinal de travado</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">A janela de contexto é o que o agente lembra na sessão atual. GPT 5.5 Codex tem 1M tokens, mas Codex compacta automaticamente quando enche. Saber ler os sinais é importante.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Quando a janela trava, o agente esquece. Reconhecer e abrir nova sessão antes de degradar evita ter que refazer trabalho.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Janela de contexto, compactação, prompt cache, degradação progressiva.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">💾</span>
+            <div><span class="font-medium">Memory persistente</span><span class="text-neutral-500 text-sm ml-2">- O que vive entre sessões</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Memória que sobrevive entre sessões. Você salva fatos sobre você, preferências, atalhos. Agente recupera no próximo chat. Você gerencia: ver, editar, limpar.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem memória, você reapresenta as mesmas preferências toda hora. Com memória bem cuidada, o agente vai te conhecendo. Mas memória inchada vira ruído.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Memory store, escopo de memória, audit, poda, memória global vs projeto.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🔒</span>
+            <div><span class="font-medium">Sandbox: read-only / edit / full-access</span><span class="text-neutral-500 text-sm ml-2">- Quando usar cada e os riscos</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Três níveis de permissão: read-only (só lê), edit (edita arquivos), full-access (roda comandos shell, instala). Você escolhe por contexto.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Full-access em projeto novo é seguro. Em código de cliente, é arriscado — o agente pode rodar comando destrutivo. Calibrar é segurança operacional.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Sandbox, escalada de permissão, blast radius, permissão contextual.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🌳</span>
+            <div><span class="font-medium">Worktrees do Git</span><span class="text-neutral-500 text-sm ml-2">- Múltiplas branches paralelas em pastas separadas</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">git worktree add cria uma nova pasta com uma branch checada. Cada agente trabalha numa worktree própria. Sem stash, sem trocar branch, sem conflito.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É a base técnica do multiagente. Sem worktrees, dois agentes editando arquivos simultaneamente geram conflitos e perda de trabalho.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">git worktree add, branches paralelas, isolamento físico, cleanup.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🤖</span>
+            <div><span class="font-medium">Sub-agents</span><span class="text-neutral-500 text-sm ml-2">- Quando delegar e o custo</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Sub-agente é um agente filho que recebe uma tarefa fechada e devolve o resultado. Útil para paralelismo e isolamento de contexto. Tem overhead.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Delegar bem multiplica throughput. Delegar mal duplica trabalho. Saber a hora certa é a diferença entre 4x mais rápido e 2x mais lento.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Sub-agent, paralelismo, overhead, contexto isolado, fan-out.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">⚠️</span>
+            <div><span class="font-medium">Erros caros multiagente</span><span class="text-neutral-500 text-sm ml-2">- Mesmo arquivo, mesma branch, sandbox errado</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-blue-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Os 3 acidentes clássicos: dois agentes na mesma branch (conflito), dois agentes no mesmo arquivo (overwrite), agente em sandbox full deletando .env. Como prevenir.</p></div>
+              <div><span class="text-blue-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cada erro pode custar horas de retrabalho ou pior — perda de dados de cliente. Reconhecer o padrão antes de cometer é proteção barata.</p></div>
+              <div><span class="text-blue-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Race condition, branch hygiene, blast radius, secrets safety, prevenção.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-2-4.html" class="px-4 py-2 text-sm bg-blue-600 hover:bg-blue-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Master Codex — Trilha 2 — 2026</p>
+      <p class="mt-2"><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      explanation.classList.toggle('active');
+    }
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

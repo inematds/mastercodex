@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 6 — Fábrica de Micro-SaaS | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-rose-400 { color: #9f1239; }
+    html:not(.dark) .bg-rose-500\/20 { background-color: rgba(159,18,57,0.12); }
+    html:not(.dark) .bg-rose-500\/10 { background-color: rgba(159,18,57,0.08); }
+    html:not(.dark) .bg-rose-500\/5 { background-color: rgba(159,18,57,0.05); }
+    html:not(.dark) .border-rose-500\/30 { border-color: rgba(159,18,57,0.25); }
+    html:not(.dark) .hover\:bg-rose-500\/30:hover { background-color: rgba(159,18,57,0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">⚡</span>
+            <span class="font-bold text-lg hidden sm:inline">Master Codex</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-rose-400 bg-rose-500/10"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-rose-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">TRILHA 6</span>
+          <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏭 Fábrica de Micro-SaaS</h1>
+          <p class="text-lg text-neutral-400 max-w-xl mb-6">Transformar o método em máquina repetível: Codex Cloud delegando PRs, automations rodando sozinhas, suas próprias skills e o ritmo de 1 micro-SaaS por semana — InboxAI white-label virando carteira de clientes.</p>
+          <div class="grid grid-cols-4 gap-4 max-w-lg">
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">~4h</div><div class="text-xs text-neutral-400">Duração</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Final</div><div class="text-xs text-neutral-400">Trilha</div></div>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <svg viewBox="0 0 320 220" class="w-full max-w-xs" xmlns="http://www.w3.org/2000/svg">
+            <rect x="20" y="40" width="280" height="140" rx="6" fill="#1f2937" stroke="#9f1239" stroke-width="1.5"/>
+            <text x="160" y="32" text-anchor="middle" fill="#9f1239" font-size="11" font-weight="bold">FÁBRICA DE MICRO-SAAS</text>
+            <rect x="35" y="60" width="60" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+            <text x="65" y="78" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">Pesquisa</text>
+            <text x="65" y="92" text-anchor="middle" fill="#9ca3af" font-size="7">nicho</text>
+            <rect x="105" y="60" width="60" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+            <text x="135" y="78" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">Build</text>
+            <text x="135" y="92" text-anchor="middle" fill="#9ca3af" font-size="7">white-label</text>
+            <rect x="175" y="60" width="60" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+            <text x="205" y="78" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">Lançar</text>
+            <text x="205" y="92" text-anchor="middle" fill="#9ca3af" font-size="7">cliente</text>
+            <rect x="245" y="60" width="50" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+            <text x="270" y="78" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">R$/mês</text>
+            <text x="270" y="92" text-anchor="middle" fill="#9ca3af" font-size="7">recorrente</text>
+            <line x1="95" y1="80" x2="105" y2="80" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <line x1="165" y1="80" x2="175" y2="80" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <line x1="235" y1="80" x2="245" y2="80" stroke="#9f1239" stroke-width="1.5" marker-end="url(#arr6)"/>
+            <text x="160" y="125" text-anchor="middle" fill="#9ca3af" font-size="8">Cloud + Automations + Skills</text>
+            <rect x="40" y="135" width="80" height="30" rx="4" fill="#111827" stroke="#4b5563" stroke-width="1"/>
+            <text x="80" y="154" text-anchor="middle" fill="#d1d5db" font-size="9">☁️ Cloud</text>
+            <rect x="125" y="135" width="80" height="30" rx="4" fill="#111827" stroke="#4b5563" stroke-width="1"/>
+            <text x="165" y="154" text-anchor="middle" fill="#d1d5db" font-size="9">⏰ Auto</text>
+            <rect x="210" y="135" width="80" height="30" rx="4" fill="#111827" stroke="#4b5563" stroke-width="1"/>
+            <text x="250" y="154" text-anchor="middle" fill="#d1d5db" font-size="9">🛠️ Skills</text>
+            <defs>
+              <marker id="arr6" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#9f1239"/></marker>
+            </defs>
+            <text x="160" y="200" text-anchor="middle" fill="#6b7280" font-size="9">1 micro-SaaS por semana</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- CARDS SIMPLES -->
+    <div class="mb-12">
+      <h2 class="text-xl font-bold mb-4 text-neutral-300">Módulos desta Trilha</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="modulo-6-1.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 p-4 transition-all hover:bg-rose-500/5">
+          <div class="text-rose-400 font-bold text-sm mb-1">6.1</div>
+          <div class="font-semibold text-sm group-hover:text-rose-400 transition-colors">☁️ Cloud + GitHub PRs</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-6-2.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 p-4 transition-all hover:bg-rose-500/5">
+          <div class="text-rose-400 font-bold text-sm mb-1">6.2</div>
+          <div class="font-semibold text-sm group-hover:text-rose-400 transition-colors">⏰ Automations</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-6-3.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 p-4 transition-all hover:bg-rose-500/5">
+          <div class="text-rose-400 font-bold text-sm mb-1">6.3</div>
+          <div class="font-semibold text-sm group-hover:text-rose-400 transition-colors">🛠️ Skills Próprias</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-6-4.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 p-4 transition-all hover:bg-rose-500/5">
+          <div class="text-rose-400 font-bold text-sm mb-1">6.4</div>
+          <div class="font-semibold text-sm group-hover:text-rose-400 transition-colors">🏭 1 SaaS por Semana</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-dark-600 pt-8 mb-6">
+      <h2 class="text-lg font-bold text-neutral-300">Conteúdo Detalhado</h2>
+    </div>
+
+    <!-- MÓDULO 6.1 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-rose-400 font-bold">6.1</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">☁️ Codex Cloud + GitHub PRs + @codex review</h3>
+        <p class="text-neutral-400 text-sm">Delegar tarefas que rodam fora do laptop, com PR automático e revisão de IA por outra IA — workflow profissional do solo dev moderno.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">☁️</span>
+            <div><span class="font-medium">Codex Cloud: agente roda no servidor</span><span class="text-neutral-500 text-sm ml-2">- Você delega; OpenAI executa</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cloud é um ambiente isolado no servidor da OpenAI: você descreve a tarefa, fecha o laptop, e o agente continua rodando, instalando dependências, testando e commitando.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Tira a máquina local do caminho crítico. Tarefas longas (build de SaaS, migração) não bloqueiam seu ambiente — você consulta o resultado horas depois.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Sandbox cloud, ambiente efêmero, persistência em GitHub, async-first, paralelismo remoto.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🔗</span>
+            <div><span class="font-medium">Conectando ao GitHub</span><span class="text-neutral-500 text-sm ml-2">- OAuth, repos, escopos</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Autorização do Codex Cloud no seu GitHub via OAuth, seleção fina de repositórios autorizados e escolha de escopos (read, write, PR creation, comments).</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Setup mal feito gera dois extremos: agente sem permissão para abrir PR (frustrante) ou agente com acesso a repo errado (perigoso). Calibrar uma vez resolve.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">OAuth, GitHub App, fine-grained tokens, repos autorizados, escopos write/read, organização vs pessoal.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">📤</span>
+            <div><span class="font-medium">Delegando uma tarefa ao Cloud</span><span class="text-neutral-500 text-sm ml-2">- Mais detalhe que no App; templates</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">No Cloud, o agente está sozinho — sem você intervir em tempo real. Por isso a descrição precisa ser mais robusta: contexto, escopo, critério de pronto, ramo de destino.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Tarefa mal descrita = PR errada = horas perdidas. Templates reutilizáveis aumentam taxa de acerto de 50% para 90%.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Brief async, escopo explícito, definition of done, contexto durável, prompt template.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">📋</span>
+            <div><span class="font-medium">PR automático com summary e test plan</span><span class="text-neutral-500 text-sm ml-2">- O agente entrega papelada profissional</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Branch nova, commit semântico, PR descrita com Summary (o quê e por quê) e Test Plan (o que validar antes de merge). Padrão pronto para revisão de equipe.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">PR organizada acelera revisão de cliente, equipe e do próprio @codex review. Sem isso, o ganho de velocidade vira caos.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Conventional commits, PR template, Summary + Test Plan, branch naming, atomic commits.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🤖</span>
+            <div><span class="font-medium">@codex review: a IA revisando a IA</span><span class="text-neutral-500 text-sm ml-2">- Comente na PR, outro agente lê</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Você comenta `@codex review` na PR. Um agente independente lê o diff completo, identifica bugs, riscos de segurança, e sugere refactors — direto nos comentários do GitHub.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É o "segundo par de olhos" automatizado que falta ao solo dev. Multiplica qualidade sem somar tempo de revisão humana.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Slash commands no GitHub, revisão automatizada, agentes independentes, fechamento de loop, threshold de severidade.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">👨‍💻</span>
+            <div><span class="font-medium">Workflow profissional: solo + cloud + review</span><span class="text-neutral-500 text-sm ml-2">- A combinação que multiplica throughput</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Combinação dos três: você dispara N tarefas no Cloud, cada uma vira PR, cada PR recebe @codex review. Você só revisa o que sobrou — entrega 4–8x mais.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Esse é o output que justifica cobrar valores de equipe trabalhando sozinho. Sem essa orquestração, agentic vira hype sem ROI.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Pipeline async, fan-out de tarefas, gates de revisão, throughput compounding, kanban agentic.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-6-1.html" class="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 6.2 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-rose-400 font-bold">6.2</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">⏰ Automations: Agentes Recorrentes</h3>
+        <p class="text-neutral-400 text-sm">Tirar trabalho repetitivo das suas mãos com agentes que rodam em horários fixos — relatórios, triagem, scans, dependabot review — e cobrar mensalidade por isso.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🆚</span>
+            <div><span class="font-medium">Prompt único vs automation recorrente</span><span class="text-neutral-500 text-sm ml-2">- A diferença fundamental</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Prompt único = você dispara, agente faz, acabou. Automation = agente acorda sozinho em horário/evento, sem você precisar lembrar. Modelos mentais distintos.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Confundir os dois faz você ou perder oportunidade (rodar manual o que devia ser automation) ou desperdiçar token (automation com escopo de prompt único).</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Trigger, schedule, idempotência, side effects, drift de contexto, custo recorrente.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">💼</span>
+            <div><span class="font-medium">Casos reais</span><span class="text-neutral-500 text-sm ml-2">- Relatório, triagem, dependabot, scan</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Relatório semanal de vendas pro cliente, triagem matinal de issues no GitHub, revisão automática de PRs do dependabot, scan de vulnerabilidade nos repositórios.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">São 4 entregáveis vendáveis em si. Cada um pode virar feature do seu micro-SaaS ou serviço cobrado por mensalidade.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Casos cron-friendly, jobs idempotentes, output estruturado, integração WhatsApp/email, incremental vs full scan.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">⚙️</span>
+            <div><span class="font-medium">Configurando uma automation</span><span class="text-neutral-500 text-sm ml-2">- Trigger, payload, ação, snippet</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Passo a passo: defina trigger (cron, webhook, evento GitHub), payload (variáveis), ação (prompt + ferramentas) e destino do output. YAML claro, versionado em repo.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Automation versionada é auditável e reproduzível para múltiplos clientes. Sem isso, vira "magia que só você sabe configurar".</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">YAML config, env vars, secrets, payload schema, dry-run, versionamento.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">📅</span>
+            <div><span class="font-medium">Schedule: cron, janela e timezone</span><span class="text-neutral-500 text-sm ml-2">- Quando rodar e como evitar choques</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cron expression define quando dispara. Janela permite executar dentro de um intervalo. Timezone evita relatórios chegando às 3h da manhã. Retries cuidam de falhas.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cron mal configurado dispara em horário errado, polui logs e gera complaint do cliente. Vale conhecer minimamente para evitar erros bobos.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Sintaxe cron, janela de execução, timezone IANA, retries com backoff, jitter para evitar thundering herd.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">👀</span>
+            <div><span class="font-medium">Monitoramento: quando algo deu errado</span><span class="text-neutral-500 text-sm ml-2">- Logs, alertas, fallback</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Logs estruturados de cada execução, alertas em Slack ou Discord quando algo falha, fallback (last good output) para não deixar cliente sem nada.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem monitoramento, automation que falha 3 dias seguidos te queima com cliente. Com alerta, você corrige antes do cliente perceber.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Logs JSON, webhook Slack, dead man switch, fallback graceful, on-call rotativo (mesmo solo).</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">💰</span>
+            <div><span class="font-medium">Custos: usage budget para automations</span><span class="text-neutral-500 text-sm ml-2">- Como não estourar orçamento</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cap diário/mensal por automation, alerta em 80% do limite, hard kill em 100%. Evita uma automation em loop esvaziar sua conta.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cliente paga R$ 800/mês — se a automation custar R$ 1.000 em tokens, é prejuízo. Calibrar é matemática direta de margem.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Hard limit, soft alert, cost per run, modelo Fast vs High em automations, margin per client.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-6-2.html" class="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 6.3 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-rose-400 font-bold">6.3</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🛠️ Criando Suas Próprias Skills</h3>
+        <p class="text-neutral-400 text-sm">Transforme processos repetidos em skills reutilizáveis: estrutura, frontmatter, progressive disclosure e a skill autoral "novo-vertical" que clona o InboxAI por nicho.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">📦</span>
+            <div><span class="font-medium">Anatomia de uma skill</span><span class="text-neutral-500 text-sm ml-2">- SKILL.md, references, scripts</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Estrutura padrão: pasta com SKILL.md (manual + frontmatter), references/ (markdown com detalhes), scripts/ (utilitários executáveis). Convenção, não regra obrigatória.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Estrutura previsível faz sua skill funcionar quando outro agente carrega. Sair do padrão sem motivo quebra interoperabilidade.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">SKILL.md, frontmatter YAML, references/, scripts/, naming convention, file tree.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">📜</span>
+            <div><span class="font-medium">Frontmatter: name, description, when_to_use</span><span class="text-neutral-500 text-sm ml-2">- Cada campo, com exemplo</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Bloco YAML no topo do SKILL.md com name (slug), description (gatilho de carregamento) e when_to_use (sinais para o agente decidir invocar).</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Description vaga = skill nunca invocada. Description precisa = skill resolve sozinha. É o que separa skill útil de skill esquecida.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Slug naming, gatilho semântico, exemplos no description, when_to_use, anti-padrões de description.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🪜</span>
+            <div><span class="font-medium">Progressive disclosure</span><span class="text-neutral-500 text-sm ml-2">- Não inflar contexto; carregar só o necessário</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">SKILL.md curto com a essência. References/ com profundidade que só carrega quando necessário. Agente segue links em vez de carregar tudo de cara.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Skill grande inflada queima tokens à toa em toda invocação. Progressive disclosure mantém custo baixo e qualidade alta.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Token budget, lazy loading, links internos, separação skill vs reference, contexto efêmero.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🎯</span>
+            <div><span class="font-medium">Skill autoral: novo-vertical</span><span class="text-neutral-500 text-sm ml-2">- Clona InboxAI e customiza por nicho</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Skill prática construída ao vivo: recebe nome do nicho (clínica, imobiliária, advocacia), clona o InboxAI base, customiza textos, prompts e branding.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É o multiplicador da fábrica. Sem essa skill, cada novo cliente exige 2 dias de trabalho. Com ela, 2 horas e o resto é cliente-específico.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Templating, vertical config, prompts paramétricos, branding modular, smoke test pós-clone.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🌍</span>
+            <div><span class="font-medium">Compartilhando</span><span class="text-neutral-500 text-sm ml-2">- Plugins, repo próprio, loja oficial</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Três caminhos: plugin privado para sua organização, repositório público de skills no GitHub, ou submeter para a loja oficial. Cada um com trade-offs.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Compartilhar skills é como ganhar reputação no mundo agentic. Skills úteis viram lead inbound de clientes que descobriram seu trabalho.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Plugin manifest, repo skills/, loja oficial, versionamento semântico, README como anúncio.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">✨</span>
+            <div><span class="font-medium">Boas práticas de design de skill</span><span class="text-neutral-500 text-sm ml-2">- Foco único, naming, examples</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Foco único (uma responsabilidade), naming claro (verbo + objeto), examples na descrição, scripts idempotentes, sem dependências exóticas que quebram em ambiente novo.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Skill que tenta fazer "tudo" não faz nada bem. Aderir aos padrões aumenta probabilidade de o agente invocá-la corretamente.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">SRP, naming convention, idempotência, deps mínimas, sample inputs/outputs, anti-padrões de skill.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-6-3.html" class="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 6.4 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-rose-400 font-bold">6.4</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🏭 O Método: 1 Micro-SaaS por Semana (InboxAI White-Label)</h3>
+        <p class="text-neutral-400 text-sm">Pesquisa de nicho, white-label do InboxAI, precificação por valor e a aritmética que leva 10 clientes a R$ 15k/mês recorrente — operando solo.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🗺️</span>
+            <div><span class="font-medium">O método em 4 fases</span><span class="text-neutral-500 text-sm ml-2">- Pesquisa, validação, build, lançamento</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Quatro fases time-boxed: pesquisa (1 dia), validação (1 dia), build (3 dias), lançamento (2 dias). Encaixa em uma semana real, com folgas para imprevistos.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem fases definidas, "1 SaaS por semana" vira ansiedade. Com fases, vira processo industrial — cada dia tem entregável claro.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Timebox, gates entre fases, MVP minimalista, validação antes de build, lançamento com 1 cliente.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🔍</span>
+            <div><span class="font-medium">Pesquisa de nicho com agente</span><span class="text-neutral-500 text-sm ml-2">- Achar dor + budget</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Agente cruza fontes (Reclame Aqui, fóruns, Google Maps, redes locais) procurando nichos com dor explícita e capacidade de pagar — sinal mais forte que "eu acho legal".</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">90% das tentativas de SaaS falham na escolha de nicho. Delegar essa pesquisa ao agente é literalmente comprar tempo de pesquisa de mercado.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Sinais de dor, sinais de budget, scraping ético, validação por entrevista, lista de leads pré-qualificados.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🎨</span>
+            <div><span class="font-medium">White-label do InboxAI</span><span class="text-neutral-500 text-sm ml-2">- Clínica, imobiliária, advocacia, e-commerce</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">4 verticais prontos: clínica (agendamento + lembrete), imobiliária (qualificação de lead), advocacia (triagem de caso), e-commerce (pós-venda automatizado).</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cada vertical já testado tira você do paradoxo da escolha. Você não decide "que SaaS construir hoje" — escolhe vertical e aplica método.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Vertical packaging, prompt por nicho, integrações por vertical (CRM, calendário), oferta padrão, onboarding de cliente.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">💰</span>
+            <div><span class="font-medium">Precificação: R$ 800–2.000/mês</span><span class="text-neutral-500 text-sm ml-2">- Por valor entregue, não por hora</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Tabela por nicho com setup + recorrência. Clínica média paga R$ 1.200/mês. Imobiliária R$ 1.500. Advocacia R$ 800. E-commerce R$ 2.000. Setup R$ 5–10k.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Precificar por hora destrói margem agentic. Por valor entregue, você captura parte do ganho do cliente — modelo recorrente que escala.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Value-based pricing, setup + MRR, anchoring, ROI claro, contrato 12 meses, cláusula de aumento.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🚀</span>
+            <div><span class="font-medium">Operação solo: 10 clientes = R$ 15k/mês</span><span class="text-neutral-500 text-sm ml-2">- A aritmética da fábrica</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">10 clientes em ticket médio R$ 1.500 = R$ 15k/mês recorrente. Cada cliente exige ~2h/semana de manutenção. Cabe folgado em 40h semanais com novos prospects.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Saber a meta concreta evita over-engineering. 10 clientes não exigem "plataforma escalável" — exigem entregar bem para os 10.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">CAC vs LTV, churn target, atendimento por cliente/semana, capacidade solo, marco dos 10.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">👥</span>
+            <div><span class="font-medium">Quando contratar (e quem)</span><span class="text-neutral-500 text-sm ml-2">- Suporte ou dev primeiro?</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-rose-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Sinais para contratar: 30+ clientes, churn em alta por demora de suporte, ou seu tempo todo virando "apagar incêndio". Primeiro contrato: suporte/CS, não dev.</p></div>
+              <div><span class="text-rose-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Contratar dev cedo demais quebra margem (agentes já fazem build). Contratar suporte cedo demais é gastar antes de precisar. Saber a hora certa importa.</p></div>
+              <div><span class="text-rose-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Trigger de contratação, churn signal, custo total CS vs dev, terceirizar primeiro, equity vs CLT.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-6-4.html" class="px-4 py-2 text-sm bg-rose-600 hover:bg-rose-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Master Codex — Trilha 6 — 2026</p>
+      <p class="mt-2"><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      explanation.classList.toggle('active');
+    }
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

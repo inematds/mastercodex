@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 2.2 — Skills: o que são, instalar, invocar | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    code, pre, .mono{font-family:'JetBrains Mono', monospace;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-blue-400{color:#2563eb;}
+    html:not(.dark) .bg-blue-500\/20{background-color:rgba(37,99,235,0.12);}
+    html:not(.dark) .bg-blue-500\/10{background-color:rgba(37,99,235,0.08);}
+    html:not(.dark) .border-blue-500\/30{border-color:rgba(37,99,235,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2 — A Linguagem dos Agentes</a><span>/</span>
+      <span class="text-blue-400">Módulo 2.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎯 Skills: o que são, como instalar, como invocar</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Skill é pacote de instrução durável + recursos. Diferente de prompt (efêmero) e de tool (interface técnica). É o que transforma capacidade pontual em capacidade reusável que vive entre sessões.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Core</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">5</div><div class="text-xs text-neutral-400">Skills MC</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🎯 O que é uma Skill</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Uma skill é um <strong class="text-blue-400">pacote de instrução durável + recursos</strong>. Vive em disco. Sobrevive entre sessões. É invocável por nome. É a forma de transformar uma rotina que funciona em algo reusável.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">EFÊMERO</div>
+          <div class="text-3xl mb-3">💬</div>
+          <h4 class="font-bold text-amber-400 mb-2">Prompt</h4>
+          <p class="text-sm text-neutral-400">Instrução que vive na sessão. Some quando você fecha o chat. Útil pra exploração.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">INTERFACE</div>
+          <div class="text-3xl mb-3">🔌</div>
+          <h4 class="font-bold text-purple-400 mb-2">Tool</h4>
+          <p class="text-sm text-neutral-400">Conexão técnica para uma API ou função. Read, Bash, WebFetch. O agente usa quando precisa.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 ring-2 ring-blue-500/30">
+          <div class="text-xs text-blue-400 mb-1">DURÁVEL</div>
+          <div class="text-3xl mb-3">📦</div>
+          <h4 class="font-bold text-blue-400 mb-2">Skill</h4>
+          <p class="text-sm text-neutral-400">Pacote de instrução + recursos. Vive em disco, é versionada, invocada por nome em qualquer sessão.</p>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 A diferença que importa</h3>
+        <p class="text-neutral-300">Você descobre que pedir "abre PR seguindo template + adiciona Co-Authored-By + roda gh pr create" funciona muito bem. <strong>Sem skill</strong>: cola o prompt toda vez. <strong>Com skill</strong>: vira `pr-creator` e você invoca em 1 palavra. Multiplicado por 50 rotinas, é uma vida diferente.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📦 Anatomia: SKILL.md, references/, scripts/</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Toda skill tem o mesmo layout: arquivo principal <code class="text-blue-400 mono text-sm">SKILL.md</code> (instrução + frontmatter), pasta <code class="text-blue-400 mono text-sm">references/</code> (docs longas) e pasta <code class="text-blue-400 mono text-sm">scripts/</code> (executáveis auxiliares).</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📁 Estrutura de uma skill</h3>
+        <div class="mono text-sm space-y-1">
+          <div class="text-neutral-300">📁 .codex/skills/landing-page/</div>
+          <div class="text-neutral-300 ml-4">├─ <span class="text-blue-400 font-bold">SKILL.md</span> <span class="text-neutral-500"># frontmatter + instrucoes principais</span></div>
+          <div class="text-neutral-300 ml-4">├─ 📁 references/</div>
+          <div class="text-neutral-300 ml-8">│  ├─ design-system.md <span class="text-neutral-500"># carregado se precisar</span></div>
+          <div class="text-neutral-300 ml-8">│  ├─ copy-templates.md</div>
+          <div class="text-neutral-300 ml-8">│  └─ exemplo-clinica.md</div>
+          <div class="text-neutral-300 ml-4">├─ 📁 scripts/</div>
+          <div class="text-neutral-300 ml-8">│  ├─ scaffold.sh <span class="text-neutral-500"># roda quando invocado</span></div>
+          <div class="text-neutral-300 ml-8">│  └─ deploy.sh</div>
+          <div class="text-neutral-300 ml-4">└─ 📁 assets/</div>
+          <div class="text-neutral-300 ml-8">   └─ template-base.html</div>
+        </div>
+      </div>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">SKILL.md (frontmatter + body)</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-amber-400">---</span>
+<span class="text-blue-400">name:</span> landing-page
+<span class="text-blue-400">description:</span> Gera uma landing page completa para PME brasileira em 1 hora — hero, pricing, depoimentos, FAQ, CTA. Use quando o usuario disser "preciso de uma landing", "site de venda", "pagina de captacao".
+<span class="text-blue-400">when_to_use:</span> Pedido para criar landing page, site institucional, pagina de produto, MVP de captacao.
+<span class="text-amber-400">---</span>
+
+<span class="text-blue-400"># Landing Page Skill</span>
+
+Voce gera uma landing page production-ready em 1 hora.
+
+<span class="text-blue-400">## Passos</span>
+1. Reverse prompt: pergunta nicho, oferta, preco, prova social.
+2. Gera HTML usando o template em `assets/template-base.html`.
+3. Para copy, leia `references/copy-templates.md`.
+4. Para design system, leia `references/design-system.md`.
+5. Roda `scripts/scaffold.sh` para criar pasta e abrir browser.
+
+<span class="text-blue-400">## Definition of Done</span>
+- Lighthouse > 90 em mobile.
+- Smoke test em viewport 375px e 1440px.
+- CTA testado (link funciona).</code></pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> O frontmatter é o que vende</h3>
+        <p class="text-neutral-300">O agente vê <strong>só o frontmatter</strong> antes de decidir invocar a skill. Se a `description` é vaga, o agente ignora. Se o `when_to_use` lista <strong>gatilhos verbais reais</strong> ("preciso de landing", "site de venda"), a skill é puxada na hora certa.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🪜 Progressive Disclosure</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Skills carregam <strong class="text-blue-400">só o que precisam, no momento que precisam</strong>. Isso é o que permite ter 50 skills disponíveis sem queimar a janela de contexto.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🪜 Os 3 níveis de carregamento</h3>
+        <svg viewBox="0 0 500 220" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="170" width="460" height="40" rx="6" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="40" y="195" fill="#3b82f6" font-size="12" font-weight="bold">NIVEL 1</text>
+          <text x="120" y="190" fill="#d1d5db" font-size="11">Nome + descrição (sempre visível)</text>
+          <text x="120" y="205" fill="#9ca3af" font-size="9">Custo: ~50 tokens por skill</text>
+          <rect x="60" y="100" width="380" height="50" rx="6" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="80" y="125" fill="#3b82f6" font-size="12" font-weight="bold">NIVEL 2</text>
+          <text x="160" y="120" fill="#d1d5db" font-size="11">SKILL.md inteiro (carrega ao decidir usar)</text>
+          <text x="160" y="135" fill="#9ca3af" font-size="9">Custo: ~500–2000 tokens, 1 vez por sessão</text>
+          <rect x="100" y="30" width="300" height="50" rx="6" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="120" y="55" fill="#3b82f6" font-size="12" font-weight="bold">NIVEL 3</text>
+          <text x="190" y="50" fill="#d1d5db" font-size="11">references/ (só se SKILL.md aponta)</text>
+          <text x="190" y="65" fill="#9ca3af" font-size="9">Custo: variável, sob demanda</text>
+        </svg>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-2">❌ Sem progressive disclosure</h4>
+          <p class="text-sm text-neutral-300 mb-2">10 skills × 3000 tokens cada = <strong>30k tokens</strong> antes da primeira mensagem.</p>
+          <p class="text-xs text-neutral-400">A janela de contexto vira lixo. O agente fica burro com sobrecarga.</p>
+        </div>
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <h4 class="font-bold text-emerald-400 mb-2">✅ Com progressive disclosure</h4>
+          <p class="text-sm text-neutral-300 mb-2">10 skills × 50 tokens visíveis = <strong>500 tokens</strong>. Carrega o resto sob demanda.</p>
+          <p class="text-xs text-neutral-400">Você pode ter 100+ skills sem custo perceptível.</p>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Implicação prática</h3>
+        <p class="text-neutral-300">Não tenha medo de instalar skills. <strong>Skill que não é usada custa 50 tokens</strong> — equivalente a uma frase. Skill que é usada paga seu custo facilmente. Mantenha sua biblioteca rica.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🛒 Instalar Skills da Loja Oficial</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A loja oficial da OpenAI tem skills prontas, otimizadas e mantidas. <strong class="text-blue-400">Antes de criar skill própria, sempre cheque a loja</strong>. Reinventar dá retrabalho e raramente é melhor.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Skill oficial</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Para quê</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Quando usar</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr>
+              <td class="p-3 text-blue-400 mono font-semibold">browser-use</td>
+              <td class="p-3 text-neutral-300">Navegar sites, preencher formulários, scrapear dados.</td>
+              <td class="p-3 text-neutral-400">QA visual, scraping de concorrente, validação de fluxo de produto.</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-blue-400 mono font-semibold">computer-use</td>
+              <td class="p-3 text-neutral-300">Controlar a tela inteira (mouse, teclado, screenshots).</td>
+              <td class="p-3 text-neutral-400">Automatizar app desktop, demos, testes E2E em apps nativos.</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-blue-400 mono font-semibold">remotion</td>
+              <td class="p-3 text-neutral-300">Gerar vídeos com React. Animação programática.</td>
+              <td class="p-3 text-neutral-400">Vídeo de venda, social media, demo animado, intro de curso.</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-blue-400 mono font-semibold">canvas-design</td>
+              <td class="p-3 text-neutral-300">Criar PDF e PNG com design profissional.</td>
+              <td class="p-3 text-neutral-400">Pitch deck, poster, capa de e-book, mídia kit.</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-blue-400 mono font-semibold">excalidraw-diagram</td>
+              <td class="p-3 text-neutral-300">Gerar diagramas de arquitetura em Excalidraw.</td>
+              <td class="p-3 text-neutral-400">Documentação técnica, fluxograma de processo, mind map.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">terminal — instalando da loja</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-emerald-400">$</span> codex skills browse
+<span class="text-neutral-500">  → abre marketplace no app</span>
+
+<span class="text-emerald-400">$</span> codex skills install browser-use
+<span class="text-neutral-500">  ✓ baixando de openai/skills/browser-use@2.1.0
+  ✓ verificando assinatura
+  ✓ instalado em ~/.codex/skills/browser-use/</span>
+
+<span class="text-emerald-400">$</span> codex skills list
+<span class="text-neutral-500">  browser-use      v2.1.0  oficial
+  computer-use     v1.4.0  oficial
+  landing-page     v1.0.0  master-codex</span></code></pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Critério de instalação</h3>
+        <p class="text-neutral-300">Instalou e não usou em <strong>30 dias</strong>? Desinstala. Skills oficiais são gratuitas mas atenção do agente é cara. Mantenha a biblioteca enxuta — cada skill ali deve resolver problema real e recorrente.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">👆 Invocação: Manual vs Automática</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Skills podem ser invocadas <strong class="text-blue-400">automaticamente</strong> (o agente reconhece o gatilho) ou <strong class="text-blue-400">manualmente</strong> (você força com <code class="mono text-sm">@nome-da-skill</code>). Cada modo serve a um cenário.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h4 class="font-bold text-emerald-400 mb-3">🤖 Automática</h4>
+          <p class="text-sm text-neutral-300 mb-3">Você diz: <em class="text-neutral-400">"preciso de uma landing pra clínica de estética"</em>.</p>
+          <p class="text-sm text-neutral-300 mb-3">O agente lê o `when_to_use`, reconhece "landing" como gatilho, carrega <code class="mono text-blue-400 text-xs">landing-page</code> sozinho.</p>
+          <div class="text-xs text-neutral-500 mt-3">
+            <span class="text-emerald-400 font-semibold">Quando:</span> Linguagem natural, não quer lembrar nome de skill.
+          </div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+          <h4 class="font-bold text-blue-400 mb-3">👆 Manual</h4>
+          <p class="text-sm text-neutral-300 mb-3">Você diz: <em class="text-neutral-400">"<span class="text-blue-400">@landing-page</span> clínica de estética em SP, R$ 297/mês"</em>.</p>
+          <p class="text-sm text-neutral-300 mb-3">A skill é carregada <strong>obrigatoriamente</strong>, sem depender do agente reconhecer.</p>
+          <div class="text-xs text-neutral-500 mt-3">
+            <span class="text-blue-400 font-semibold">Quando:</span> Garantir uso, skill nova com gatilho fraco, automação por script.
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">⚖️ Trade-offs</h3>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-neutral-400 border-b border-dark-600">
+              <th class="py-2">Critério</th>
+              <th class="py-2 text-center">Automática</th>
+              <th class="py-2 text-center">Manual (@nome)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-700">
+            <tr><td class="py-2 text-neutral-300">Fluidez</td><td class="py-2 text-center text-emerald-400">+++</td><td class="py-2 text-center text-amber-400">+</td></tr>
+            <tr><td class="py-2 text-neutral-300">Garantia de uso</td><td class="py-2 text-center text-amber-400">+</td><td class="py-2 text-center text-emerald-400">+++</td></tr>
+            <tr><td class="py-2 text-neutral-300">Scriptável</td><td class="py-2 text-center text-red-400">não</td><td class="py-2 text-center text-emerald-400">sim</td></tr>
+            <tr><td class="py-2 text-neutral-300">Funciona com skill nova</td><td class="py-2 text-center text-red-400">precisa polir gatilho</td><td class="py-2 text-center text-emerald-400">sempre</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 A regra prática</h3>
+        <p class="text-neutral-300">Use <strong>automática</strong> no dia a dia (chat fluido). Use <strong>manual</strong> em automações (scripts, hooks, CI). Quando criar skill nova, comece manual até ajustar o gatilho — depois libere para automática.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🎁 As 5 Skills do Master Codex</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cinco skills proprietárias entregues no curso. Foram desenhadas pra <strong class="text-blue-400">tirar você do zero a entregar projeto vendável</strong>. Sozinhas, justificam o investimento de R$ 5k.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 mono text-sm">@landing-page</span>
+            <span class="text-xs text-neutral-500">~1h</span>
+          </div>
+          <h4 class="font-bold text-neutral-100 mb-2">🚀 Landing Page Completa</h4>
+          <p class="text-sm text-neutral-400">Hero, pricing, depoimentos, FAQ, CTA. Lighthouse 90+. Pronta pra ar.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 mono text-sm">@pr-review</span>
+            <span class="text-xs text-neutral-500">~5min</span>
+          </div>
+          <h4 class="font-bold text-neutral-100 mb-2">🔍 Auditoria de PR</h4>
+          <p class="text-sm text-neutral-400">Roda na PR aberta. Aponta bugs, segredos vazados, lógica frágil, sugere melhorias.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 mono text-sm">@qa-visual</span>
+            <span class="text-xs text-neutral-500">~10min</span>
+          </div>
+          <h4 class="font-bold text-neutral-100 mb-2">📸 QA Visual Automatizado</h4>
+          <p class="text-sm text-neutral-400">Screenshots desktop+mobile, comparação antes/depois, lista de regressões visuais.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 mono text-sm">@micro-saas-launch</span>
+            <span class="text-xs text-neutral-500">~1 fim de semana</span>
+          </div>
+          <h4 class="font-bold text-neutral-100 mb-2">💼 Kit Completo de Micro-SaaS</h4>
+          <p class="text-sm text-neutral-400">Landing + auth + Stripe + dashboard + email transacional. Do zero ao primeiro cliente pagante.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-blue-500/30 p-5 md:col-span-2">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-blue-400 mono text-sm">@weekly-report</span>
+            <span class="text-xs text-neutral-500">~3min, agendável</span>
+          </div>
+          <h4 class="font-bold text-neutral-100 mb-2">📊 Relatório Semanal de Cliente</h4>
+          <p class="text-sm text-neutral-400">Lê commits da semana, métricas do banco, abre tickets fechados. Gera PDF/email com o que foi entregue. <strong class="text-blue-400">Justifica os R$ 2k/mês de retainer sem você escrever uma linha</strong>.</p>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Por que essas 5</h3>
+        <p class="text-neutral-300">Cada skill resolve um problema que <strong>todo freelancer/dev solo encara semanalmente</strong>: vender (landing), revisar (PR review), garantir qualidade visual (QA), lançar produto (micro-SaaS), justificar valor pro cliente (weekly report). Não são exemplos didáticos — são alavancas comerciais.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Skill = pacote durável</strong><span class="text-neutral-400"> — diferente de prompt (efêmero) e tool (interface). Vive em disco, é versionada.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Anatomia: SKILL.md + references/ + scripts/</strong><span class="text-neutral-400"> — frontmatter com name, description, when_to_use é o que faz a skill ser invocada.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Progressive disclosure economiza contexto</strong><span class="text-neutral-400"> — 50 skills custam 2.5k tokens visíveis; carregam tudo só quando precisa.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Loja oficial: browser-use, computer-use, remotion, canvas-design, excalidraw</strong><span class="text-neutral-400"> — antes de criar, cheque a loja.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Invocação: automática (fluida) vs manual (@nome, garantia)</strong><span class="text-neutral-400"> — comece manual, libere automática quando o gatilho estiver afiado.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">5 skills do Master Codex são alavancas comerciais</strong><span class="text-neutral-400"> — landing-page, pr-review, qa-visual, micro-saas-launch, weekly-report.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">2.3 — Reverse prompting + Plan Mode + Definition of Done. Os três hábitos que separam quem entrega na primeira tentativa de quem itera 10 vezes.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-2-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: AGENTS.md</a>
+          <a href="modulo-2-3.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">Próximo: Reverse + Plan + DoD →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 2.2 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

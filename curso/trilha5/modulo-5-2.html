@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 5.2 — Browser Use + Computer Use | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-teal-400{color:#0d9488;}
+    html:not(.dark) .bg-teal-500\/20{background-color:rgba(13,148,136,0.12);}
+    html:not(.dark) .bg-teal-500\/10{background-color:rgba(13,148,136,0.08);}
+    html:not(.dark) .border-teal-500\/30{border-color:rgba(13,148,136,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-teal-400">Trilha 5 — Multiagente</a><span>/</span>
+      <span class="text-teal-400">Módulo 5.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-teal-500/20 text-teal-400 text-xs font-semibold rounded-full mb-4">MÓDULO 5.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🖥️ Browser Use + Computer Use</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Quando o agente precisa de um browser real para automatizar SaaS sem API, ou do desktop inteiro pra editar mídia entre apps — e onde NUNCA deixar ele entrar.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Pro</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Ferr</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🌐 Browser Use: Agente Controla Browser Real</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Diferente do browser embutido (que renderiza uma página pra você ver), Browser Use dá ao agente <strong class="text-teal-400">controle programático completo de um Chromium</strong>: ele navega, clica, preenche formulários, executa JavaScript, mantém sessão.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-3xl mb-3">👁️</div>
+          <h4 class="font-bold text-blue-400 mb-2">Browser embutido</h4>
+          <p class="text-sm text-neutral-400">Renderiza site dentro do Codex App pra VOCÊ ver e anotar. Útil pra desenvolvimento e debug visual.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 ring-2 ring-teal-500/30">
+          <div class="text-3xl mb-3">🤖</div>
+          <h4 class="font-bold text-teal-400 mb-2">Browser Use</h4>
+          <p class="text-sm text-neutral-400">Browser sob controle do AGENTE. Ele dirige sozinho, executa fluxos completos, extrai dados, testa apps.</p>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">🛠️ O que Browser Use sabe fazer</h3>
+        <div class="grid grid-cols-2 gap-2 text-sm text-neutral-300">
+          <div>• Navegar para URL</div>
+          <div>• Preencher formulários</div>
+          <div>• Clicar em botões e links</div>
+          <div>• Esperar carregar (waitForSelector)</div>
+          <div>• Tirar screenshot</div>
+          <div>• Extrair texto/atributos</div>
+          <div>• Executar JS na página</div>
+          <div>• Lidar com cookies e sessão</div>
+          <div>• Upload de arquivo</div>
+          <div>• Multi-tab e iframes</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🖱️ Computer Use: Agente Controla seu Desktop</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Computer Use é <strong class="text-teal-400">um degrau acima</strong>: o agente vê a tela inteira, move o mouse, digita teclas. Ele consegue abrir Photoshop, Figma, Excel, Notion desktop — qualquer app instalado, mesmo que não tenha API.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-4">🎬 Como funciona o loop Computer Use</h3>
+        <svg viewBox="0 0 520 180" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="60" width="100" height="50" rx="6" fill="#1f2937" stroke="#14b8a6"/>
+          <text x="70" y="82" text-anchor="middle" fill="#14b8a6" font-size="10" font-weight="bold">Screenshot</text>
+          <text x="70" y="98" text-anchor="middle" fill="#9ca3af" font-size="8">tela atual</text>
+
+          <path d="M 120 85 L 180 85" stroke="#14b8a6" stroke-width="1.5" marker-end="url(#a2)"/>
+
+          <rect x="180" y="60" width="100" height="50" rx="6" fill="#1f2937" stroke="#facc15"/>
+          <text x="230" y="82" text-anchor="middle" fill="#facc15" font-size="10" font-weight="bold">Vision</text>
+          <text x="230" y="98" text-anchor="middle" fill="#9ca3af" font-size="8">decide ação</text>
+
+          <path d="M 280 85 L 340 85" stroke="#14b8a6" stroke-width="1.5" marker-end="url(#a2)"/>
+
+          <rect x="340" y="60" width="100" height="50" rx="6" fill="#1f2937" stroke="#a78bfa"/>
+          <text x="390" y="82" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="bold">Ação</text>
+          <text x="390" y="98" text-anchor="middle" fill="#9ca3af" font-size="8">click/type/scroll</text>
+
+          <path d="M 390 110 L 390 140 L 70 140 L 70 110" stroke="#14b8a6" stroke-width="1.5" fill="none" marker-end="url(#a2)" stroke-dasharray="3,3"/>
+          <text x="230" y="158" text-anchor="middle" fill="#9ca3af" font-size="9">repete até concluir tarefa</text>
+
+          <defs><marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8" fill="#14b8a6"/></marker></defs>
+        </svg>
+      </div>
+
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-3">⚠️ Riscos reais</h3>
+        <p class="text-neutral-300 mb-3">Computer Use opera no SEU usuário. Se você roda na sua máquina principal:</p>
+        <ul class="space-y-1 text-sm text-neutral-300">
+          <li>• Acesso a TODAS suas senhas salvas no browser pessoal</li>
+          <li>• Acesso a sessões logadas (Gmail, banco, AWS)</li>
+          <li>• Pode mover/deletar arquivos por engano</li>
+          <li>• Pode executar comandos no terminal aberto</li>
+        </ul>
+        <p class="text-neutral-300 mt-3"><strong class="text-amber-400">Solução:</strong> rode em VM dedicada, perfil de usuário separado, ou container.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🎯 Quando Cada Um Faz Sentido</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Browser Use é mais previsível e seguro. Computer Use é mais poderoso mas frágil. <strong class="text-teal-400">Default em Browser Use; só sobe pra Computer Use quando você não tem alternativa</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Tarefa</th>
+              <th class="text-center p-3 text-teal-400 font-semibold">Browser Use</th>
+              <th class="text-center p-3 text-purple-400 font-semibold">Computer Use</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">Pesquisar 5 concorrentes (web)</td><td class="p-3 text-center text-teal-400">✓ ideal</td><td class="p-3 text-center text-neutral-500">overkill</td></tr>
+            <tr><td class="p-3 text-neutral-300">Testar fluxo de checkout E2E</td><td class="p-3 text-center text-teal-400">✓ ideal</td><td class="p-3 text-center text-neutral-500">desnecessário</td></tr>
+            <tr><td class="p-3 text-neutral-300">Login num SaaS B2B sem API</td><td class="p-3 text-center text-teal-400">✓ ideal</td><td class="p-3 text-center text-neutral-500">overkill</td></tr>
+            <tr><td class="p-3 text-neutral-300">Editar imagem no Photoshop desktop</td><td class="p-3 text-center text-red-400">✗ impossível</td><td class="p-3 text-center text-purple-400">✓ único caminho</td></tr>
+            <tr><td class="p-3 text-neutral-300">Fluxo entre Figma desktop e Slack</td><td class="p-3 text-center text-red-400">✗ impossível</td><td class="p-3 text-center text-purple-400">✓ único caminho</td></tr>
+            <tr><td class="p-3 text-neutral-300">Operar planilha Excel local</td><td class="p-3 text-center text-red-400">✗ impossível</td><td class="p-3 text-center text-purple-400">✓ único caminho</td></tr>
+            <tr><td class="p-3 text-neutral-300">Scrap de site com login</td><td class="p-3 text-center text-teal-400">✓ ideal</td><td class="p-3 text-center text-neutral-500">overkill</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Regra prática</h3>
+        <p class="text-neutral-300">Se o fluxo nasce e morre no browser → Browser Use. Se ele atravessa apps desktop → Computer Use. <strong>Nunca use Computer Use por preguiça de configurar Browser Use direito</strong> — fragilidade adicional não é grátis.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔒 Configurando Permissões com Segurança</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A diferença entre uso seguro e desastre é <strong class="text-teal-400">configurar isolamento na primeira vez</strong>. Allowlist de domínios, perfil de browser dedicado, sessão sem credentials de produção.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">📝 Config de allowlist (browser-use.config.json)</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code>{
+  "browserProfile": "agent-isolated",
+  "allowedDomains": [
+    "*.inboxai.app",
+    "stripe.com",
+    "github.com",
+    "*.stackoverflow.com"
+  ],
+  "blockedPatterns": [
+    "*/banking/*",
+    "*/checkout-real/*",
+    "auth.google.com"
+  ],
+  "session": {
+    "persistent": false,
+    "clearOnExit": true
+  },
+  "downloads": {
+    "directory": "~/agent-downloads",
+    "maxSizeMB": 50
+  }
+}</code></pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-4">✅ Checklist de setup seguro</h3>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Perfil de browser dedicado (não usar o pessoal)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Allowlist de domínios definida no AGENTS.md</span></div>
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Credenciais via vault, não hardcoded</span></div>
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Computer Use só em VM ou usuário separado</span></div>
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Banking, e-mail pessoal, AWS prod → blocked</span></div>
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Sessão limpa entre execuções (cookies clear)</span></div>
+          <div class="flex items-start space-x-2"><span class="text-teal-400">☐</span><span>Logs de tudo que o agente acessou — auditável</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🛠️ Casos de Uso Reais (que vendem)</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Esses são fluxos que clientes pagam <strong class="text-teal-400">R$ 3-15k de setup mais R$ 500-2k/mês de manutenção</strong>. Não é exercício acadêmico — é commodity vendável agora.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-3xl mb-3">🔍</div>
+          <h4 class="font-bold text-teal-400 mb-2">Pesquisa de Concorrentes</h4>
+          <p class="text-xs text-neutral-400 mb-3">Browser Use abre 5 sites de concorrente, extrai pricing, features, testimonials, blog. Gera tabela comparativa.</p>
+          <div class="text-xs text-teal-400 font-semibold">R$ 1.5-3k por relatório</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-3xl mb-3">🛒</div>
+          <h4 class="font-bold text-teal-400 mb-2">Testes E2E de Checkout</h4>
+          <p class="text-xs text-neutral-400 mb-3">Browser Use roda diariamente o fluxo: produto → carrinho → pagamento sandbox → confirmação. Alerta se quebra.</p>
+          <div class="text-xs text-teal-400 font-semibold">R$ 800-2k/mês</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-3xl mb-3">📊</div>
+          <h4 class="font-bold text-teal-400 mb-2">Relatórios de SaaS sem API</h4>
+          <p class="text-xs text-neutral-400 mb-3">Login no SaaS B2B (sem API pública), extrai métricas, gera PDF semanal, envia por e-mail.</p>
+          <div class="text-xs text-teal-400 font-semibold">R$ 3-8k setup + R$ 500/mês</div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">📋 Briefing tipo: pesquisa de concorrente</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code># Tarefa pra agente Browser Use
+Para cada concorrente em ./concorrentes.txt:
+1. Acessar o site
+2. Extrair: pricing, lista de features (Hero), tom da copy
+3. Tirar screenshot da Hero e da página de pricing
+4. Tentar achar /blog → contar quantos posts em 2025
+5. Salvar em ./output/&lt;dominio&gt;/
+
+Ao final, gerar ./output/comparativo.md com tabela
+de pricing e features lado a lado.
+
+Restrições:
+- Não logar em nada
+- Não preencher formulário (newsletter, contato)
+- Não baixar arquivos &gt; 5MB
+- Pular se site exigir captcha
+- Limite 3min por concorrente</code></pre>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">⚠️ Limites e Riscos: Onde NÃO Ir</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Conhecer os limites <strong class="text-teal-400">antes de prometer</strong> ao cliente evita projeto que entrega 80% e morre nos 20% finais — o pior cenário comercial possível.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-4">🚫 NÃO USE para</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span><strong>Banking, fintech crítica</strong> — risco legal e técnico</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Sites com captcha agressivo (LinkedIn, Cloudflare)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Conteúdo dinâmico WebSocket (chat live)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Dados de saúde (LGPD pesado)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Login com 2FA SMS (você precisa do celular)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Termos de uso explícitos contra automação</span></li>
+          </ul>
+        </div>
+        <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6">
+          <h4 class="font-bold text-amber-400 mb-4">⚠️ Use com cuidado em</h4>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li class="flex items-start space-x-2"><span class="text-amber-400">!</span><span>SaaS com rate limit agressivo (espere 2-5s entre ações)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400">!</span><span>Sites com SPA pesada (waitForSelector explícito)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400">!</span><span>Fluxos com upload grande (timeout)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400">!</span><span>Logins de cliente (avise sobre privacidade)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400">!</span><span>Dados PII (LGPD compliance)</span></li>
+            <li class="flex items-start space-x-2"><span class="text-amber-400">!</span><span>Operações irreversíveis (delete, send)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Mitigação prática</h3>
+        <p class="text-neutral-300">Para tudo que NÃO está na lista vermelha mas tem risco médio: rode primeiro em <strong>dry-run</strong> (sem clicar em botão de "salvar/enviar/deletar" — só registra o que faria). Aprovação humana antes do real. Isso mantém o agente útil sem virar bomba-relógio.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-teal-900/40 via-dark-800 to-dark-800 rounded-xl border border-teal-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Browser Use ≠ browser embutido</strong><span class="text-neutral-400"> — agente dirige sozinho, não você ver.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Computer Use é desktop inteiro</strong><span class="text-neutral-400"> — poderoso, frágil, perigoso sem isolamento.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Default em Browser Use</strong><span class="text-neutral-400"> — só suba pra Computer Use quando precisa de app desktop.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Allowlist + perfil isolado</strong><span class="text-neutral-400"> — segurança não é opcional, é setup obrigatório.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Casos vendáveis: pesquisa, E2E, relatórios SaaS</strong><span class="text-neutral-400"> — receita recorrente real.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Banking, captcha pesado, 2FA → não use</strong><span class="text-neutral-400"> — limite o escopo antes de prometer.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-teal-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">5.3 — Remotion: vídeo de lançamento em uma noite. React para vídeo, captura UI real do app, render 1080p e 9:16 prontos para todas as plataformas.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-5-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Multiagente sem Caos</a>
+          <a href="modulo-5-3.html" class="flex-1 text-center px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-500 transition-colors">Próximo: Remotion →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 5.2 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

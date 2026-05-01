@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 6.4 — 1 Micro-SaaS por Semana | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-rose-400{color:#9f1239;}
+    html:not(.dark) .bg-rose-500\/20{background-color:rgba(159,18,57,0.12);}
+    html:not(.dark) .bg-rose-500\/10{background-color:rgba(159,18,57,0.08);}
+    html:not(.dark) .border-rose-500\/30{border-color:rgba(159,18,57,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-rose-400 bg-rose-500/10"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-rose-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-rose-400">Trilha 6 — Escala</a><span>/</span>
+      <span class="text-rose-400">Módulo 6.4</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-rose-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">MÓDULO 6.4 — FINAL</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🏭 O Método: 1 Micro-SaaS por Semana (InboxAI White-Label)</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Pesquisa de nicho, 4 verticais prontos, precificação por valor e a aritmética que leva 10 clientes a R$ 15k/mês recorrente — operando solo. O método que transforma agentic em fábrica.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Final</div><div class="text-xs text-neutral-400">Módulo</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Método</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🗺️ O Método em 4 Fases</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Sem fases definidas, "1 SaaS por semana" vira ansiedade. Com fases, vira <strong class="text-rose-400">processo industrial</strong>: cada dia tem entregável claro, gates entre etapas, folgas para imprevistos.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">📅 Cronograma da semana-padrão</h3>
+        <svg viewBox="0 0 600 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <line x1="40" y1="100" x2="560" y2="100" stroke="#374151" stroke-width="2"/>
+
+          <rect x="40" y="60" width="80" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1.5"/>
+          <text x="80" y="78" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">SEG</text>
+          <text x="80" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">🔍 Pesquisa</text>
+          <text x="80" y="120" text-anchor="middle" fill="#6b7280" font-size="8">nicho + dor</text>
+
+          <rect x="125" y="60" width="80" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1.5"/>
+          <text x="165" y="78" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">TER</text>
+          <text x="165" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">✅ Validação</text>
+          <text x="165" y="120" text-anchor="middle" fill="#6b7280" font-size="8">3 entrevistas</text>
+
+          <rect x="210" y="40" width="180" height="60" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="2"/>
+          <text x="300" y="58" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">QUA-QUI-SEX</text>
+          <text x="300" y="74" text-anchor="middle" fill="#9ca3af" font-size="9">🔨 Build (3 dias)</text>
+          <text x="300" y="92" text-anchor="middle" fill="#9ca3af" font-size="8">novo-vertical + Cloud + review</text>
+          <text x="300" y="120" text-anchor="middle" fill="#6b7280" font-size="8">white-label do InboxAI</text>
+
+          <rect x="395" y="60" width="80" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1.5"/>
+          <text x="435" y="78" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">SAB</text>
+          <text x="435" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">🚀 Lançar</text>
+          <text x="435" y="120" text-anchor="middle" fill="#6b7280" font-size="8">cliente piloto</text>
+
+          <rect x="480" y="60" width="80" height="40" rx="4" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="520" y="78" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">DOM</text>
+          <text x="520" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">☕ Off</text>
+          <text x="520" y="120" text-anchor="middle" fill="#6b7280" font-size="8">recarga</text>
+
+          <text x="300" y="160" text-anchor="middle" fill="#9ca3af" font-size="10">Cada fase tem gate: só passa quando entregável da anterior aprovado</text>
+          <text x="300" y="180" text-anchor="middle" fill="#fb7185" font-size="11" font-weight="bold">Resultado: 1 cliente novo por semana</text>
+        </svg>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📊 Por que dá certo</h3>
+        <p class="text-neutral-300">Sem timebox, build vira poço sem fundo. Sem gate, você pula validação e constrói pra cliente que não existe. Sem folga (domingo off), você queima em 6 semanas. <strong>Disciplina de processo é o que transforma agentic em renda recorrente</strong> — não capacidade técnica.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔍 Pesquisa de Nicho com Agente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">90% das tentativas de SaaS falham na escolha de nicho. Delegar essa pesquisa ao agente é <strong class="text-rose-400">comprar tempo de pesquisa de mercado</strong> — agente cruza fontes em paralelo enquanto você dorme.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">🎯 Sinais de nicho viável</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-emerald-900/20 rounded-lg border border-emerald-500/30 p-4">
+            <h4 class="font-bold text-emerald-400 text-sm mb-2">✅ Sinais positivos</h4>
+            <ul class="text-xs text-neutral-300 space-y-1">
+              <li>• Reclamação repetida em fóruns ("ninguém atende")</li>
+              <li>• Profissionais pagam plataformas caras (R$ 500+)</li>
+              <li>• Setor pouco digitalizado, pulou geração</li>
+              <li>• 100+ negócios na sua cidade</li>
+              <li>• Decisor único (dono, não comitê)</li>
+            </ul>
+          </div>
+          <div class="bg-red-900/20 rounded-lg border border-red-500/30 p-4">
+            <h4 class="font-bold text-red-400 text-sm mb-2">❌ Sinais ruins</h4>
+            <ul class="text-xs text-neutral-300 space-y-1">
+              <li>• "Eu acho que seria legal..." (sem dado)</li>
+              <li>• Vencido por preço, não valor</li>
+              <li>• Vende para governo (ciclo de 12+ meses)</li>
+              <li>• Nicho saturado de SaaS local</li>
+              <li>• Compra exige licitação</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-3">🔎 Prompt-padrão de pesquisa</h3>
+        <pre class="bg-dark-900/60 rounded-lg p-3 text-xs text-neutral-300 overflow-x-auto"><code>Pesquise nichos de pequenos negócios em [SUA CIDADE] que:
+1. Têm ≥ 100 estabelecimentos no Google Maps
+2. Aparecem em fóruns/Reclame Aqui com queixas de "atendimento ruim",
+   "demora pra responder", "perdi cliente por não responder a tempo"
+3. Já pagam R$ 500+/mês por algum sistema (CRM, ERP, agendamento)
+4. Têm decisor único (não corporativo)
+
+Para os 5 melhores, retorne:
+- Nome do nicho
+- Número estimado de estabelecimentos
+- 3 fontes de queixa com link
+- Faixa de preço que já pagam
+- Persona típica do decisor</code></pre>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🎨 White-Label do InboxAI: 4 Verticais Prontos</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cada vertical já testado <strong class="text-rose-400">tira você do paradoxo da escolha</strong>. Você não decide "que SaaS construir hoje" — escolhe vertical, aplica método, sai com cliente novo na sexta.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Vertical</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Dor central</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Feature-chave</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Integrações</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-rose-400 font-semibold">🏥 Clínica</td><td class="p-3 text-neutral-300">No-show de pacientes</td><td class="p-3 text-neutral-300">Lembrete WhatsApp 24h antes</td><td class="p-3 text-neutral-400 text-xs">Google Calendar, Doctoralia</td></tr>
+            <tr><td class="p-3 text-rose-400 font-semibold">🏠 Imobiliária</td><td class="p-3 text-neutral-300">Lead frio, sem qualificação</td><td class="p-3 text-neutral-300">IA qualifica budget e urgência</td><td class="p-3 text-neutral-400 text-xs">HubSpot, Vista Corretor</td></tr>
+            <tr><td class="p-3 text-rose-400 font-semibold">⚖️ Advocacia</td><td class="p-3 text-neutral-300">Triagem manual de casos</td><td class="p-3 text-neutral-300">IA classifica área e urgência</td><td class="p-3 text-neutral-400 text-xs">Email, ProJuris</td></tr>
+            <tr><td class="p-3 text-rose-400 font-semibold">🛒 E-commerce</td><td class="p-3 text-neutral-300">Pós-venda fragmentado</td><td class="p-3 text-neutral-300">Confirmação + rastreio + NPS</td><td class="p-3 text-neutral-400 text-xs">Shopify, Bling, Melhor Envio</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-rose-900/20 rounded-xl border border-rose-500/30 p-6">
+        <h3 class="text-lg font-semibold text-rose-400 mb-3">⚡ Por que essa diversidade resolve</h3>
+        <p class="text-neutral-300">Quando um vertical satura na sua cidade (ex: clínicas), você troca para imobiliária na semana seguinte — mesma skill <code class="text-rose-400">novo-vertical</code>, mesmo método, cliente novo. <strong>4 verticais = 4 mercados independentes</strong> = você nunca fica sem prospect.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">💰 Precificação: R$ 800–2.000/mês Recorrente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Precificar por hora <strong class="text-rose-400">destrói margem agentic</strong>. Por valor entregue, você captura parte do ganho do cliente — e o modelo recorrente escala sem te queimar.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Vertical</th>
+              <th class="text-center p-3 text-neutral-400 font-semibold">Setup</th>
+              <th class="text-center p-3 text-rose-400 font-semibold">Mensalidade</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Justificativa de valor</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">🏥 Clínica</td><td class="p-3 text-center text-neutral-400">R$ 5.000</td><td class="p-3 text-center text-rose-400 font-bold">R$ 1.200</td><td class="p-3 text-neutral-400 text-xs">Reduz no-show de 30% para 8% = 4–8 consultas extras/semana</td></tr>
+            <tr><td class="p-3 text-neutral-300">🏠 Imobiliária</td><td class="p-3 text-center text-neutral-400">R$ 8.000</td><td class="p-3 text-center text-rose-400 font-bold">R$ 1.500</td><td class="p-3 text-neutral-400 text-xs">Lead qualificado economiza 5h/semana do corretor</td></tr>
+            <tr><td class="p-3 text-neutral-300">⚖️ Advocacia</td><td class="p-3 text-center text-neutral-400">R$ 4.000</td><td class="p-3 text-center text-rose-400 font-bold">R$ 800</td><td class="p-3 text-neutral-400 text-xs">Triagem economiza 10h/semana da secretária</td></tr>
+            <tr><td class="p-3 text-neutral-300">🛒 E-commerce</td><td class="p-3 text-center text-neutral-400">R$ 10.000</td><td class="p-3 text-center text-rose-400 font-bold">R$ 2.000</td><td class="p-3 text-neutral-400 text-xs">NPS sobe; recompra aumenta 12% em média</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Truque do anchoring</h3>
+        <p class="text-neutral-300">Apresente <strong>3 planos</strong> ao cliente: Básico R$ 800, Padrão R$ 1.200, Pro R$ 1.800. 70% escolhem Padrão (era seu alvo). Sem o Pro, percebem o Padrão como "caro". Com o Pro, percebem como "razoável". <strong class="text-rose-400">Sem manipulação — só psicologia de comparação</strong>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🚀 Operação Solo: 10 Clientes = R$ 15k/mês Recorrente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Saber a meta concreta <strong class="text-rose-400">evita over-engineering</strong>. 10 clientes não exigem "plataforma escalável" — exigem entregar bem para os 10. A aritmética cabe na sua semana com folga.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">📈 Curva de receita recorrente — 10 semanas</h3>
+        <svg viewBox="0 0 540 220" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <line x1="50" y1="20" x2="50" y2="180" stroke="#374151" stroke-width="1"/>
+          <line x1="50" y1="180" x2="510" y2="180" stroke="#374151" stroke-width="1"/>
+          <text x="40" y="25" text-anchor="end" fill="#6b7280" font-size="9">R$ 15k</text>
+          <text x="40" y="100" text-anchor="end" fill="#6b7280" font-size="9">R$ 7,5k</text>
+          <text x="40" y="180" text-anchor="end" fill="#6b7280" font-size="9">R$ 0</text>
+          <text x="60" y="200" fill="#6b7280" font-size="9">S1</text>
+          <text x="155" y="200" fill="#6b7280" font-size="9">S3</text>
+          <text x="265" y="200" fill="#6b7280" font-size="9">S5</text>
+          <text x="370" y="200" fill="#6b7280" font-size="9">S7</text>
+          <text x="475" y="200" fill="#6b7280" font-size="9">S10</text>
+
+          <rect x="55" y="165" width="35" height="15" fill="#9f1239"/>
+          <rect x="100" y="150" width="35" height="30" fill="#9f1239"/>
+          <rect x="145" y="135" width="35" height="45" fill="#9f1239"/>
+          <rect x="190" y="120" width="35" height="60" fill="#9f1239"/>
+          <rect x="235" y="105" width="35" height="75" fill="#9f1239"/>
+          <rect x="280" y="90" width="35" height="90" fill="#9f1239"/>
+          <rect x="325" y="75" width="35" height="105" fill="#9f1239"/>
+          <rect x="370" y="60" width="35" height="120" fill="#9f1239"/>
+          <rect x="415" y="45" width="35" height="135" fill="#9f1239"/>
+          <rect x="460" y="30" width="35" height="150" fill="#fb7185"/>
+
+          <text x="478" y="22" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">R$ 15k</text>
+          <text x="270" y="58" text-anchor="middle" fill="#9ca3af" font-size="9">+1 cliente / semana</text>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-3">⏱️ Aritmética da capacidade</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li>• <strong>Atendimento por cliente:</strong> ~2h/semana (suporte, ajustes, novidades)</li>
+          <li>• <strong>10 clientes:</strong> 20h/semana de atendimento</li>
+          <li>• <strong>1 SaaS novo/semana:</strong> ~12h (Cloud + skill + lançamento)</li>
+          <li>• <strong>Total:</strong> 32h/semana → cabe em 5 dias úteis com folga</li>
+          <li>• <strong>Sobra 8h+ para:</strong> prospecção, conteúdo, melhoria do produto</li>
+        </ul>
+      </div>
+
+      <div class="bg-rose-900/20 rounded-xl border border-rose-500/30 p-6">
+        <h3 class="text-lg font-semibold text-rose-400 mb-3">🎯 O marco dos 10</h3>
+        <p class="text-neutral-300">Ao atingir 10 clientes ativos com churn baixo, você tem <strong>R$ 15k/mês recorrente trabalhando solo</strong>, em parte do tempo, com 91% de margem. É o ponto onde você decide: estabilizar (qualidade de vida) ou escalar (próximo tópico).</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">👥 Quando Contratar (e Quem Primeiro)</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Contratar dev cedo demais quebra margem (agentes já fazem build). Contratar suporte cedo demais é gastar antes de precisar. <strong class="text-rose-400">Saber a hora certa</strong> protege seu negócio.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">🚦 Sinais para contratar</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-xl">📊</span>
+            <div>
+              <div class="text-sm font-semibold text-rose-400">30+ clientes ativos</div>
+              <div class="text-xs text-neutral-400">Suporte sozinho ultrapassa 30h/semana — você vira gargalo</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-xl">📉</span>
+            <div>
+              <div class="text-sm font-semibold text-rose-400">Churn em alta por demora</div>
+              <div class="text-xs text-neutral-400">Clientes saem porque você não responde em 24h — sinal de SOS</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-xl">🔥</span>
+            <div>
+              <div class="text-sm font-semibold text-rose-400">Seu tempo é só apagar incêndio</div>
+              <div class="text-xs text-neutral-400">Sem espaço para vender ou melhorar produto — está parado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <h4 class="font-bold text-emerald-400 mb-3">✅ 1ª contratação: Suporte/CS</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Atende cliente no WhatsApp/email</li>
+            <li>• Onboarding de novo cliente</li>
+            <li>• Triagem antes de chegar em você</li>
+            <li>• Custo: R$ 2.500–4.000/mês</li>
+            <li>• ROI: protege seu MRR de R$ 15k+</li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ 2ª contratação (não 1ª): Dev</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Agentes já fazem build</li>
+            <li>• Você escala via skills, não via mãos</li>
+            <li>• Dev só faz sentido para nicho complexo</li>
+            <li>• Custo: R$ 8–15k/mês</li>
+            <li>• Quebra margem se contratado cedo</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESUMO + FECHAMENTO DO CURSO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-rose-900/40 via-dark-800 to-dark-800 rounded-xl border border-rose-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">Método em 4 fases timeboxed</strong><span class="text-neutral-400"> — pesquisa, validação, build, lançamento; um cliente novo por semana.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">Pesquisa de nicho com agente</strong><span class="text-neutral-400"> — sinais de dor + budget; 90% dos SaaS falham aqui.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">4 verticais prontos: clínica, imobiliária, advocacia, e-commerce</strong><span class="text-neutral-400"> — sem paradoxo de escolha; mercados independentes.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">Precificação por valor: R$ 800–2.000/mês</strong><span class="text-neutral-400"> — anchoring com 3 planos; nunca por hora.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">10 clientes = R$ 15k/mês com 32h/semana</strong><span class="text-neutral-400"> — cabe solo com folga para prospecção.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">1ª contratação é suporte, não dev</strong><span class="text-neutral-400"> — agentes fazem build; humanos protegem MRR.</span></div></div>
+        </div>
+
+        <!-- FECHAMENTO DO CURSO -->
+        <div class="bg-gradient-to-br from-rose-900/30 via-dark-700/50 to-dark-700/50 rounded-xl border border-rose-500/40 p-6 mb-8">
+          <div class="text-center mb-6">
+            <div class="text-5xl mb-3">🎓</div>
+            <h3 class="text-2xl font-bold text-rose-400 mb-2">Você Terminou o Master Codex</h3>
+            <p class="text-neutral-300">6 trilhas, 24 módulos, 144 tópicos — e agora um método que funciona.</p>
+          </div>
+
+          <div class="bg-dark-800/60 rounded-lg p-5 mb-6">
+            <h4 class="font-semibold text-rose-400 mb-3">📦 O que você sai daqui com:</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+              <div class="flex items-start space-x-2"><span class="text-rose-400">→</span><span class="text-neutral-300">Mindset de diretor de agentes (T1)</span></div>
+              <div class="flex items-start space-x-2"><span class="text-rose-400">→</span><span class="text-neutral-300">AGENTS.md, plan mode, skills (T2)</span></div>
+              <div class="flex items-start space-x-2"><span class="text-rose-400">→</span><span class="text-neutral-300">Frontend agentic com browser embutido (T3)</span></div>
+              <div class="flex items-start space-x-2"><span class="text-rose-400">→</span><span class="text-neutral-300">InboxAI funcional + backend completo (T4)</span></div>
+              <div class="flex items-start space-x-2"><span class="text-rose-400">→</span><span class="text-neutral-300">Multiagente paralelo via worktrees (T5)</span></div>
+              <div class="flex items-start space-x-2"><span class="text-rose-400">→</span><span class="text-neutral-300">Fábrica de micro-SaaS recorrente (T6)</span></div>
+            </div>
+          </div>
+
+          <div class="bg-dark-800/60 rounded-lg p-5 mb-6">
+            <h4 class="font-semibold text-rose-400 mb-3">🙏 Obrigado por chegar aqui</h4>
+            <p class="text-sm text-neutral-300 leading-relaxed">Você atravessou um conteúdo denso, pratico e que muitos leem mas poucos terminam. <strong>Conhecimento aplicado vale infinitamente mais</strong> do que conhecimento parado. A diferença entre quem assistiu e quem está construindo é só ação — e você passou desse marco.</p>
+          </div>
+
+          <div class="bg-dark-800/60 rounded-lg p-5 mb-2">
+            <h4 class="font-semibold text-rose-400 mb-3">🚀 Próximos passos</h4>
+            <ul class="space-y-2 text-sm text-neutral-300">
+              <li class="flex items-start space-x-2"><span class="text-rose-400">1.</span><span><strong>Esta semana:</strong> rode o método 6.4 com 1 nicho. Não espere se sentir "pronto" — pesquise segunda, valide terça, builde até sexta.</span></li>
+              <li class="flex items-start space-x-2"><span class="text-rose-400">2.</span><span><strong>Comunidade:</strong> entre na <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a> para trocar wins, dores e clientes com outros diretores de agentes.</span></li>
+              <li class="flex items-start space-x-2"><span class="text-rose-400">3.</span><span><strong>Mentoria:</strong> se quer atalho com revisão direta sobre seu nicho, primeira oferta e onboarding, agende uma sessão pelo INEMA.</span></li>
+              <li class="flex items-start space-x-2"><span class="text-rose-400">4.</span><span><strong>Volte sempre:</strong> os módulos foram desenhados para reler. A 2ª passada destrava nuances que a 1ª não capta.</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-6-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Skills Próprias</a>
+          <a href="../../index.html" class="flex-1 text-center px-6 py-3 bg-rose-600 text-white rounded-lg font-semibold hover:bg-rose-500 transition-colors">🏭 Comece sua fábrica →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Master Codex — Módulo 6.4 — Trilha Final — 2026</p>
+      <p class="mt-2"><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

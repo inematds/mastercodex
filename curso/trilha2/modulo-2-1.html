@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 2.1 — AGENTS.md: O Manual Operacional do Projeto | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    code, pre, .mono{font-family:'JetBrains Mono', monospace;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-blue-400{color:#2563eb;}
+    html:not(.dark) .bg-blue-500\/20{background-color:rgba(37,99,235,0.12);}
+    html:not(.dark) .bg-blue-500\/10{background-color:rgba(37,99,235,0.08);}
+    html:not(.dark) .border-blue-500\/30{border-color:rgba(37,99,235,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-blue-400 bg-blue-500/10"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-blue-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-blue-400">Trilha 2 — A Linguagem dos Agentes</a><span>/</span>
+      <span class="text-blue-400">Módulo 2.1</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-blue-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-4">MÓDULO 2.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📄 AGENTS.md: O Manual Operacional do Projeto</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">O arquivo que Codex, Cursor e Claude leem automaticamente antes de cada sessão. Sem ele, você re-explica o projeto toda vez. Com ele, qualquer agente já chega calibrado.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Core</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-blue-400">Doc</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📄 O que é AGENTS.md</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">AGENTS.md é um arquivo de markdown na raiz do projeto que Codex, Cursor, Claude e outros agentes <strong class="text-blue-400">leem automaticamente antes de cada sessão</strong>. É o system prompt do projeto. Vive no repositório, é versionado, é compartilhado.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🔄 Como o agente carrega AGENTS.md</h3>
+        <svg viewBox="0 0 500 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="80" width="100" height="40" rx="6" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="70" y="105" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="bold">Você abre</text>
+          <text x="70" y="118" text-anchor="middle" fill="#9ca3af" font-size="9">o projeto</text>
+          <path d="M 125 100 L 165 100" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <rect x="170" y="60" width="120" height="80" rx="6" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="230" y="80" text-anchor="middle" fill="#3b82f6" font-size="11" font-weight="bold">Codex</text>
+          <text x="230" y="100" text-anchor="middle" fill="#9ca3af" font-size="9">1. Lê AGENTS.md</text>
+          <text x="230" y="115" text-anchor="middle" fill="#9ca3af" font-size="9">2. Combina hierarquia</text>
+          <text x="230" y="130" text-anchor="middle" fill="#9ca3af" font-size="9">3. Carrega no contexto</text>
+          <path d="M 295 100 L 335 100" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <rect x="340" y="80" width="140" height="40" rx="6" fill="#10b981" stroke="#10b981" stroke-width="1.5"/>
+          <text x="410" y="105" text-anchor="middle" fill="#ffffff" font-size="11" font-weight="bold">Já chega calibrado</text>
+          <text x="250" y="180" text-anchor="middle" fill="#6b7280" font-size="10">Sem você precisar dizer nada</text>
+          <defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#3b82f6"/></marker></defs>
+        </svg>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Por que isso importa</h3>
+        <p class="text-neutral-300">O agente não tem memória entre sessões por padrão. Toda vez que você abre uma conversa nova, ele esquece tudo que sabia. AGENTS.md inverte isso: <strong>o conhecimento sobre o projeto vive no repo, não na cabeça da sessão</strong>. Resultado: você muda de agente, troca de modelo, abre nova janela — e o projeto continua coerente.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🏗️ Estrutura Mínima Viável</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cinco seções obrigatórias. Mais que isso vira ruído. Menos que isso vira improviso. Padronizar essas cinco evita <strong class="text-blue-400">80% dos erros</strong> de agente em projeto.</p>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">AGENTS.md (template mínimo)</span>
+        </div>
+        <pre class="p-5 text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-blue-400"># Objetivo</span>
+InboxAI: triagem automatica de email com IA para PMEs.
+
+<span class="text-blue-400"># Stack</span>
+- Next.js 15 + React 19 + TypeScript strict
+- Convex (banco e funcoes)
+- Tailwind CSS + shadcn/ui
+- Bun como runtime e package manager
+
+<span class="text-blue-400"># Comandos</span>
+- `bun dev` -> sobe app em localhost:3000
+- `bun test` -> roda testes (Vitest)
+- `bun lint` -> ESLint + tsc --noEmit
+- `bun build` -> build de producao
+
+<span class="text-blue-400"># Regras de Codigo</span>
+- TypeScript strict, sem `any` implicito
+- Conventional commits (feat:, fix:, chore:)
+- Componentes funcionais, hooks, sem class components
+- Sem comentarios obvios; codigo se explica
+
+<span class="text-blue-400"># Definition of Done</span>
+- `bun lint` passa sem warning
+- `bun test` verde
+- Smoke test no Chrome desktop + mobile
+- PR com Summary + Test plan</code></pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A regra do tamanho</h3>
+        <p class="text-neutral-300">AGENTS.md ideal cabe em <strong>uma tela</strong> (~80 linhas). Se passar de 200 linhas, divida por subpasta. Se passar de 500, vira folclore que ninguém lê. <strong>Concisão é parte do contrato — o agente lê isso a cada sessão</strong>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🌳 Hierarquia: Global vs Subpasta</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">AGENTS.md na raiz vale para o projeto inteiro. AGENTS.md em subpasta <strong class="text-blue-400">override regras só naquela área</strong>. Codex combina os dois automaticamente — você nunca precisa repetir o que já está na raiz.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">📁 Layout em monorepo InboxAI</h3>
+        <div class="mono text-sm space-y-1">
+          <div class="text-neutral-300">📁 inboxai/</div>
+          <div class="text-neutral-300 ml-4">├─ <span class="text-blue-400 font-bold">AGENTS.md</span> <span class="text-neutral-500"># regras gerais: stack, DoD, conventional commits</span></div>
+          <div class="text-neutral-300 ml-4">├─ 📁 frontend/</div>
+          <div class="text-neutral-300 ml-8">│  └─ <span class="text-blue-400 font-bold">AGENTS.md</span> <span class="text-neutral-500"># override: usar shadcn/ui, sem CSS Modules</span></div>
+          <div class="text-neutral-300 ml-4">├─ 📁 backend/</div>
+          <div class="text-neutral-300 ml-8">│  └─ <span class="text-blue-400 font-bold">AGENTS.md</span> <span class="text-neutral-500"># override: padrao Convex, sem REST handlers</span></div>
+          <div class="text-neutral-300 ml-4">└─ 📁 infra/</div>
+          <div class="text-neutral-300 ml-8">   └─ <span class="text-blue-400 font-bold">AGENTS.md</span> <span class="text-neutral-500"># override: Terraform + AWS, sem manual deploy</span></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <h4 class="font-bold text-blue-400 mb-2">🌍 AGENTS.md raiz</h4>
+          <p class="text-sm text-neutral-400 mb-3">Tudo que vale em qualquer área:</p>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Stack geral do projeto</li>
+            <li>• Conventional commits</li>
+            <li>• TypeScript strict</li>
+            <li>• Definition of Done global</li>
+            <li>• Quem é o cliente / o produto</li>
+          </ul>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <h4 class="font-bold text-blue-400 mb-2">📂 AGENTS.md subpasta</h4>
+          <p class="text-sm text-neutral-400 mb-3">Só o que é específico daquela área:</p>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• Padrões de componente</li>
+            <li>• Estrutura de queries do banco</li>
+            <li>• Bibliotecas restritas àquela área</li>
+            <li>• Comandos extras (storybook, docker)</li>
+            <li>• Convenções de pasta</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">⚠️ Não duplique</h3>
+        <p class="text-neutral-300">A pior armadilha é repetir regras do raiz dentro do subpasta. Quando muda na raiz, fica desincronizado. <strong>Subpasta só fala o que é diferente</strong> — herança implícita resolve o resto.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📋 Anatomia de um Exemplar (InboxAI Real)</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Walkthrough comentado do AGENTS.md real do projeto InboxAI da Trilha 4. <strong class="text-blue-400">Cada linha tem justificativa</strong>. Copie o padrão, adapte para seus projetos.</p>
+
+      <div class="bg-dark-900 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="w-3 h-3 rounded-full bg-red-500"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500"></span>
+          <span class="text-xs text-neutral-400 ml-2 mono">~/inboxai/AGENTS.md</span>
+        </div>
+        <pre class="p-5 text-xs sm:text-sm overflow-x-auto"><code class="mono text-neutral-300"><span class="text-blue-400"># InboxAI</span>
+
+<span class="text-blue-400">## Objetivo</span>
+SaaS de triagem de email para PMEs brasileiras.            <span class="text-emerald-400"># o quê e pra quem em uma frase</span>
+Cliente paga R$ 197/mes. Meta MRR: R$ 50k em 6 meses.      <span class="text-emerald-400"># contexto comercial — o agente prioriza certo</span>
+
+<span class="text-blue-400">## Stack</span>
+- Next.js 15 (App Router) + React 19                       <span class="text-emerald-400"># versao explicita evita codigo legado</span>
+- Convex 1.20 (banco + functions)                          <span class="text-emerald-400"># nada de Prisma/Drizzle aqui</span>
+- Tailwind 4 + shadcn/ui                                   <span class="text-emerald-400"># sem CSS Modules, sem styled-components</span>
+- Bun 1.2 (runtime)                                        <span class="text-emerald-400"># nunca npm/yarn — agente as vezes esquece</span>
+
+<span class="text-blue-400">## Comandos</span>
+- `bun dev` (porta 3000)                                   <span class="text-emerald-400"># comando canonico, sem improvisar</span>
+- `bun test` (Vitest)
+- `bun lint` (eslint + tsc)
+- `bunx convex dev` (banco em paralelo)                    <span class="text-emerald-400"># lembrete que precisa de dois terminais</span>
+
+<span class="text-blue-400">## Regras de Codigo</span>
+- TS strict; nada de `any` implicito                       <span class="text-emerald-400"># corta um vicio comum</span>
+- Componentes em `components/` (kebab-case)                <span class="text-emerald-400"># convencao de pasta explicita</span>
+- Hooks em `hooks/use-*.ts`                                <span class="text-emerald-400"># prefixo obrigatorio</span>
+- Sem comentario obvio (`// somar 2 + 2`)                  <span class="text-emerald-400"># corta poluicao gerada por IA</span>
+
+<span class="text-blue-400">## Definition of Done</span>
+- Build limpo (`bun build`)
+- Lint zero warning
+- Smoke test Chrome 1440px + iPhone 14
+- Screenshot antes/depois no PR                            <span class="text-emerald-400"># prova visual de mudanca</span>
+
+<span class="text-blue-400">## Nao Faca</span>
+- Adicionar libs sem aprovar comigo                        <span class="text-emerald-400"># controle de bundle size</span>
+- Usar `console.log` (use logger)                          <span class="text-emerald-400"># observabilidade real</span>
+- Commitar `.env*`                                         <span class="text-emerald-400"># proibir explicitamente</span></code></pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Padrão "Não Faça"</h3>
+        <p class="text-neutral-300">A seção <strong>Não Faça</strong> é tão importante quanto a Stack. Agentes têm vícios — instalar libs aleatórias, deixar console.log, criar arquivo na raiz. Listar explicitamente o que <strong>não fazer</strong> economiza horas de revisão.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">⚠️ Erros Comuns</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Três vícios silenciosos. Cada um corrói a utilidade do AGENTS.md sem você perceber. <strong class="text-blue-400">Reconhecer evita que vire ruído ignorado</strong>.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+          <h4 class="font-bold text-red-400 mb-3">❌ Errado</h4>
+          <pre class="text-xs mono text-neutral-300 overflow-x-auto"><code><span class="text-red-400"># Regras</span>
+- Seja util e gentil com o usuario
+- Escreva codigo limpo e bonito
+- Tente nao quebrar nada
+- Use as melhores praticas
+- Evite codigo ruim</code></pre>
+          <p class="text-xs text-neutral-400 mt-3">Genérico, vazio, intratável. O agente não consegue verificar nenhuma dessas regras.</p>
+        </div>
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+          <h4 class="font-bold text-emerald-400 mb-3">✅ Certo</h4>
+          <pre class="text-xs mono text-neutral-300 overflow-x-auto"><code><span class="text-emerald-400"># Regras</span>
+- TS strict; sem `any` implicito
+- Componentes em `kebab-case`
+- Hooks em `hooks/use-*.ts`
+- Conventional commits obrigatorio
+- `bun lint` zero warning antes de PR</code></pre>
+          <p class="text-xs text-neutral-400 mt-3">Específico, verificável, com nomes de arquivo e comandos exatos.</p>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Vício</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Sintoma</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Cura</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr>
+              <td class="p-3 text-red-400 font-semibold">Genérico</td>
+              <td class="p-3 text-neutral-300">"Seja útil", "escreva bem"</td>
+              <td class="p-3 text-neutral-400">Trocar por regra verificável com comando ou nome de arquivo.</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-red-400 font-semibold">Datado</td>
+              <td class="p-3 text-neutral-300">Versão antiga, comando que não roda</td>
+              <td class="p-3 text-neutral-400">Revisão semanal. Quando troca stack, atualiza no mesmo PR.</td>
+            </tr>
+            <tr>
+              <td class="p-3 text-red-400 font-semibold">Longo</td>
+              <td class="p-3 text-neutral-300">Mais de 200 linhas no raiz</td>
+              <td class="p-3 text-neutral-400">Quebrar por subpasta. Manter raiz só com o universal.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Teste de utilidade</h3>
+        <p class="text-neutral-300">Pergunte a um colega que nunca viu o projeto: "leu o AGENTS.md, o que você não pode fazer aqui?". Se ele <strong>não consegue listar 3 coisas concretas</strong>, seu AGENTS.md está vago. Reescreva.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-blue-500/20 text-blue-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🌱 Living Document: Revisar a Cada Sprint</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">AGENTS.md não é setup once and forget. Ao notar padrão repetido, vira regra. Ao virar ruído, sai. <strong class="text-blue-400">A cada sprint, revisar e podar mantém o sinal alto</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-blue-400 mb-4">🔁 Ciclo de Vida do AGENTS.md</h3>
+        <div class="space-y-4">
+          <div class="flex items-start space-x-4">
+            <div class="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center flex-shrink-0">+</div>
+            <div>
+              <div class="font-semibold text-neutral-100">Adicione</div>
+              <div class="text-sm text-neutral-400">Quando você corrige o agente <strong>3 vezes</strong> sobre a mesma coisa, vira linha em AGENTS.md.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="w-10 h-10 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center flex-shrink-0">~</div>
+            <div>
+              <div class="font-semibold text-neutral-100">Atualize</div>
+              <div class="text-sm text-neutral-400">Trocou stack ou comando? <strong>Mesmo PR atualiza AGENTS.md</strong>. Drift documental é morte lenta.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="w-10 h-10 rounded-full bg-red-500/20 text-red-400 font-bold flex items-center justify-center flex-shrink-0">−</div>
+            <div>
+              <div class="font-semibold text-neutral-100">Remova</div>
+              <div class="text-sm text-neutral-400">Regra que nunca é violada virou senso comum. <strong>Tira</strong>. Cada linha custa atenção do agente.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-4">
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center flex-shrink-0">✓</div>
+            <div>
+              <div class="font-semibold text-neutral-100">Audite</div>
+              <div class="text-sm text-neutral-400">Última segunda do mês: leia inteiro. <strong>Cada linha precisa justificar a presença</strong>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A regra dos 3 strikes</h3>
+        <p class="text-neutral-300">Toda vez que você re-explica a mesma coisa pro agente — anota mentalmente. Na <strong>terceira vez</strong>, vira linha em AGENTS.md. Antes disso, é desperdício de espaço. Depois disso, é desperdício do seu tempo.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-blue-900/40 via-dark-800 to-dark-800 rounded-xl border border-blue-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">AGENTS.md é o system prompt do projeto</strong><span class="text-neutral-400"> — vive no repo, é versionado, lido automaticamente por todo agente.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Estrutura mínima viável: 5 seções</strong><span class="text-neutral-400"> — Objetivo, Stack, Comandos, Regras, Definition of Done. Cabe em uma tela.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Hierarquia raiz + subpasta</strong><span class="text-neutral-400"> — subpasta só fala o que é diferente; herança implícita resolve o resto.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Anatomia real: cada linha justificada</strong><span class="text-neutral-400"> — incluindo a seção Não Faça, que corta vícios de agente.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Erros comuns: genérico, datado, longo</strong><span class="text-neutral-400"> — regra precisa ser verificável, com comando ou caminho de arquivo.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-blue-400 mt-1">✓</span><div><strong class="text-white">Living document: regra dos 3 strikes</strong><span class="text-neutral-400"> — corrigiu a mesma coisa 3 vezes? Vira linha em AGENTS.md.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-blue-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">2.2 — Skills: pacote de instrução durável + recursos. Como instalar da loja, como invocar manual ou automaticamente, e as 5 skills proprietárias do Master Codex.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha 2</a>
+          <a href="modulo-2-2.html" class="flex-1 text-center px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-500 transition-colors">Próximo: Skills →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 2.1 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

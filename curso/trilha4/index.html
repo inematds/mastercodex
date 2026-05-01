@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 4 — Backend, WhatsApp e Agente IA | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+    .modal { display: none; }
+    .modal.active { display: flex; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(146,64,14,0.12); }
+    html:not(.dark) .bg-amber-500\/10 { background-color: rgba(146,64,14,0.08); }
+    html:not(.dark) .bg-amber-500\/5 { background-color: rgba(146,64,14,0.05); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(146,64,14,0.25); }
+    html:not(.dark) .hover\:bg-amber-500\/30:hover { background-color: rgba(146,64,14,0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">⚡</span>
+            <span class="font-bold text-lg hidden sm:inline">Master Codex</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">TRILHA 4</span>
+          <h1 class="text-3xl sm:text-4xl font-bold mb-4">⚙️ Backend, WhatsApp e Agente IA</h1>
+          <p class="text-lg text-neutral-400 max-w-xl mb-6">Modele banco, conecte WhatsApp pela Evolution API, embuta um agente IA dentro do produto e suba o InboxAI ao vivo na web — multi-tenant, seguro e com domínio próprio.</p>
+          <div class="grid grid-cols-4 gap-4 max-w-lg">
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">~5h</div><div class="text-xs text-neutral-400">Duração</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <svg viewBox="0 0 320 240" class="w-full max-w-xs" xmlns="http://www.w3.org/2000/svg">
+            <rect x="120" y="100" width="80" height="40" rx="6" fill="#1f2937" stroke="#f59e0b" stroke-width="2"/>
+            <text x="160" y="118" text-anchor="middle" fill="#f59e0b" font-size="11" font-weight="bold">InboxAI</text>
+            <text x="160" y="132" text-anchor="middle" fill="#9ca3af" font-size="8">backend</text>
+            <rect x="20" y="20" width="70" height="32" rx="6" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+            <text x="55" y="32" text-anchor="middle" fill="#10b981" font-size="9">WhatsApp</text>
+            <text x="55" y="44" text-anchor="middle" fill="#6b7280" font-size="7">Evolution</text>
+            <line x1="90" y1="36" x2="120" y2="105" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <rect x="230" y="20" width="70" height="32" rx="6" fill="#1f2937" stroke="#a78bfa" stroke-width="1.5"/>
+            <text x="265" y="32" text-anchor="middle" fill="#a78bfa" font-size="9">Agente IA</text>
+            <text x="265" y="44" text-anchor="middle" fill="#6b7280" font-size="7">Codex API</text>
+            <line x1="230" y1="36" x2="200" y2="105" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <rect x="20" y="190" width="70" height="32" rx="6" fill="#1f2937" stroke="#0ea5e9" stroke-width="1.5"/>
+            <text x="55" y="202" text-anchor="middle" fill="#0ea5e9" font-size="9">Convex</text>
+            <text x="55" y="214" text-anchor="middle" fill="#6b7280" font-size="7">DB</text>
+            <line x1="90" y1="206" x2="120" y2="135" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <rect x="230" y="190" width="70" height="32" rx="6" fill="#1f2937" stroke="#ef4444" stroke-width="1.5"/>
+            <text x="265" y="202" text-anchor="middle" fill="#ef4444" font-size="9">Vercel</text>
+            <text x="265" y="214" text-anchor="middle" fill="#6b7280" font-size="7">Deploy</text>
+            <line x1="230" y1="206" x2="200" y2="135" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,3"/>
+            <text x="160" y="170" text-anchor="middle" fill="#6b7280" font-size="9">Stack do InboxAI ao vivo</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- CARDS SIMPLES -->
+    <div class="mb-12">
+      <h2 class="text-xl font-bold mb-4 text-neutral-300">Módulos desta Trilha</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="modulo-4-1.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-4 transition-all hover:bg-amber-500/5">
+          <div class="text-amber-400 font-bold text-sm mb-1">4.1</div>
+          <div class="font-semibold text-sm group-hover:text-amber-400 transition-colors">🗄️ Stack + Modelagem</div>
+          <div class="text-xs text-neutral-500 mt-1">~75 min</div>
+        </a>
+        <a href="modulo-4-2.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-4 transition-all hover:bg-amber-500/5">
+          <div class="text-amber-400 font-bold text-sm mb-1">4.2</div>
+          <div class="font-semibold text-sm group-hover:text-amber-400 transition-colors">📱 Evolution API</div>
+          <div class="text-xs text-neutral-500 mt-1">~75 min</div>
+        </a>
+        <a href="modulo-4-3.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-4 transition-all hover:bg-amber-500/5">
+          <div class="text-amber-400 font-bold text-sm mb-1">4.3</div>
+          <div class="font-semibold text-sm group-hover:text-amber-400 transition-colors">🤖 Agente IA</div>
+          <div class="text-xs text-neutral-500 mt-1">~75 min</div>
+        </a>
+        <a href="modulo-4-4.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 p-4 transition-all hover:bg-amber-500/5">
+          <div class="text-amber-400 font-bold text-sm mb-1">4.4</div>
+          <div class="font-semibold text-sm group-hover:text-amber-400 transition-colors">🔐 Auth + Deploy</div>
+          <div class="text-xs text-neutral-500 mt-1">~75 min</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-dark-600 pt-8 mb-6">
+      <h2 class="text-lg font-bold text-neutral-300">Conteúdo Detalhado</h2>
+    </div>
+
+    <!-- MÓDULO 4.1 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-amber-400 font-bold">4.1</span>
+          <span class="text-xs text-neutral-500">~75 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🗄️ Stack + Modelagem do Banco</h3>
+        <p class="text-neutral-400 text-sm">Convex, Supabase ou Postgres puro? Modele as tabelas do InboxAI, defina índices, faça migrations sem dor e popule dados de teste.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🤔</span>
+            <div><span class="font-medium">Convex vs Supabase vs Postgres puro</span><span class="text-neutral-500 text-sm ml-2">- Quando cada um faz sentido</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Comparação prática entre Convex (BaaS reativo, TypeScript first), Supabase (Postgres + auth + storage gerenciado) e Postgres puro (Neon, Railway). Cada um tem trade-off de produtividade, controle e custo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Escolha errada vira refactor de 3 semanas no meio do projeto. Acertar no dia zero economiza tempo e dor — Convex pra MVP rápido, Supabase pra padrão SQL, Postgres puro pra escala extrema.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">BaaS, reatividade, RLS, lock-in, custo por GB, latência de query, free tier limits.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">📋</span>
+            <div><span class="font-medium">Schema do InboxAI</span><span class="text-neutral-500 text-sm ml-2">- Contacts, conversations, messages, deals</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Modelagem completa: organizations, users, contacts, conversations, messages, deals. Cada tabela com campos justificados pela operação real do produto, não pela vaidade técnica.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Schema bem feito é a coluna do produto. Esquema porco vira N+1 query, race condition e bug de dado fantasma. Aqui você sai com schema.ts pronto pra colar no Convex.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Entidades, atributos, normalização vs denormalização, soft delete, audit fields.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🔗</span>
+            <div><span class="font-medium">Relacionamentos e índices</span><span class="text-neutral-500 text-sm ml-2">- FKs, 1:N, N:N e performance</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Como ligar tabelas (contact tem N messages, deal tem 1 contact), criar índices em campos de busca (telefone, status) e evitar full table scan quando o cliente cresce.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">A maioria dos travamentos em produto SaaS vem de query sem índice. Saber onde indexar desde o dia zero evita que sua "página de conversas" fique 8s lenta com 5k registros.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Foreign key, índice composto, query plan, N+1, join lateral, paginação cursor.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🚧</span>
+            <div><span class="font-medium">Migrations sem quebrar dado</span><span class="text-neutral-500 text-sm ml-2">- Padrão zero-downtime via agente</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Como o agente cria migrations expand-then-contract: adiciona coluna, popula, troca código, depois remove a antiga. Nunca derruba produção.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cliente pagando R$ 2k/mês não aceita "ficou 10min fora". Migration zero-downtime é a diferença entre amador e profissional vendendo SaaS.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Expand/contract, backfill, rolling deploy, schema versioning, rollback.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🌱</span>
+            <div><span class="font-medium">Seed: dados de teste</span><span class="text-neutral-500 text-sm ml-2">- 50 contatos, 200 mensagens, 10 deals</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Script seed.ts que popula o banco com dados realistas: nomes brasileiros, telefones BR, mensagens em português, deals em diferentes estágios. Perfeito pra dev e demo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Demo pra cliente com banco vazio é tiro no pé. Seed bom é o que faz a UI parecer "cheia de gente usando" no primeiro screenshot pro prospect.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Faker, fixtures, idempotência de seed, ambiente dev vs demo, dados sintéticos LGPD-safe.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">💾</span>
+            <div><span class="font-medium">Backups e ambiente prod</span><span class="text-neutral-500 text-sm ml-2">- Snapshot pré-deploy e rollback</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Backup automático no Convex/Supabase, snapshot manual antes de cada deploy crítico, política de retenção, plano de restore testado a cada 30 dias.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Perder dado de cliente é fim de relacionamento e processo trabalhista no horizonte. Backup só vale se você já testou restore — senão é placebo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Point-in-time recovery, snapshot, retenção, RTO/RPO, drill de restore.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-4-1.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 4.2 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-amber-400 font-bold">4.2</span>
+          <span class="text-xs text-neutral-500">~75 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">📱 Integrando Evolution API (WhatsApp)</h3>
+        <p class="text-neutral-400 text-sm">Conecte o WhatsApp do cliente em 10 minutos com Docker, receba mensagens via webhook e envie texto, áudio e imagem programaticamente.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🤔</span>
+            <div><span class="font-medium">O que é Evolution API e por que escolhemos</span><span class="text-neutral-500 text-sm ml-2">- Open-source, sem aprovação Meta</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Evolution API é um wrapper open-source em volta do Baileys (cliente WhatsApp Web). Sem aprovação Meta, roda em VPS, conecta número pessoal ou business em minutos.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">A oficial WhatsApp Cloud API leva 2–6 semanas pra aprovação BSP. Cliente brasileiro PME quer ver funcionando hoje. Evolution destrava esse "hoje" pelo trade-off certo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Baileys, BSP, Cloud API oficial, ToS WhatsApp, sessão multi-device.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">☁️</span>
+            <div><span class="font-medium">Self-host vs cloud</span><span class="text-neutral-500 text-sm ml-2">- VPS R$ 30/mês ou serviço pago</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Comparação: rodar Evolution numa VPS Hetzner/Hostinger por R$ 30/mês vs usar provedor SaaS (UltraMsg, Z-API) que cobra R$ 100–300/mês mas tira a dor de operação.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Margem do seu SaaS depende disso. Self-host dá margem de 70%; cloud terceirizado fica em 30%. Saber operar destrava preço competitivo no BR.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">VPS, uptime SLA, custo operacional, terceirização, build vs buy.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🐳</span>
+            <div><span class="font-medium">Setup local com Docker</span><span class="text-neutral-500 text-sm ml-2">- docker-compose up em 10 min</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">docker-compose.yml com Evolution + Postgres + Redis. Sobe num comando, expõe porta 8080 com painel web. Inclui variáveis de ambiente, volume persistente e healthcheck.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Docker abstrai 80% da operação. Mesmo comando local e em produção. É a diferença entre "funciona na minha máquina" e "funciona em qualquer cliente".</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">docker-compose, volumes, networks, env vars, healthcheck, restart policy.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">📲</span>
+            <div><span class="font-medium">Conectando WhatsApp pessoal</span><span class="text-neutral-500 text-sm ml-2">- QR code, sessão e reconnect</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Endpoint que gera QR code pra escanear com o WhatsApp do cliente. Sessão fica persistida no banco. Quando cair, reconecta sozinho — você não precisa pedir QR de novo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sessão que cai e exige QR toda vez é UX horrível pro cliente. Persistência e reconnect automático são o que faz o sistema "sumir" no bom sentido.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">QR code pairing, multi-device, session persistence, reconnect backoff, logout remoto.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🔔</span>
+            <div><span class="font-medium">Webhooks: receber mensagens</span><span class="text-neutral-500 text-sm ml-2">- Endpoint POST + validação</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Endpoint /webhook/evolution no seu backend que recebe POST sempre que chega mensagem. Você valida assinatura, salva no banco, dispara o agente IA.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Webhook é o coração do produto. Errar aqui (idempotência, ordem, erro silencioso) é perder mensagem do cliente — pior bug que existe nesse domínio.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Webhook, idempotência, retry, assinatura HMAC, dead-letter queue.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">📤</span>
+            <div><span class="font-medium">Enviando mensagens</span><span class="text-neutral-500 text-sm ml-2">- Texto, imagem, áudio, document</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Função sendMessage(to, payload) que abstrai o formato JSON da Evolution para texto, imagem (URL ou base64), áudio (mp3/ogg) e document (PDF). Inclui rate limit interno.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Mandar mensagem rápido demais derruba a sessão por flood. Saber respeitar limite e reaproveitar conexão é o que mantém o número online por meses sem cair.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Rate limit, throttle, base64 vs URL, mimetype, mensagens em massa, ban risk.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-4-2.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 4.3 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-amber-400 font-bold">4.3</span>
+          <span class="text-xs text-neutral-500">~75 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🤖 Agente IA Dentro do Produto</h3>
+        <p class="text-neutral-400 text-sm">System prompt que qualifica leads, function calling pra criar deals, handoff humano e observabilidade pra LGPD — tudo dentro do produto que o cliente paga.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🎯</span>
+            <div><span class="font-medium">System prompt do qualificador</span><span class="text-neutral-500 text-sm ml-2">- Persona, objetivo, restrições</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Estrutura do system prompt em 5 blocos: persona (quem é o agente), objetivo (qualificar lead pra reunião), ferramentas disponíveis, restrições (nunca prometer preço), formato de saída.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">90% dos agentes ruins têm system prompt ruim. Estrutura clara é a diferença entre "vendedor virtual que fecha venda" e "chatbot esquisito que cliente xinga".</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Persona, objetivo SMART, guardrails, formato JSON, exemplos few-shot.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">📚</span>
+            <div><span class="font-medium">Contexto: histórico + dados do contato</span><span class="text-neutral-500 text-sm ml-2">- Sem estourar tokens</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Como passar para o agente as últimas N mensagens + perfil do contato + histórico resumido das conversas anteriores, sem ultrapassar 30k tokens nem queimar custo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Mandar contexto cru a cada turno custa caro e degrada qualidade. Usar resumo + última janela + cache é o que torna agente economicamente viável.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Sliding window, sumarização hierárquica, prompt caching, tokens efetivos.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🛠️</span>
+            <div><span class="font-medium">Function calling</span><span class="text-neutral-500 text-sm ml-2">- Agente cria deal, agenda call</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Schema de funções: createDeal, scheduleCall, updateContact, transferToHuman. Agente decide quando chamar, sistema executa, retorna resultado pro próximo turno.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem function calling, agente é só um chatbot bonito. Com, ele atua de fato no produto — cria registros, marca calendário, dispara follow-up. Aí vira valor pago.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Tool use, JSON schema, validação de argumentos, ciclo agentic, retry de tool falha.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">👋</span>
+            <div><span class="font-medium">Handoff humano</span><span class="text-neutral-500 text-sm ml-2">- Quando passar pra pessoa real</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Gatilhos automáticos: agente em loop sem progresso, cliente irritado (sentiment negativo), valor de deal acima de R$ X, palavra-chave "cancelar". Sistema avisa humano e congela bot.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Agente que insiste sozinho num cliente irritado vira reclamação no Reclame Aqui. Handoff fluido é o que protege a marca do seu cliente.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Detecção de loop, sentiment, escalation rules, UX de transição, contexto repassado.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">💰</span>
+            <div><span class="font-medium">Custos: cache, modelo, batch</span><span class="text-neutral-500 text-sm ml-2">- Haiku vs Sonnet, prompt caching</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Otimização: prompt caching pra economizar 90% em tokens repetidos, Haiku pra triagem barata + Sonnet pra resposta complexa, batch pra análise pós-fato (não tempo real).</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Custo de IA é o que mata margem do SaaS. Diferença entre R$ 8 por cliente/mês e R$ 80 é só engenharia de custo. Aqui você aprende a fazer 90% de redução.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Prompt caching, batch API, model routing, cost per conversation, unit economics.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">👁️</span>
+            <div><span class="font-medium">Observabilidade</span><span class="text-neutral-500 text-sm ml-2">- Logs, painel auditoria, LGPD</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Log estruturado de cada turno: prompt, resposta, tools chamadas, custo, latência. Painel pra auditar o que o agente fez. Endpoint LGPD de "exportar/apagar dados deste contato".</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cliente vai perguntar "por que o bot disse isso?" Sem log, você fica sem resposta. LGPD obriga rastreabilidade — sem ela, multa de até 2% do faturamento.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Structured logging, traces, ANPD, direito do titular, retenção de dados.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-4-3.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 4.4 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-amber-400 font-bold">4.4</span>
+          <span class="text-xs text-neutral-500">~75 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🔐 Auth Multi-tenant + Deploy</h3>
+        <p class="text-neutral-400 text-sm">Isolamento por cliente, Clerk pra login, RLS pra blindar dados, Vercel + Convex em produção e domínio próprio com SSL no automático.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🏢</span>
+            <div><span class="font-medium">Multi-tenant: isolamento por cliente</span><span class="text-neutral-500 text-sm ml-2">- Cada cliente em namespace próprio</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Modelagem onde cada cliente do aluno tem organizationId próprio. Toda query filtra por org. Usuários só veem dados da sua organização — nunca da clínica concorrente.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem multi-tenant, você não vende SaaS, vende projeto. Multi-tenant bem feito é o que permite cobrar 10 clientes no mesmo backend e escalar margem.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Tenant ID, shared schema, isolated schema, pool pattern, silo pattern.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🔑</span>
+            <div><span class="font-medium">Auth com Clerk</span><span class="text-neutral-500 text-sm ml-2">- Email, Google, roles</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Setup do Clerk em 15 minutos: providers (email magic link, Google, GitHub), roles (owner, admin, agent), organizations nativas, webhook que cria registro no Convex.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Auth caseira é receita pra vazamento. Clerk resolve em horas o que levaria semanas — e libera você pra trabalhar no que diferencia o produto, não no login.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">JWT, magic link, OAuth, roles, organizations, webhooks de auth.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🛡️</span>
+            <div><span class="font-medium">Row-level security em Convex</span><span class="text-neutral-500 text-sm ml-2">- Aluno A nunca vê dado do aluno B</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Padrão de queries Convex onde cada função verifica orgId do usuário autenticado e filtra. Em Supabase, mesmo princípio com policies SQL. Bug aqui = vazamento.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Em SaaS multi-tenant, RLS quebrada vira manchete. É o controle final que protege o produto contra erro humano de query mal escrita.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">RLS, policy, identity context, defense in depth, audit trail.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🔒</span>
+            <div><span class="font-medium">Variáveis de ambiente: secrets corretamente</span><span class="text-neutral-500 text-sm ml-2">- .env, Vercel, rotação</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">.env no .gitignore, secrets na Vercel/Convex Cloud por ambiente (dev/preview/prod), checklist de rotação a cada 90 dias, scan de leaks com gitleaks.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Secret no Git é a forma mais comum de invasão. 5 minutos seguindo o checklist evita boleto de R$ 50k da AWS por mineração de cripto.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Env vars, gitignore, gitleaks, vault, rotação, princípio do menor privilégio.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🚀</span>
+            <div><span class="font-medium">Deploy: Vercel + Convex Cloud</span><span class="text-neutral-500 text-sm ml-2">- Comandos práticos</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">vercel deploy pro frontend, npx convex deploy pro backend reativo, integração GitHub que faz preview em cada PR. Em 3 comandos seu app está ao vivo.</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Cliente paga por produto online, não por código no GitHub. Deploy fluido é o que transforma "fiz" em "vendi".</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Build, edge function, preview deploy, environment, rollback de deploy.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">🌐</span>
+            <div><span class="font-medium">Domínio próprio + SSL automático</span><span class="text-neutral-500 text-sm ml-2">- Vercel domains + Cloudflare</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-amber-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Comprar domínio (Registro.br ou Cloudflare), apontar DNS pra Vercel, SSL emitido automático via Let's Encrypt. Subdomínio por cliente (cliente1.app.com.br).</p></div>
+              <div><span class="text-amber-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Domínio próprio é o que separa MVP de produto vendável. Cliente sério não compra .vercel.app no link — ele compra app.suamarca.com.br.</p></div>
+              <div><span class="text-amber-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">DNS, CNAME, A record, Let's Encrypt, wildcard SSL, white-label.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-4-4.html" class="px-4 py-2 text-sm bg-amber-600 hover:bg-amber-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Master Codex — Trilha 4 — 2026</p>
+      <p class="mt-2"><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      explanation.classList.toggle('active');
+    }
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

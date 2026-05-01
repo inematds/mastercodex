@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trilha 5 — Múltiplos Agentes em Paralelo | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: { colors: { primary: '#FACC15', dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' } } } }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+    .topic-explanation { display: none; }
+    .topic-explanation.active { display: block; }
+
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+    html:not(.dark) .text-teal-400 { color: #0d9488; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(13,148,136,0.12); }
+    html:not(.dark) .bg-teal-500\/10 { background-color: rgba(13,148,136,0.08); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(13,148,136,0.25); }
+    html:not(.dark) .hover\:bg-teal-500\/30:hover { background-color: rgba(13,148,136,0.18); }
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .bg-primary\/10 { background-color: rgba(161,98,7,0.08); }
+    html:not(.dark) .border-primary\/40 { border-color: rgba(161,98,7,0.25); }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">⚡</span>
+            <span class="font-bold text-lg hidden sm:inline">Master Codex</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="inline-block px-3 py-1 bg-teal-500/20 text-teal-400 text-xs font-semibold rounded-full mb-4">TRILHA 5</span>
+          <h1 class="text-3xl sm:text-4xl font-bold mb-4">🤝 Múltiplos Agentes em Paralelo</h1>
+          <p class="text-lg text-neutral-400 max-w-xl mb-6">Virar uma equipe de uma pessoa só: arquitetura sem caos, agentes que controlam browser e desktop, vídeo de lançamento em uma noite e marketing inteiro entregue por um único agente.</p>
+          <div class="grid grid-cols-4 gap-4 max-w-lg">
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">4</div><div class="text-xs text-neutral-400">Módulos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">24</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">~4h</div><div class="text-xs text-neutral-400">Duração</div></div>
+            <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Pro</div><div class="text-xs text-neutral-400">Nível</div></div>
+          </div>
+        </div>
+        <div class="flex justify-center">
+          <svg viewBox="0 0 320 240" class="w-full max-w-xs" xmlns="http://www.w3.org/2000/svg">
+            <line x1="160" y1="120" x2="60" y2="60" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.5"/>
+            <line x1="160" y1="120" x2="160" y2="40" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.5"/>
+            <line x1="160" y1="120" x2="260" y2="60" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.5"/>
+            <line x1="160" y1="120" x2="60" y2="180" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.5"/>
+            <line x1="160" y1="120" x2="160" y2="200" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.5"/>
+            <line x1="160" y1="120" x2="260" y2="180" stroke="#14b8a6" stroke-width="1.5" stroke-opacity="0.5"/>
+            <circle cx="160" cy="120" r="34" fill="#1f2937" stroke="#14b8a6" stroke-width="2"/>
+            <text x="160" y="116" text-anchor="middle" fill="#14b8a6" font-size="13" font-weight="bold">VOCÊ</text>
+            <text x="160" y="130" text-anchor="middle" fill="#14b8a6" font-size="9">Diretor</text>
+            <circle cx="60" cy="60" r="20" fill="#1f2937" stroke="#14b8a6" stroke-width="1.5"/>
+            <text x="60" y="63" text-anchor="middle" fill="#d1d5db" font-size="9">Front</text>
+            <circle cx="160" cy="40" r="20" fill="#1f2937" stroke="#14b8a6" stroke-width="1.5"/>
+            <text x="160" y="43" text-anchor="middle" fill="#d1d5db" font-size="9">Back</text>
+            <circle cx="260" cy="60" r="20" fill="#1f2937" stroke="#14b8a6" stroke-width="1.5"/>
+            <text x="260" y="63" text-anchor="middle" fill="#d1d5db" font-size="9">QA</text>
+            <circle cx="60" cy="180" r="20" fill="#1f2937" stroke="#14b8a6" stroke-width="1.5"/>
+            <text x="60" y="183" text-anchor="middle" fill="#d1d5db" font-size="9">Mkt</text>
+            <circle cx="160" cy="200" r="20" fill="#1f2937" stroke="#14b8a6" stroke-width="1.5"/>
+            <text x="160" y="203" text-anchor="middle" fill="#d1d5db" font-size="9">Pesq</text>
+            <circle cx="260" cy="180" r="20" fill="#1f2937" stroke="#14b8a6" stroke-width="1.5"/>
+            <text x="260" y="183" text-anchor="middle" fill="#d1d5db" font-size="9">Arq</text>
+            <text x="160" y="230" text-anchor="middle" fill="#6b7280" font-size="9">6 agentes em paralelo, 1 diretor</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- CARDS SIMPLES -->
+    <div class="mb-12">
+      <h2 class="text-xl font-bold mb-4 text-neutral-300">Módulos desta Trilha</h2>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <a href="modulo-5-1.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 p-4 transition-all hover:bg-teal-500/5">
+          <div class="text-teal-400 font-bold text-sm mb-1">5.1</div>
+          <div class="font-semibold text-sm group-hover:text-teal-400 transition-colors">🎼 Multiagente sem Caos</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-5-2.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 p-4 transition-all hover:bg-teal-500/5">
+          <div class="text-teal-400 font-bold text-sm mb-1">5.2</div>
+          <div class="font-semibold text-sm group-hover:text-teal-400 transition-colors">🖥️ Browser + Computer Use</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-5-3.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 p-4 transition-all hover:bg-teal-500/5">
+          <div class="text-teal-400 font-bold text-sm mb-1">5.3</div>
+          <div class="font-semibold text-sm group-hover:text-teal-400 transition-colors">🎬 Remotion: vídeo de lançamento</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+        <a href="modulo-5-4.html" class="group bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 p-4 transition-all hover:bg-teal-500/5">
+          <div class="text-teal-400 font-bold text-sm mb-1">5.4</div>
+          <div class="font-semibold text-sm group-hover:text-teal-400 transition-colors">📣 Agente de Marketing</div>
+          <div class="text-xs text-neutral-500 mt-1">~60 min</div>
+        </a>
+      </div>
+    </div>
+
+    <div class="border-t border-dark-600 pt-8 mb-6">
+      <h2 class="text-lg font-bold text-neutral-300">Conteúdo Detalhado</h2>
+    </div>
+
+    <!-- MÓDULO 5.1 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-teal-400 font-bold">5.1</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🎼 Arquitetura Multiagente sem Caos</h3>
+        <p class="text-neutral-400 text-sm">Como ter 6 agentes em paralelo sem conflito de merge, sem agente A desfazendo trabalho do B e sem virar gerente de IA frustrado.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">💥</span>
+            <div><span class="font-medium">O caos clássico do multiagente ingênuo</span><span class="text-neutral-500 text-sm ml-2">- Quando 2 agentes destroem 8h de trabalho</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Dois agentes editando o mesmo arquivo na mesma branch geram conflitos de merge horríveis. Pior: agente A desfaz mudança que B fez 2 minutos antes, sem perceber.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Quem tenta paralelismo sem isolamento perde mais tempo limpando bagunça do que ganharia com a paralelização. É a armadilha que faz gente desistir de multiagente.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Race condition no filesystem, conflito de merge, work invalidation, falta de isolamento.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🌳</span>
+            <div><span class="font-medium">Cada agente em sua worktree</span><span class="text-neutral-500 text-sm ml-2">- A solução técnica do isolamento real</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Git worktree cria pastas paralelas para branches diferentes do mesmo repo. Cada agente abre sua worktree, sua branch, e nunca pisa no outro até a hora do PR.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É a base técnica de paralelismo seguro. Sem isso, multiagente é teoria; com isso, vira workflow real que escala para 6+ agentes.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">git worktree add, branches paralelas, isolation por tarefa, merge no PR, cleanup de worktrees.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🎭</span>
+            <div><span class="font-medium">Os 6 papéis canônicos da equipe-fantasma</span><span class="text-neutral-500 text-sm ml-2">- Arquiteto, Frontend, Backend, QA, Marketing, Pesquisa</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cada agente tem AGENTS.md próprio descrevendo papel, escopo, fronteiras e o que NÃO deve tocar. Especialização vence generalismo no multiagente.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem papéis claros, agentes se sobrepõem e brigam por arquivos. Com papéis, cada um sabe seu território e a colaboração flui naturalmente.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">AGENTS.md por papel, fronteiras explícitas, anti-objetivos, especialização, RACI agentic.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🎬</span>
+            <div><span class="font-medium">Você como agente coordenador</span><span class="text-neutral-500 text-sm ml-2">- Orquestrar é o trabalho, não programar</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Seu papel real: definir interfaces (contratos entre agentes), mediar conflitos quando dois agentes querem o mesmo arquivo, e decidir prioridades.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Quem fica programando junto não consegue coordenar. Quem só coordena entrega 4–8x mais. A virada de mindset é literalmente "eu não escrevo, eu dirijo".</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Interface contracts, mediação de conflito, priorização, throughput vs envolvimento, alta liderança.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">📨</span>
+            <div><span class="font-medium">Comunicação assíncrona via PRs</span><span class="text-neutral-500 text-sm ml-2">- O GitHub vira chat da equipe</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cada agente abre PR quando termina. Você revisa, comenta pedindo ajustes, faz merge. PRs são a interface assíncrona oficial entre agentes e diretor.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">PRs estruturam a colaboração: quem viu o quê, quando, com qual feedback. Sem PRs, multiagente vira chat caótico sem rastro.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">PR-driven workflow, async review, comentários inline, @codex review, history audit.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">⚠️</span>
+            <div><span class="font-medium">Quando ABANDONAR multiagente</span><span class="text-neutral-500 text-sm ml-2">- O overhead nem sempre vale a pena</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Tarefa &lt; 30min: o overhead de coordenar 2 agentes vence o ganho. Bug isolado em 1 arquivo: 1 agente focado é melhor. Saber quando NÃO fazer é maturidade.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Multiagente é poderoso mas custa atenção. Aplicar pra tudo é otimizar pra ferramenta, não pro resultado. O bom diretor sabe escolher o tamanho da equipe.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Coordination overhead, ponto de equilíbrio, escolha de ferramenta, single-agent flow, cost-benefit.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-5-1.html" class="px-4 py-2 text-sm bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 5.2 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-teal-400 font-bold">5.2</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🖥️ Browser Use + Computer Use</h3>
+        <p class="text-neutral-400 text-sm">Quando o agente precisa controlar um browser real ou seu desktop inteiro: pesquisa de concorrentes, automação de SaaS, testes E2E. E onde NÃO usar.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">🌐</span>
+            <div><span class="font-medium">Browser Use: agente controla browser real</span><span class="text-neutral-500 text-sm ml-2">- Diferente do browser embutido</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Browser Use dá ao agente controle completo de um Chromium real: navegar, clicar, preencher formulários, ler página renderizada com JavaScript executado.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Tarefas que dependem de sites com login, JavaScript pesado ou estado de sessão exigem browser real. O fetch HTTP simples não dá conta.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Headless Chromium, Playwright sob o capô, sessão persistente, DOM real, screenshot.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🖱️</span>
+            <div><span class="font-medium">Computer Use: agente controla seu desktop</span><span class="text-neutral-500 text-sm ml-2">- Mouse, teclado, screenshots da tela inteira</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Computer Use vai além do browser: o agente vê a tela inteira, move o mouse, digita teclas, abre Photoshop, Figma, Excel — qualquer app instalado.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Workflows que envolvem múltiplos apps desktop (editar mídia, copiar entre programas) só são automatizáveis assim. É o degrau final da automação.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Vision do desktop, mouse/keyboard control, OCR, multi-app workflow, agente como usuário.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🎯</span>
+            <div><span class="font-medium">Quando cada um faz sentido</span><span class="text-neutral-500 text-sm ml-2">- Browser para web, Computer para desktop</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Browser Use: pesquisa web, testes E2E, automação de SaaS. Computer Use: tarefas multi-app, edição de mídia local, fluxos que saem do navegador.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Escolher errado custa estabilidade. Computer Use é mais frágil que Browser Use — usar só quando realmente precisa do desktop.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Decision matrix, fragilidade vs poder, web vs desktop, escolha consciente.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">🔒</span>
+            <div><span class="font-medium">Configurando permissões com segurança</span><span class="text-neutral-500 text-sm ml-2">- Sandbox, allowlist, sessões isoladas</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Allowlist de domínios, perfis de browser isolados, sessão sem cookies sensíveis. Computer Use idealmente roda em VM ou usuário separado.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Agente com acesso total ao seu desktop é risco real. Configurar isolamento na primeira vez evita catástrofe (login bancário, e-mail pessoal).</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Allowlist, sandbox VM, perfil dedicado, secrets fora do alcance, principle of least privilege.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🛠️</span>
+            <div><span class="font-medium">Casos de uso reais</span><span class="text-neutral-500 text-sm ml-2">- Concorrentes, checkout, relatórios</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Pesquisar 5 concorrentes e tabelar features. Testar fluxo de checkout em homologação. Automatizar relatório mensal que requer login num SaaS B2B sem API.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">São workflows que valem dinheiro real para clientes. Saber executar bem é diferencial competitivo direto, não exercício acadêmico.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Competitor research, E2E testing, SaaS scraping, RPA agentic, monetização direta.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">⚠️</span>
+            <div><span class="font-medium">Limites e riscos</span><span class="text-neutral-500 text-sm ml-2">- Captcha, rate limit, banking — onde NÃO ir</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Sites com captcha quebram. Rate limit derruba sessão. Conteúdo dinâmico via WebSocket é instável. Banking e financeiro: NÃO use, risco demais.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Conhecer os limites antes de prometer ao cliente evita projeto que entrega 80% e morre nos 20% finais — o pior cenário comercial.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Captcha walls, rate limiting, retry com backoff, lista de NÃO-USE, escopo realista.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-5-2.html" class="px-4 py-2 text-sm bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 5.3 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-teal-400 font-bold">5.3</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">🎬 Remotion: Vídeo de Lançamento em Uma Noite</h3>
+        <p class="text-neutral-400 text-sm">React para vídeo. Você descreve o que quer mostrar, o agente monta composições, captura prints do app real e renderiza 1080p e 9:16 prontos para postar.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">📦</span>
+            <div><span class="font-medium">O que é Remotion</span><span class="text-neutral-500 text-sm ml-2">- React para vídeo, frame por frame</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Biblioteca que renderiza vídeo a partir de componentes React. Você programa o vídeo como programa um site: props, state, animações, frames.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Vídeo deixa de ser "abrir After Effects e clicar 200 vezes" e vira "código que agente edita". Isso muda quem consegue fazer vídeo profissional.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">React-as-video, fps, duration in frames, composições, programmatic motion graphics.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🛒</span>
+            <div><span class="font-medium">A skill remotion do Codex</span><span class="text-neutral-500 text-sm ml-2">- Instalação, primeiro vídeo, render</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">A skill Remotion do Codex automatiza setup, scaffolding de composições e render. Em 5 minutos você tem o primeiro vídeo .mp4 saindo do projeto.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Pular o setup manual mantém o foco no que importa: contar a história do produto. Skill faz heavy lifting; você dirige criação.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">npx create-video, Composition root, render --output, skill agentic, scaffold pronto.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">🎞️</span>
+            <div><span class="font-medium">Composições, Sequence, animações</span><span class="text-neutral-500 text-sm ml-2">- Anatomia de um vídeo Remotion</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Composition é a "cena". Sequence agrupa o que aparece em determinado intervalo. interpolate e spring criam animações fluidas a partir do frame atual.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Entender a anatomia destrava intervir no que o agente gera. Vai além do "rodou bonito" e te dá controle real sobre o resultado.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Composition, Sequence, useCurrentFrame, interpolate, spring, AbsoluteFill.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">📸</span>
+            <div><span class="font-medium">Pegando print do app pra montar o vídeo</span><span class="text-neutral-500 text-sm ml-2">- UI real animada, não mock genérico</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Workflow: Browser Use abre o InboxAI rodando local, captura prints de telas-chave, agente importa no Remotion como assets e anima entre eles.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Vídeo com mock genérico parece pitch de aluno. Vídeo com a UI real do produto parece lançamento sério. Diferença vende.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Screenshot programático, asset pipeline, transição entre telas, mockup vs real.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🎥</span>
+            <div><span class="font-medium">Rendering: 1080p e 9:16</span><span class="text-neutral-500 text-sm ml-2">- YouTube e Reels do mesmo código</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Mesmo projeto Remotion exporta 1920x1080 horizontal pra YouTube/Twitter e 1080x1920 vertical pra Reels/TikTok. Composição responsiva.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Reaproveitar o mesmo código pra todos os formatos é o que torna economicamente viável fazer vídeo pra cada plataforma. Sem isso, é trabalho 4x.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">npx remotion render, multi-aspect ratio, composição responsiva, export queue.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">📤</span>
+            <div><span class="font-medium">Publicando: YouTube, Twitter, LinkedIn, Reels</span><span class="text-neutral-500 text-sm ml-2">- Otimização por plataforma e thumbnails</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cada plataforma exige duração ideal, legendas, thumbnail. Agente gera thumbnail com Image Gen, escreve título/legenda otimizada por canal.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Vídeo bom mal publicado não roda. Otimização por plataforma multiplica alcance sem custo extra de produção.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Hook nos 3s iniciais, thumbnail CTR, legenda nativa, hashtag por canal, schedule.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-5-3.html" class="px-4 py-2 text-sm bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+    <!-- MÓDULO 5.4 -->
+    <div class="bg-dark-800 rounded-xl border border-dark-600 mb-6">
+      <div class="p-6 border-b border-dark-600">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-teal-400 font-bold">5.4</span>
+          <span class="text-xs text-neutral-500">~60 min</span>
+        </div>
+        <h3 class="text-2xl font-bold mb-2">📣 Agente de Marketing: Landing + Copy + Posts</h3>
+        <p class="text-neutral-400 text-sm">Um único agente entrega landing page de alta conversão, copy nos frameworks certos e calendário de 30 dias de posts. Você só publica.</p>
+      </div>
+      <div class="divide-y divide-dark-600">
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">1</span>
+            <span class="text-lg">📋</span>
+            <div><span class="font-medium">O briefing pro agente de marketing</span><span class="text-neutral-500 text-sm ml-2">- Produto, público, oferta, tom</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Template de briefing: o que o produto faz, pra quem, qual o problema-âncora, qual a oferta, qual o tom de voz, quais palavras evitar.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Briefing ruim gera marketing genérico. Briefing bom destrava agente que entrega copy que de fato converte. 80% do resultado vem do input.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Brief template, ICP, problema-âncora, oferta, voz da marca, anti-palavras.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">2</span>
+            <span class="text-lg">🏗️</span>
+            <div><span class="font-medium">Estrutura de landing alta conversão</span><span class="text-neutral-500 text-sm ml-2">- Hero, problema, solução, prova, CTA</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Anatomia padrão: Hero com hook, problema do leitor, solução do produto, prova social (logos/testemunhos), oferta, FAQ, CTA final.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Conhecer a estrutura permite revisar o que o agente entrega — não aceitar landing fora do padrão e identificar onde está furando.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Above the fold, Hero, social proof, oferta única, FAQ, double CTA, F-pattern.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">3</span>
+            <span class="text-lg">✍️</span>
+            <div><span class="font-medium">Copy: framework PAS</span><span class="text-neutral-500 text-sm ml-2">- Problema, Agitação, Solução</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">PAS: começa identificando o problema do leitor, agita mostrando consequências de não resolver, apresenta a solução. Funciona na maioria dos contextos.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Frameworks de copy não são opcionais. Texto sem estrutura emocional não converte. PAS dá o esqueleto que o agente preenche bem.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">PAS, AIDA, BAB, framework-driven copy, consciência do problema, emoção antes da razão.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">4</span>
+            <span class="text-lg">📱</span>
+            <div><span class="font-medium">10 formatos variados de post</span><span class="text-neutral-500 text-sm ml-2">- Calendário sem repetir tom</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Os 10 arquétipos: problema, solução, demo, depoimento, oferta, comparação, métrica, prova social, dica útil, CTA direto. Cada um cumpre função distinta.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Sem variedade, audiência cansa em 3 dias. Calendário com 10 formatos rotativos mantém engajamento por 30 dias sem repetir vibe.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Content pillars, rotação de formato, fadiga de conteúdo, calendário editorial, mix.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">5</span>
+            <span class="text-lg">🎨</span>
+            <div><span class="font-medium">Visual: Image Gen 2 pra ilustrações</span><span class="text-neutral-500 text-sm ml-2">- Imagem original em vez de stock</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Cada post sai com imagem original gerada por Image Gen 2 sob prompt cuidadoso. Sem aquela vibe genérica de banco de imagens.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">Imagem original cria identidade visual reconhecível. Stock genérico vira ruído entre milhões de posts iguais. É grátis se diferenciar.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Prompt template, identidade visual consistente, paleta-marca, anti-stock, brand recognition.</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="topic-item">
+          <button onclick="toggleTopic(this)" class="w-full px-6 py-4 flex items-center space-x-3 hover:bg-dark-700/50 transition-colors text-left">
+            <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-sm font-bold flex items-center justify-center flex-shrink-0">6</span>
+            <span class="text-lg">📅</span>
+            <div><span class="font-medium">Calendário: 30 dias gerados em uma noite</span><span class="text-neutral-500 text-sm ml-2">- O agente entrega o pacote, você publica</span></div>
+          </button>
+          <div class="topic-explanation px-6 pb-4">
+            <div class="bg-dark-700/50 rounded-lg p-4 space-y-3 ml-9">
+              <div><span class="text-teal-400 font-semibold">O que é:</span><p class="text-neutral-300 text-sm">Workflow final: agente recebe briefing, gera landing, copy, 30 posts com imagens e schedule. Você revisa, agenda no Buffer e segue a vida.</p></div>
+              <div><span class="text-teal-400 font-semibold">Por que aprender:</span><p class="text-neutral-300 text-sm">É a aplicação prática que mostra o ROI: 1 noite de trabalho = pacote de marketing que antes custava R$ 8–15k de agência.</p></div>
+              <div><span class="text-teal-400 font-semibold">Conceitos-chave:</span><p class="text-neutral-300 text-sm">Pacote completo, ROI absurdo, agendamento, Buffer/Hootsuite, ship and forget.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="p-4 bg-dark-700/30 flex justify-start space-x-3">
+        <a href="modulo-5-4.html" class="px-4 py-2 text-sm bg-teal-600 hover:bg-teal-500 text-white rounded-lg transition-colors">Ver Completo</a>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Master Codex — Trilha 5 — 2026</p>
+      <p class="mt-2"><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTopic(button) {
+      const explanation = button.nextElementSibling;
+      explanation.classList.toggle('active');
+    }
+
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 6.1 — Codex Cloud + GitHub PRs + @codex review | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-rose-400{color:#9f1239;}
+    html:not(.dark) .bg-rose-500\/20{background-color:rgba(159,18,57,0.12);}
+    html:not(.dark) .bg-rose-500\/10{background-color:rgba(159,18,57,0.08);}
+    html:not(.dark) .border-rose-500\/30{border-color:rgba(159,18,57,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-rose-400 bg-rose-500/10"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-rose-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-rose-400">Trilha 6 — Escala</a><span>/</span>
+      <span class="text-rose-400">Módulo 6.1</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-rose-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-4">MÓDULO 6.1</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">☁️ Codex Cloud + GitHub PRs + @codex review</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Delegar tarefas que rodam fora do laptop, abrir PRs profissionais sem digitar e fechar o ciclo com um agente revisando outro agente — o workflow que multiplica throughput sem virar caos.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-rose-400">Workflow</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">☁️ Codex Cloud: Agente Roda no Servidor da OpenAI</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cloud é um <strong class="text-rose-400">ambiente isolado no servidor da OpenAI</strong> que executa o agente sem depender do seu laptop. Você descreve a tarefa, fecha o notebook, e horas depois encontra a PR pronta esperando revisão.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">🔄 Local vs Cloud — Fluxo Operacional</h3>
+        <svg viewBox="0 0 540 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <text x="270" y="18" text-anchor="middle" fill="#9f1239" font-size="11" font-weight="bold">CODEX LOCAL (App/CLI)</text>
+          <rect x="40" y="30" width="80" height="40" rx="4" fill="#1f2937" stroke="#4b5563" stroke-width="1"/>
+          <text x="80" y="55" text-anchor="middle" fill="#d1d5db" font-size="10">Você</text>
+          <rect x="160" y="30" width="80" height="40" rx="4" fill="#1f2937" stroke="#4b5563" stroke-width="1"/>
+          <text x="200" y="55" text-anchor="middle" fill="#d1d5db" font-size="10">Laptop ligado</text>
+          <rect x="280" y="30" width="80" height="40" rx="4" fill="#1f2937" stroke="#4b5563" stroke-width="1"/>
+          <text x="320" y="55" text-anchor="middle" fill="#d1d5db" font-size="10">Agente</text>
+          <rect x="400" y="30" width="100" height="40" rx="4" fill="#1f2937" stroke="#4b5563" stroke-width="1"/>
+          <text x="450" y="55" text-anchor="middle" fill="#d1d5db" font-size="10">PR pronta</text>
+          <line x1="120" y1="50" x2="160" y2="50" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+          <line x1="240" y1="50" x2="280" y2="50" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+          <line x1="360" y1="50" x2="400" y2="50" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a)"/>
+
+          <text x="270" y="105" text-anchor="middle" fill="#9f1239" font-size="11" font-weight="bold">CODEX CLOUD</text>
+          <rect x="40" y="120" width="80" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1"/>
+          <text x="80" y="145" text-anchor="middle" fill="#fb7185" font-size="10">Você delega</text>
+          <rect x="160" y="120" width="80" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1"/>
+          <text x="200" y="138" text-anchor="middle" fill="#9ca3af" font-size="9">Laptop OFF</text>
+          <text x="200" y="152" text-anchor="middle" fill="#9ca3af" font-size="9">☕ café</text>
+          <rect x="280" y="120" width="80" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1"/>
+          <text x="320" y="138" text-anchor="middle" fill="#fb7185" font-size="10">Sandbox</text>
+          <text x="320" y="152" text-anchor="middle" fill="#9ca3af" font-size="9">cloud</text>
+          <rect x="400" y="120" width="100" height="40" rx="4" fill="#1f2937" stroke="#fb7185" stroke-width="1"/>
+          <text x="450" y="145" text-anchor="middle" fill="#fb7185" font-size="10">PR pronta</text>
+          <line x1="120" y1="140" x2="160" y2="140" stroke="#9f1239" stroke-width="1.5" marker-end="url(#b)"/>
+          <line x1="240" y1="140" x2="280" y2="140" stroke="#9f1239" stroke-width="1.5" marker-end="url(#b)"/>
+          <line x1="360" y1="140" x2="400" y2="140" stroke="#9f1239" stroke-width="1.5" marker-end="url(#b)"/>
+          <text x="270" y="190" text-anchor="middle" fill="#6b7280" font-size="9">Você desbloqueia o caminho crítico — agente trabalha sem você</text>
+          <defs>
+            <marker id="a" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#6b7280"/></marker>
+            <marker id="b" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#9f1239"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📊 Por que isso importa pra fábrica</h3>
+        <p class="text-neutral-300">Quando você opera 1 SaaS por semana com 10 clientes ativos, o gargalo não é digitação — é tempo da sua máquina ligada. Cloud paraleliza N tarefas <strong>sem ocupar seu local</strong>. Enquanto Cloud builda um vertical novo, você atende cliente. À noite, desliga o laptop e a obra continua. Throughput dobra sem cobrar mais horas suas.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔗 Conectando ao GitHub</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Setup é OAuth + GitHub App + escolha fina de repos autorizados. Calibrar agora <strong class="text-rose-400">evita acidente</strong> (agente com acesso a repo errado) e libera todos os recursos pra frente (Cloud, @codex review).</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">📋 Checklist do Setup</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg"><span class="text-rose-400 font-bold">1.</span><div><div class="text-sm font-semibold text-neutral-200">Acessar codex.openai.com → Settings → GitHub</div><div class="text-xs text-neutral-500">Página de configuração da integração</div></div></div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg"><span class="text-rose-400 font-bold">2.</span><div><div class="text-sm font-semibold text-neutral-200">Autorizar via OAuth (Authorize OpenAI Codex)</div><div class="text-xs text-neutral-500">Confirma identidade no GitHub e gera token</div></div></div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg"><span class="text-rose-400 font-bold">3.</span><div><div class="text-sm font-semibold text-neutral-200">Escolher repos: "Only selected repositories"</div><div class="text-xs text-neutral-500">NUNCA "All repositories" em produção</div></div></div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg"><span class="text-rose-400 font-bold">4.</span><div><div class="text-sm font-semibold text-neutral-200">Definir escopos: Contents (write), Pull requests (write), Issues (write)</div><div class="text-xs text-neutral-500">Mínimo necessário para abrir PR e responder issue</div></div></div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg"><span class="text-rose-400 font-bold">5.</span><div><div class="text-sm font-semibold text-neutral-200">Validar com tarefa-piloto (criar branch e abrir PR teste)</div><div class="text-xs text-neutral-500">Smoke test antes de delegar coisa real</div></div></div>
+        </div>
+      </div>
+
+      <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-3">⚠️ Erro caro de setup</h3>
+        <p class="text-neutral-300">Autorizar "All repositories" em organização com clientes pagantes deixa o agente acessível a todo repo — incluindo os privados de outros projetos. Use sempre <strong>fine-grained access</strong> com lista explícita. Quando criar um repo novo, volte e adicione manualmente. O minuto extra economiza acidentes que custam clientes.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📤 Delegando uma Tarefa ao Cloud</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">No App, você dirige em tempo real e corrige no caminho. No Cloud, <strong class="text-rose-400">o agente está sozinho</strong> — então a descrição precisa ser blindada: contexto, escopo, critério de pronto e ramo de destino, tudo explícito.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">📝 Template de Brief para Cloud</h3>
+        <pre class="bg-dark-900/60 rounded-lg p-4 text-xs text-neutral-300 overflow-x-auto"><code>## Tarefa
+Implementar lembrete automático de consulta no InboxAI-Clinica.
+
+## Contexto
+- Repo: inema/inboxai-clinica (branch base: main)
+- Stack: Next.js 15 + Convex + Tailwind
+- Convenção: AGENTS.md tem padrões; siga-os.
+
+## Escopo
+1. Adicionar tabela `appointments` no schema Convex.
+2. Criar cron job `notifyAppointmentTomorrow` que dispara WhatsApp.
+3. UI: nova página /agenda com lista de próximos 7 dias.
+
+## Fora de escopo
+- Não alterar layout do dashboard existente.
+- Não tocar em integrações de pagamento.
+
+## Definition of Done
+- [ ] Schema migrado e tipado.
+- [ ] Cron rodando às 18h America/Sao_Paulo.
+- [ ] UI renderiza sem erros.
+- [ ] Testes passando (npm test).
+- [ ] PR aberta para `develop` com Summary + Test Plan.
+
+## Branch
+feat/clinica-lembretes</code></pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Regra do contexto async</h3>
+        <p class="text-neutral-300">Cada ambiguidade não resolvida no brief vira <strong>1h de retrabalho</strong>. Vale 5 minutos a mais escrevendo "fora de escopo" e "definition of done" do que descobrir que o agente reescreveu o que não devia. Templates são patrimônio: salve em <code class="text-rose-400">.codex/briefs/</code> no repo.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📋 PR Automático com Summary e Test Plan</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cloud não devolve só um diff — devolve <strong class="text-rose-400">PR completa</strong>: branch nova, commits semânticos, descrição estruturada. Esse é o padrão profissional que destrava revisão de cliente, equipe e do próprio @codex review.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">📄 Estrutura padrão da PR</h3>
+        <pre class="bg-dark-900/60 rounded-lg p-4 text-xs text-neutral-300 overflow-x-auto"><code>feat(clinica): lembretes automáticos de consulta via WhatsApp
+
+## Summary
+- Nova tabela `appointments` (paciente, médico, datetime, status).
+- Cron diário às 18h envia WhatsApp para consultas do dia seguinte.
+- Página /agenda lista próximos 7 dias com filtros.
+
+## Test Plan
+- [ ] Rodar `npm test` (cobre schema e lógica do cron).
+- [ ] Criar consulta para amanhã via UI; aguardar 18h e validar envio.
+- [ ] Cancelar consulta; confirmar que cron pula a entrada.
+- [ ] Testar em Convex dev antes de merge para develop.
+
+## Out of scope
+- Não cobre lembrete por e-mail (issue #142 acompanha).</code></pre>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <h4 class="font-bold text-emerald-400 mb-3">✅ PR boa</h4>
+          <ul class="space-y-1 text-sm text-neutral-300">
+            <li>• Título conventional commits</li>
+            <li>• Summary objetivo (3–5 bullets)</li>
+            <li>• Test Plan acionável</li>
+            <li>• Links de issues relacionadas</li>
+            <li>• Out of scope explícito</li>
+          </ul>
+        </div>
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ PR ruim</h4>
+          <ul class="space-y-1 text-sm text-neutral-300">
+            <li>• Título "atualização"</li>
+            <li>• 30 commits desorganizados</li>
+            <li>• Sem descrição</li>
+            <li>• Mistura refactor + feature</li>
+            <li>• Quebra testes existentes</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🤖 @codex review: A IA Revisando a IA</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Comente <code class="text-rose-400">@codex review</code> em qualquer PR. Um agente independente lê o diff completo, identifica bugs, riscos de segurança e sugere refactors — direto nos comentários do GitHub. <strong class="text-rose-400">Segundo par de olhos automatizado</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">🔍 O que o @codex review olha</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <h4 class="font-bold text-rose-400 text-sm mb-2">🐛 Bugs lógicos</h4>
+            <p class="text-xs text-neutral-400">Off-by-one, null deref, race conditions, validação ausente.</p>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <h4 class="font-bold text-rose-400 text-sm mb-2">🔐 Segurança</h4>
+            <p class="text-xs text-neutral-400">Secrets em código, SQL injection, permissões expostas, CORS.</p>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <h4 class="font-bold text-rose-400 text-sm mb-2">📐 Padrões do projeto</h4>
+            <p class="text-xs text-neutral-400">Aderência ao AGENTS.md, naming, estrutura de pastas.</p>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <h4 class="font-bold text-rose-400 text-sm mb-2">⚡ Performance</h4>
+            <p class="text-xs text-neutral-400">Loops aninhados, N+1 queries, render desnecessário.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Workflow real</h3>
+        <p class="text-neutral-300">Cloud abre PR → você comenta <code class="text-rose-400">@codex review</code> → 2 minutos depois aparece review estruturado → você lê só os pontos sinalizados como "high severity" → decide aceitar ou pedir ajuste. <strong>De 30 minutos de revisão humana, sobram 5</strong>. O resto é decisão, não leitura.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-rose-500/20 text-rose-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">👨‍💻 Workflow Profissional: Solo + Cloud + Review</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">A combinação que multiplica throughput sem virar caos: você dispara N tarefas no Cloud, cada uma vira PR, cada PR passa pelo @codex review. <strong class="text-rose-400">Você só atua nos pontos sinalizados</strong> — o resto roda sozinho.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-rose-400 mb-4">🏭 Pipeline do Solo Dev Moderno</h3>
+        <svg viewBox="0 0 600 220" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="100" height="50" rx="6" fill="#1f2937" stroke="#9f1239" stroke-width="1.5"/>
+          <text x="70" y="42" text-anchor="middle" fill="#fb7185" font-size="11" font-weight="bold">VOCÊ</text>
+          <text x="70" y="56" text-anchor="middle" fill="#9ca3af" font-size="9">briefa N tarefas</text>
+
+          <rect x="160" y="5" width="100" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+          <text x="210" y="22" text-anchor="middle" fill="#fb7185" font-size="9">☁️ Cloud #1</text>
+          <text x="210" y="35" text-anchor="middle" fill="#9ca3af" font-size="8">tarefa A</text>
+          <rect x="160" y="55" width="100" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+          <text x="210" y="72" text-anchor="middle" fill="#fb7185" font-size="9">☁️ Cloud #2</text>
+          <text x="210" y="85" text-anchor="middle" fill="#9ca3af" font-size="8">tarefa B</text>
+          <rect x="160" y="105" width="100" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1"/>
+          <text x="210" y="122" text-anchor="middle" fill="#fb7185" font-size="9">☁️ Cloud #3</text>
+          <text x="210" y="135" text-anchor="middle" fill="#9ca3af" font-size="8">tarefa C</text>
+
+          <line x1="120" y1="40" x2="160" y2="25" stroke="#9f1239" stroke-width="1.5" marker-end="url(#a6)"/>
+          <line x1="120" y1="45" x2="160" y2="75" stroke="#9f1239" stroke-width="1.5" marker-end="url(#a6)"/>
+          <line x1="120" y1="50" x2="160" y2="125" stroke="#9f1239" stroke-width="1.5" marker-end="url(#a6)"/>
+
+          <rect x="300" y="5" width="100" height="40" rx="4" fill="#111827" stroke="#9f1239" stroke-width="1"/>
+          <text x="350" y="22" text-anchor="middle" fill="#fb7185" font-size="9">📋 PR #1</text>
+          <text x="350" y="35" text-anchor="middle" fill="#9ca3af" font-size="8">+ summary</text>
+          <rect x="300" y="55" width="100" height="40" rx="4" fill="#111827" stroke="#9f1239" stroke-width="1"/>
+          <text x="350" y="72" text-anchor="middle" fill="#fb7185" font-size="9">📋 PR #2</text>
+          <text x="350" y="85" text-anchor="middle" fill="#9ca3af" font-size="8">+ summary</text>
+          <rect x="300" y="105" width="100" height="40" rx="4" fill="#111827" stroke="#9f1239" stroke-width="1"/>
+          <text x="350" y="122" text-anchor="middle" fill="#fb7185" font-size="9">📋 PR #3</text>
+          <text x="350" y="135" text-anchor="middle" fill="#9ca3af" font-size="8">+ summary</text>
+
+          <line x1="260" y1="25" x2="300" y2="25" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a6)"/>
+          <line x1="260" y1="75" x2="300" y2="75" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a6)"/>
+          <line x1="260" y1="125" x2="300" y2="125" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a6)"/>
+
+          <rect x="440" y="55" width="120" height="40" rx="4" fill="#111827" stroke="#fb7185" stroke-width="1.5"/>
+          <text x="500" y="72" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">🤖 @codex review</text>
+          <text x="500" y="85" text-anchor="middle" fill="#9ca3af" font-size="8">3 PRs comentadas</text>
+
+          <line x1="400" y1="25" x2="440" y2="65" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a6)"/>
+          <line x1="400" y1="75" x2="440" y2="75" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a6)"/>
+          <line x1="400" y1="125" x2="440" y2="85" stroke="#6b7280" stroke-width="1.5" marker-end="url(#a6)"/>
+
+          <rect x="220" y="170" width="160" height="40" rx="6" fill="#1f2937" stroke="#9f1239" stroke-width="1.5"/>
+          <text x="300" y="187" text-anchor="middle" fill="#fb7185" font-size="10" font-weight="bold">VOCÊ revisa só os flags</text>
+          <text x="300" y="200" text-anchor="middle" fill="#9ca3af" font-size="9">5 minutos por PR</text>
+          <line x1="500" y1="95" x2="380" y2="170" stroke="#9f1239" stroke-width="1.5" marker-end="url(#a6)"/>
+
+          <defs>
+            <marker id="a6" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><polygon points="0 0, 6 3, 0 6" fill="#9f1239"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bg-rose-900/20 rounded-xl border border-rose-500/30 p-6">
+        <h3 class="text-lg font-semibold text-rose-400 mb-3">🚀 O que isso destrava</h3>
+        <p class="text-neutral-300">Sem essa orquestração, você executa <strong>1 tarefa por vez sequencialmente</strong>. Com ela, opera 4–8 em paralelo com revisão automatizada de qualidade — o que era trabalho de equipe vira routine de 2h diárias. É a diferença entre cobrar <strong class="text-rose-400">R$ 5k de freela</strong> e operar <strong class="text-rose-400">R$ 15k/mês recorrente</strong> com 10 clientes.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-rose-900/40 via-dark-800 to-dark-800 rounded-xl border border-rose-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">Cloud roda agente sem seu laptop</strong><span class="text-neutral-400"> — paraleliza N tarefas; você desbloqueia o caminho crítico.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">GitHub setup com fine-grained access</strong><span class="text-neutral-400"> — nunca "All repositories"; protege sua carteira de clientes.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">Brief async exige template robusto</strong><span class="text-neutral-400"> — contexto + escopo + DoD + branch; salve em .codex/briefs/.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">PR padrão: Summary + Test Plan + Out of scope</strong><span class="text-neutral-400"> — destrava revisão sua, do cliente e do @codex review.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">@codex review é segundo par de olhos automatizado</strong><span class="text-neutral-400"> — 30 min de revisão viram 5; você só decide.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-rose-400 mt-1">✓</span><div><strong class="text-white">Solo + Cloud + Review = throughput de equipe</strong><span class="text-neutral-400"> — 4–8 PRs/dia operando sozinho com qualidade.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-rose-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">6.2 — Automations: agentes recorrentes que rodam por cron, geram relatório semanal, triagem de issues e dependabot review — sem você precisar lembrar.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="index.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Voltar para Trilha 6</a>
+          <a href="modulo-6-2.html" class="flex-1 text-center px-6 py-3 bg-rose-600 text-white rounded-lg font-semibold hover:bg-rose-500 transition-colors">Próximo: Automations →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 6.1 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

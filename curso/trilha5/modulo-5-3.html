@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 5.3 — Remotion: Vídeo de Lançamento em Uma Noite | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-teal-400{color:#0d9488;}
+    html:not(.dark) .bg-teal-500\/20{background-color:rgba(13,148,136,0.12);}
+    html:not(.dark) .bg-teal-500\/10{background-color:rgba(13,148,136,0.08);}
+    html:not(.dark) .border-teal-500\/30{border-color:rgba(13,148,136,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-teal-400 bg-teal-500/10"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-teal-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-teal-400">Trilha 5 — Multiagente</a><span>/</span>
+      <span class="text-teal-400">Módulo 5.3</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-teal-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-teal-500/20 text-teal-400 text-xs font-semibold rounded-full mb-4">MÓDULO 5.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🎬 Remotion: Vídeo de Lançamento em Uma Noite</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Você descreve o roteiro, o agente programa o vídeo em React, captura prints reais do app, renderiza 1080p e 9:16 e entrega tudo pronto pra postar no YouTube, Twitter, LinkedIn e Reels.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Pro</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-teal-400">Vídeo</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📦 O Que é Remotion</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Remotion é uma <strong class="text-teal-400">biblioteca que renderiza vídeo a partir de componentes React</strong>. Você programa o vídeo do mesmo jeito que programa um site: props, state, animações, frames. O resultado vira .mp4.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-3xl mb-3">🎨</div>
+          <h4 class="font-bold text-red-400 mb-2">After Effects (jeito antigo)</h4>
+          <p class="text-sm text-neutral-400">Abrir, clicar 200 vezes, rendering longo, sem versionamento. Paga R$ 100/mês e exige curva.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-3xl mb-3">🎬</div>
+          <h4 class="font-bold text-amber-400 mb-2">CapCut / iMovie</h4>
+          <p class="text-sm text-neutral-400">Bom pra cortar, ruim pra animação. Sem programabilidade, sem reuso, sem agente que edita.</p>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 ring-2 ring-teal-500/30">
+          <div class="text-3xl mb-3">⚛️</div>
+          <h4 class="font-bold text-teal-400 mb-2">Remotion (jeito agentic)</h4>
+          <p class="text-sm text-neutral-400">Código React, agente edita, git versiona, renderiza 1080p e 9:16 do mesmo projeto. Open source.</p>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">🎯 Por que isso muda jogo</h3>
+        <p class="text-neutral-300">Quando vídeo vira código, ele vira <strong>tarefa que agente executa</strong>. Você descreve o roteiro, o agente monta as composições, e em 1 hora você tem 4 cortes diferentes do mesmo lançamento. Antes era trabalho de 1 semana de editor.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🛒 A Skill Remotion do Codex</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Codex já vem com a skill Remotion. <strong class="text-teal-400">Em 5 minutos você tem o primeiro .mp4 saindo</strong> sem precisar saber a API toda na primeira vez.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">⚡ Setup em 5 comandos</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code># 1. Scaffold do projeto
+npx create-video@latest inboxai-launch --template=hello-world
+
+cd inboxai-launch
+
+# 2. Instala deps
+npm install
+
+# 3. Roda preview ao vivo (Remotion Studio)
+npm run dev
+# abre http://localhost:3000
+
+# 4. Pede pro agente (com skill remotion ativa)
+codex "use a skill remotion: cria composição de 30s
+para o lançamento do InboxAI com 5 cenas:
+1) Hook (0-3s)
+2) Problema (3-9s)
+3) Demo do app (9-20s)
+4) Depoimento fake (20-26s)
+5) CTA (26-30s)
+Use os prints em ./public/screens/"
+
+# 5. Renderiza
+npx remotion render src/Root.tsx LaunchVideo out/launch.mp4</code></pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">📂 Estrutura de pastas que a skill cria</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code>inboxai-launch/
+├── src/
+│   ├── Root.tsx          ← registra todas as composições
+│   ├── LaunchVideo.tsx   ← composição principal (1920x1080)
+│   ├── LaunchVertical.tsx← versão 1080x1920
+│   ├── scenes/
+│   │   ├── Hook.tsx
+│   │   ├── Problem.tsx
+│   │   ├── Demo.tsx
+│   │   ├── Testimonial.tsx
+│   │   └── CTA.tsx
+│   └── components/Logo.tsx, Caption.tsx, ...
+├── public/
+│   └── screens/          ← prints do app vão aqui
+├── out/                  ← .mp4 renderizados
+└── remotion.config.ts</code></pre>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🎞️ Composições, Sequence, Animações</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Três conceitos centrais bastam pra entender 90% dos vídeos Remotion: <strong class="text-teal-400">Composition (cena raiz), Sequence (intervalo) e useCurrentFrame (animação por frame)</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">⚛️ Composição com 3 sequences</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code>// src/LaunchVideo.tsx
+import { Composition, Sequence, AbsoluteFill,
+         useCurrentFrame, interpolate, spring,
+         useVideoConfig } from 'remotion';
+
+export const LaunchVideo = () =&gt; {
+  return (
+    &lt;AbsoluteFill className="bg-zinc-900"&gt;
+      &lt;Sequence from={0} durationInFrames={90}&gt;
+        &lt;Hook /&gt;
+      &lt;/Sequence&gt;
+      &lt;Sequence from={90} durationInFrames={180}&gt;
+        &lt;Problem /&gt;
+      &lt;/Sequence&gt;
+      &lt;Sequence from={270} durationInFrames={330}&gt;
+        &lt;Demo /&gt;
+      &lt;/Sequence&gt;
+    &lt;/AbsoluteFill&gt;
+  );
+};
+
+// Cena com animação por frame
+const Hook = () =&gt; {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  // título sobe 40px e desaparece de baixo
+  const y = interpolate(frame, [0, fps * 1], [40, 0]);
+  const opacity = spring({ frame, fps, config: { damping: 12 } });
+
+  return (
+    &lt;AbsoluteFill className="flex items-center justify-center"&gt;
+      &lt;h1 style={{ transform: `translateY(${y}px)`, opacity }}
+          className="text-7xl font-bold text-white"&gt;
+        Sua inbox virou caos.
+      &lt;/h1&gt;
+    &lt;/AbsoluteFill&gt;
+  );
+};</code></pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-4">🧠 Mental model dos 3 conceitos</h3>
+        <div class="space-y-3">
+          <div class="bg-dark-700/50 rounded-lg p-3"><strong class="text-teal-400">Composition:</strong><span class="text-sm text-neutral-300"> a "raiz" do vídeo. Define duração total, fps, dimensões. É o equivalente a um App.tsx pra vídeo.</span></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><strong class="text-teal-400">Sequence:</strong><span class="text-sm text-neutral-300"> agrupa o que aparece num intervalo (`from` + `durationInFrames`). Pensa como timeline track.</span></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><strong class="text-teal-400">useCurrentFrame:</strong><span class="text-sm text-neutral-300"> retorna o frame atual sendo renderizado. Combine com `interpolate` ou `spring` pra animar qualquer prop.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">📸 Pegando Print do App pra Montar o Vídeo</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Vídeo com mock genérico parece pitch de aluno. <strong class="text-teal-400">Vídeo com a UI real do produto parece lançamento sério</strong>. Workflow: Browser Use captura prints do InboxAI rodando local, Remotion importa e anima entre eles.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-4">🔄 Pipeline completo</h3>
+        <svg viewBox="0 0 520 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="80" width="100" height="50" rx="6" fill="#1f2937" stroke="#a78bfa"/>
+          <text x="70" y="100" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="bold">App rodando</text>
+          <text x="70" y="116" text-anchor="middle" fill="#9ca3af" font-size="8">localhost:3000</text>
+
+          <path d="M 120 105 L 165 105" stroke="#14b8a6" stroke-width="1.5" marker-end="url(#a3)"/>
+
+          <rect x="165" y="80" width="105" height="50" rx="6" fill="#1f2937" stroke="#14b8a6"/>
+          <text x="217" y="100" text-anchor="middle" fill="#14b8a6" font-size="10" font-weight="bold">Browser Use</text>
+          <text x="217" y="116" text-anchor="middle" fill="#9ca3af" font-size="8">tira screenshots</text>
+
+          <path d="M 270 105 L 315 105" stroke="#14b8a6" stroke-width="1.5" marker-end="url(#a3)"/>
+
+          <rect x="315" y="80" width="105" height="50" rx="6" fill="#1f2937" stroke="#facc15"/>
+          <text x="367" y="100" text-anchor="middle" fill="#facc15" font-size="10" font-weight="bold">public/screens/</text>
+          <text x="367" y="116" text-anchor="middle" fill="#9ca3af" font-size="8">PNG salvos</text>
+
+          <path d="M 420 105 L 465 105" stroke="#14b8a6" stroke-width="1.5" marker-end="url(#a3)"/>
+
+          <rect x="465" y="80" width="50" height="50" rx="6" fill="#1f2937" stroke="#10b981"/>
+          <text x="490" y="105" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">.mp4</text>
+          <text x="490" y="120" text-anchor="middle" fill="#9ca3af" font-size="8">render</text>
+
+          <path d="M 270 130 L 270 165 L 367 165 L 367 130" stroke="#a78bfa" stroke-width="1" fill="none" stroke-dasharray="3,3"/>
+          <text x="318" y="180" text-anchor="middle" fill="#9ca3af" font-size="9">Remotion importa como &lt;Img/&gt;</text>
+
+          <defs><marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L7,4 L0,8" fill="#14b8a6"/></marker></defs>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">📜 Script do agente (browser-use → public/)</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code># Tarefa pro agente Browser Use
+1. Abrir http://localhost:3000 (InboxAI dev)
+2. Login com user de demo (creds em .env.demo)
+3. Capturar screenshot 1920x1080 das telas:
+   - /dashboard          → public/screens/01-dashboard.png
+   - /inbox              → public/screens/02-inbox.png
+   - /inbox/triage       → public/screens/03-triage.png
+   - /settings           → public/screens/04-settings.png
+   - /reports            → public/screens/05-reports.png
+4. Versão mobile (390x844) das mesmas → public/screens/mobile/
+
+# Depois, no Remotion:
+import dashboard from '/public/screens/01-dashboard.png';
+&lt;Img src={dashboard} style={{ transform: zoomEffect }} /&gt;</code></pre>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🎥 Rendering: 1080p e 9:16</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Mesmo projeto, dois formatos. <strong class="text-teal-400">YouTube/Twitter pedem 1920x1080 horizontal; Reels/TikTok pedem 1080x1920 vertical</strong>. Remotion gera os dois do mesmo código se você compor responsivo.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">🎬 Registrando 2 composições no Root</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code>// src/Root.tsx
+import { Composition } from 'remotion';
+import { LaunchVideo } from './LaunchVideo';
+import { LaunchVertical } from './LaunchVertical';
+
+export const RemotionRoot = () =&gt; (
+  &lt;&gt;
+    {/* 1080p horizontal — YouTube, Twitter, LinkedIn */}
+    &lt;Composition
+      id="LaunchHorizontal"
+      component={LaunchVideo}
+      durationInFrames={900}     // 30s a 30fps
+      fps={30}
+      width={1920}
+      height={1080}
+    /&gt;
+
+    {/* 9:16 vertical — Reels, TikTok, Shorts */}
+    &lt;Composition
+      id="LaunchVertical"
+      component={LaunchVertical}
+      durationInFrames={450}     // 15s — formatos curtos
+      fps={30}
+      width={1080}
+      height={1920}
+    /&gt;
+  &lt;/&gt;
+);</code></pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">🚀 Comandos de render</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code># YouTube/Twitter — 30s, alta qualidade
+npx remotion render src/Root.tsx LaunchHorizontal \
+  out/launch-yt.mp4 \
+  --crf=18 --codec=h264
+
+# Reels/TikTok — 15s, vertical, otimizado mobile
+npx remotion render src/Root.tsx LaunchVertical \
+  out/launch-reels.mp4 \
+  --crf=20 --codec=h264
+
+# Bonus: GIF curto pro Twitter (3s)
+npx remotion render src/Root.tsx LaunchHorizontal \
+  out/launch-teaser.gif \
+  --frames=0-90</code></pre>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/20 text-teal-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">📤 Publicando: Otimização por Plataforma</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Vídeo bom mal publicado não roda. <strong class="text-teal-400">Cada plataforma tem regras tácitas que multiplicam alcance</strong> sem custo extra de produção.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Canal</th>
+              <th class="text-center p-3 text-teal-400 font-semibold">Formato</th>
+              <th class="text-center p-3 text-teal-400 font-semibold">Duração ideal</th>
+              <th class="text-left p-3 text-teal-400 font-semibold">Hack</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">YouTube</td><td class="p-3 text-center">1920x1080</td><td class="p-3 text-center">30-60s (Shorts: 15s)</td><td class="p-3 text-neutral-400">Thumbnail custom + CTA "saiba mais"</td></tr>
+            <tr><td class="p-3 text-neutral-300">Twitter/X</td><td class="p-3 text-center">1920x1080 ou 1:1</td><td class="p-3 text-center">15-30s</td><td class="p-3 text-neutral-400">Hook nos 3s, sem som default</td></tr>
+            <tr><td class="p-3 text-neutral-300">LinkedIn</td><td class="p-3 text-center">1920x1080</td><td class="p-3 text-center">30-90s</td><td class="p-3 text-neutral-400">Legenda burned-in (sem som no feed)</td></tr>
+            <tr><td class="p-3 text-neutral-300">Reels/TikTok</td><td class="p-3 text-center">1080x1920</td><td class="p-3 text-center">9-15s</td><td class="p-3 text-neutral-400">Trending audio, hook visual em 1s</td></tr>
+            <tr><td class="p-3 text-neutral-300">Shorts</td><td class="p-3 text-center">1080x1920</td><td class="p-3 text-center">15-60s</td><td class="p-3 text-neutral-400">Loop perceptível ajuda no replay</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-teal-400 mb-3">🖼️ Thumbnail com Image Gen — prompt template</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300"><code># Pra agente: image-gen
+"Thumbnail YouTube 1280x720 do app InboxAI.
+Composição: lado esquerdo print da inbox bagunçada
+em red overlay, lado direito mesmo print organizado
+em green overlay. Centro: seta amarela cruzando
++ texto 'AI faz' em fonte sans-serif bold branca.
+Estilo: clean, alto contraste, evitar cara do dev.
+Não usar texto pequeno demais."
+
+# Salva como: out/thumb-yt.png</code></pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Hack final: legenda nativa</h3>
+        <p class="text-neutral-300">85% das pessoas assistem sem som. <strong>Burn legenda no vídeo</strong> direto da composição Remotion (componente Caption animado por frame). Não dependa de auto-caption das plataformas — elas erram seu nome de produto.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-teal-900/40 via-dark-800 to-dark-800 rounded-xl border border-teal-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Remotion = React pra vídeo</strong><span class="text-neutral-400"> — programa em vez de clicar 200 vezes.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">A skill remotion do Codex faz scaffold</strong><span class="text-neutral-400"> — 5 comandos do zero ao primeiro .mp4.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Composition + Sequence + useCurrentFrame</strong><span class="text-neutral-400"> — o trio que cobre 90% dos vídeos.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Browser Use captura UI real</strong><span class="text-neutral-400"> — vídeo com app real vende, mock genérico não.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Mesmo código → 1080p e 9:16</strong><span class="text-neutral-400"> — uma composição por aspect ratio.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-teal-400 mt-1">✓</span><div><strong class="text-white">Otimização por plataforma multiplica alcance</strong><span class="text-neutral-400"> — duração, hook, thumb, legenda nativa.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-teal-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">5.4 — Agente de Marketing: landing page de alta conversão, copy nos frameworks certos e calendário de 30 dias gerado em uma noite.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-5-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Browser + Computer Use</a>
+          <a href="modulo-5-4.html" class="flex-1 text-center px-6 py-3 bg-teal-600 text-white rounded-lg font-semibold hover:bg-teal-500 transition-colors">Próximo: Agente de Marketing →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 5.3 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

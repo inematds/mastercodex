@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 3.2 — Construindo o Inbox Unificado (InboxAI) | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-purple-400{color:#7c3aed;}
+    html:not(.dark) .bg-purple-500\/20{background-color:rgba(124,58,237,0.12);}
+    html:not(.dark) .bg-purple-500\/10{background-color:rgba(124,58,237,0.08);}
+    html:not(.dark) .border-purple-500\/30{border-color:rgba(124,58,237,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-purple-400 bg-purple-500/10"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-purple-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-purple-400">Trilha 3 — Frontend</a><span>/</span>
+      <span class="text-purple-400">Módulo 3.2</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-purple-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-4">MÓDULO 3.2</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">📨 Construindo o Inbox Unificado (InboxAI)</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">A primeira tela do projeto-âncora: três colunas, multi-canal (WhatsApp, IG, email, web), real-time mockado, atalhos de operador power-user.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Inter</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-purple-400">Build</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🏗️ Anatomia do Inbox</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">O layout de três colunas existe porque <strong class="text-purple-400">funciona em todo inbox profissional do mercado</strong>: Slack, Linear, Intercom, Superhuman, Front. Reinventar a roda aqui custa caro e o cliente estranha.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">📐 Wireframe — proporções e função</h3>
+        <svg viewBox="0 0 600 300" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="140" height="260" rx="6" fill="#1f2937" stroke="#7c3aed" stroke-width="1.5"/>
+          <text x="90" y="14" text-anchor="middle" fill="#7c3aed" font-size="10" font-weight="bold">Lista de Conversas</text>
+          <rect x="30" y="35" width="120" height="35" rx="4" fill="#374151"/>
+          <circle cx="45" cy="52" r="9" fill="#7c3aed"/>
+          <rect x="60" y="44" width="80" height="6" rx="2" fill="#9ca3af"/>
+          <rect x="60" y="55" width="50" height="5" rx="2" fill="#6b7280"/>
+          <rect x="30" y="78" width="120" height="35" rx="4" fill="#7c3aed" fill-opacity="0.2"/>
+          <circle cx="45" cy="95" r="9" fill="#a78bfa"/>
+          <rect x="60" y="87" width="80" height="6" rx="2" fill="#a78bfa"/>
+          <rect x="60" y="98" width="50" height="5" rx="2" fill="#7c3aed"/>
+          <rect x="30" y="121" width="120" height="35" rx="4" fill="#374151"/>
+          <rect x="30" y="164" width="120" height="35" rx="4" fill="#374151"/>
+          <rect x="180" y="20" width="280" height="260" rx="6" fill="#1f2937" stroke="#7c3aed" stroke-width="1.5"/>
+          <text x="320" y="14" text-anchor="middle" fill="#7c3aed" font-size="10" font-weight="bold">Thread Ativa</text>
+          <rect x="190" y="35" width="260" height="30" rx="4" fill="#374151"/>
+          <rect x="200" y="80" width="160" height="40" rx="8" fill="#374151"/>
+          <rect x="270" y="135" width="170" height="40" rx="8" fill="#7c3aed" fill-opacity="0.4"/>
+          <rect x="200" y="190" width="120" height="40" rx="8" fill="#374151"/>
+          <rect x="190" y="245" width="260" height="30" rx="4" fill="#4b5563"/>
+          <rect x="480" y="20" width="100" height="260" rx="6" fill="#1f2937" stroke="#7c3aed" stroke-width="1.5"/>
+          <text x="530" y="14" text-anchor="middle" fill="#7c3aed" font-size="10" font-weight="bold">Contato</text>
+          <circle cx="530" cy="60" r="22" fill="#7c3aed" fill-opacity="0.4"/>
+          <rect x="495" y="92" width="70" height="6" rx="2" fill="#9ca3af"/>
+          <rect x="495" y="105" width="70" height="5" rx="2" fill="#6b7280"/>
+          <rect x="495" y="125" width="70" height="35" rx="4" fill="#374151"/>
+          <rect x="495" y="170" width="70" height="80" rx="4" fill="#374151"/>
+          <text x="90" y="295" text-anchor="middle" fill="#6b7280" font-size="9">1 fr (~280px)</text>
+          <text x="320" y="295" text-anchor="middle" fill="#6b7280" font-size="9">2 fr (flex)</text>
+          <text x="530" y="295" text-anchor="middle" fill="#6b7280" font-size="9">1 fr (~280px)</text>
+        </svg>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">📌 Por que essas proporções</h3>
+        <p class="text-neutral-300">Lista 1fr (~280px) cabe título + preview + timestamp. Thread 2fr é onde mora o trabalho real, então ganha mais espaço. Contato 1fr aparece e some no mobile sem dor. <strong>É proporção testada por bilhões de uso de Gmail/Slack/Linear</strong> — não tente outra.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🧱 Componentes</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Componentização clara é o que destrava reuso, testes e iteração rápida. <strong class="text-purple-400">Sem ela, mudar o estilo de uma mensagem vira mudar 12 arquivos</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">📁 Estrutura de pastas</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed">app/
+└── inbox/
+    └── page.tsx                  # rota /inbox
+components/
+└── inbox/
+    ├── ConversationList.tsx      # coluna esquerda
+    ├── ConversationItem.tsx      # cada linha da lista
+    ├── ChannelBadge.tsx          # 🟢 IG ✉️ 💬
+    ├── MessageThread.tsx         # coluna central
+    ├── MessageBubble.tsx         # cada balão
+    ├── MessageComposer.tsx       # textarea + botões
+    └── ContactPanel.tsx          # coluna direita
+lib/
+├── mock-conversations.ts         # dados fake
+└── types.ts                      # Conversation, Message, Contact
+store/
+└── inbox-store.ts                # Zustand</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⚙️ Snippet — ConversationItem</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>type Props = {
+  conversation: Conversation;
+  isActive: boolean;
+  onClick: () =&gt; void;
+};
+
+export function ConversationItem({ conversation, isActive, onClick }: Props) {
+  const { contact, lastMessage, channel, unreadCount } = conversation;
+  return (
+    &lt;button
+      onClick={onClick}
+      className={`w-full flex items-start gap-3 p-3 rounded-lg
+        ${isActive ? 'bg-purple-500/15' : 'hover:bg-neutral-800/50'}`}
+    &gt;
+      &lt;Avatar src={contact.avatar} alt={contact.name} /&gt;
+      &lt;div className="flex-1 min-w-0 text-left"&gt;
+        &lt;div className="flex items-center gap-2"&gt;
+          &lt;span className="font-medium truncate"&gt;{contact.name}&lt;/span&gt;
+          &lt;ChannelBadge channel={channel} /&gt;
+        &lt;/div&gt;
+        &lt;p className="text-xs text-neutral-400 truncate"&gt;{lastMessage.preview}&lt;/p&gt;
+      &lt;/div&gt;
+      {unreadCount &gt; 0 &amp;&amp; (
+        &lt;span className="bg-purple-500 text-white text-xs px-2 py-0.5 rounded-full"&gt;
+          {unreadCount}
+        &lt;/span&gt;
+      )}
+    &lt;/button&gt;
+  );
+}</code></pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 Regras de componentização</h3>
+        <ul class="text-neutral-300 space-y-2 text-sm">
+          <li><strong class="text-purple-400">1 componente = 1 arquivo</strong> — facilita find/replace e o agente lê melhor.</li>
+          <li><strong class="text-purple-400">Props tipadas explícitas</strong> — não use any nem inline type, o Codex se perde.</li>
+          <li><strong class="text-purple-400">Nada de lógica de fetch dentro</strong> — componente só apresenta; estado vem por prop ou hook.</li>
+          <li><strong class="text-purple-400">Nome diz o que é, não onde está</strong> — ConversationItem, não LeftSidebarRow.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">📊 Estado: Conversas, Mensagens, Status</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Estado mal modelado é a origem da maioria dos bugs em frontend complexo. <strong class="text-purple-400">Decidir certo aqui</strong> evita reescrita de 60% do projeto na Trilha 4 quando plugar o backend de verdade.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <h4 class="font-bold text-purple-400 mb-3">🟣 Zustand</h4>
+          <p class="text-sm text-neutral-300 mb-3">Store local, simples. Bom pra protótipo e pra começar.</p>
+          <ul class="text-xs text-neutral-400 space-y-1">
+            <li>✓ 1KB, sem boilerplate</li>
+            <li>✓ TypeScript-friendly</li>
+            <li>✗ Real-time é manual</li>
+            <li>✗ Sem persistência server-side</li>
+          </ul>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <h4 class="font-bold text-purple-400 mb-3">🌊 Convex</h4>
+          <p class="text-sm text-neutral-300 mb-3">Real-time + DB acoplados. Bom pra produção e InboxAI completo.</p>
+          <ul class="text-xs text-neutral-400 space-y-1">
+            <li>✓ useQuery sincroniza automaticamente</li>
+            <li>✓ Mutations otimistas</li>
+            <li>✓ Schema tipado end-to-end</li>
+            <li>✗ Requer setup (vem na Trilha 4)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">📐 Schema sugerido (TypeScript)</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>// lib/types.ts
+export type Channel = 'whatsapp' | 'instagram' | 'email' | 'web';
+export type ConversationStatus = 'open' | 'pending' | 'resolved';
+
+export type Contact = {
+  id: string;
+  name: string;
+  avatar?: string;
+  phone?: string;
+  email?: string;
+  tags: string[];
+};
+
+export type Message = {
+  id: string;
+  conversationId: string;
+  authorId: string;            // 'agent' | contactId | 'ai'
+  body: string;
+  createdAt: number;           // epoch ms
+  readAt?: number;
+};
+
+export type Conversation = {
+  id: string;
+  contactId: string;
+  channel: Channel;
+  status: ConversationStatus;
+  assignedTo?: string;         // userId do operador
+  lastMessage: { preview: string; at: number };
+  unreadCount: number;
+  createdAt: number;
+};</code></pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">💡 A regra: comece em Zustand, migre pra Convex</h3>
+        <p class="text-neutral-300">Na Trilha 3 estamos fazendo frontend mockado — Zustand é o suficiente. Quando chegar na Trilha 4 e plugar o backend, troque <code class="text-purple-400 bg-dark-700 px-1 rounded">useStore()</code> por <code class="text-purple-400 bg-dark-700 px-1 rounded">useQuery()</code> e os tipos já estão prontos. <strong>Zero refactor de componente</strong>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔴 Real-time Mock</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Mockar o real-time desde o início destrava UX inteira (animação de entrada, badge de unread, scroll automático, som) <strong class="text-purple-400">sem bloquear no backend</strong>. Quando o WebSocket real chegar, é trocar a fonte.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⏲️ Mock com setInterval</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>// hooks/useFakeIncomingMessages.ts
+import { useEffect } from 'react';
+import { useInboxStore } from '@/store/inbox-store';
+import { generateFakeMessage } from '@/lib/fake-data';
+
+export function useFakeIncomingMessages(intervalMs = 8000) {
+  const addMessage = useInboxStore((s) =&gt; s.addMessage);
+
+  useEffect(() =&gt; {
+    const id = setInterval(() =&gt; {
+      const msg = generateFakeMessage();
+      addMessage(msg);
+      // notification, scroll, badge — tudo reage automático
+    }, intervalMs);
+    return () =&gt; clearInterval(id);
+  }, [addMessage, intervalMs]);
+}</code></pre>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ Esperando o backend</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• UI estática até semana 3</li>
+            <li>• Animações descobertas tarde</li>
+            <li>• Bug de race condition em produção</li>
+            <li>• Cliente não tem o que ver</li>
+          </ul>
+        </div>
+        <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-5">
+          <h4 class="font-bold text-purple-400 mb-3">✅ Mock-first</h4>
+          <ul class="text-sm text-neutral-300 space-y-1">
+            <li>• UI viva desde o dia 1</li>
+            <li>• Edge cases descobertos cedo</li>
+            <li>• Cliente vê demo já em D+2</li>
+            <li>• Backend só pluga quando pronto</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🎯 O segredo: trate como real desde o começo</h3>
+        <p class="text-neutral-300">A função <code class="text-purple-400 bg-dark-700 px-1 rounded">addMessage</code> tem que ter <strong>exatamente a mesma assinatura</strong> que terá com Convex/WebSocket. Aí, no dia da troca, você muda 1 arquivo (a fonte de dados) e tudo continua funcionando.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🏷️ Multi-canal: Badge Visual</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Multi-canal é <strong class="text-purple-400">o diferencial central do InboxAI</strong>. Sem badge claro, o operador responde "oi" no WhatsApp como se fosse email — e perde tom. Com badge, ele lê o canal antes de qualquer letra.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">🎨 Tabela de canais</h3>
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Canal</th>
+              <th class="text-center p-3 text-neutral-400 font-semibold">Ícone</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Cor</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Tom esperado</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">WhatsApp</td><td class="p-3 text-center text-2xl">🟢</td><td class="p-3 text-neutral-300">#25D366</td><td class="p-3 text-neutral-400">Informal, áudio comum</td></tr>
+            <tr><td class="p-3 text-neutral-300">Instagram DM</td><td class="p-3 text-center text-2xl">📷</td><td class="p-3 text-neutral-300">#E4405F</td><td class="p-3 text-neutral-400">Curto, emoji-heavy</td></tr>
+            <tr><td class="p-3 text-neutral-300">Email</td><td class="p-3 text-center text-2xl">✉️</td><td class="p-3 text-neutral-300">#3B82F6</td><td class="p-3 text-neutral-400">Formal, longo</td></tr>
+            <tr><td class="p-3 text-neutral-300">Web Chat</td><td class="p-3 text-center text-2xl">💬</td><td class="p-3 text-neutral-300">#7C3AED</td><td class="p-3 text-neutral-400">Direto ao ponto</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⚙️ Snippet — ChannelBadge</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>const CHANNELS = {
+  whatsapp:  { emoji: '🟢', label: 'WhatsApp',  className: 'bg-green-500/15 text-green-400' },
+  instagram: { emoji: '📷', label: 'Instagram', className: 'bg-pink-500/15 text-pink-400' },
+  email:     { emoji: '✉️', label: 'Email',     className: 'bg-blue-500/15 text-blue-400' },
+  web:       { emoji: '💬', label: 'Web Chat',  className: 'bg-purple-500/15 text-purple-400' },
+} as const;
+
+export function ChannelBadge({ channel }: { channel: Channel }) {
+  const c = CHANNELS[channel];
+  return (
+    &lt;span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs ${c.className}`}&gt;
+      &lt;span&gt;{c.emoji}&lt;/span&gt;
+      &lt;span&gt;{c.label}&lt;/span&gt;
+    &lt;/span&gt;
+  );
+}</code></pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">🌈 Cor + ícone, sempre os dois</h3>
+        <p class="text-neutral-300">Daltônicos representam ~8% dos homens. Cor sozinha exclui. Ícone sozinho fica fraco. <strong>Sempre os dois juntos</strong> — é uma das poucas regras que vale aplicar sem questionar.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/20 text-purple-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">⌨️ Atalhos de Teclado e UX pro Operador</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Operador profissional atende 200+ conversas/dia. Cada clique a menos é minutos por dia. <strong class="text-purple-400">Atalhos transformam o produto de "ok" em "indispensável"</strong> — é o que faz o cliente cancelar a concorrência.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Tecla</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Ação</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Inspiração</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-purple-400 font-mono">j / k</td><td class="p-3 text-neutral-300">Navegar próxima/anterior conversa</td><td class="p-3 text-neutral-500">Vim, Gmail, Linear</td></tr>
+            <tr><td class="p-3 text-purple-400 font-mono">r</td><td class="p-3 text-neutral-300">Focar no composer e responder</td><td class="p-3 text-neutral-500">Gmail, Front</td></tr>
+            <tr><td class="p-3 text-purple-400 font-mono">a</td><td class="p-3 text-neutral-300">Atribuir conversa a alguém</td><td class="p-3 text-neutral-500">Linear, Intercom</td></tr>
+            <tr><td class="p-3 text-purple-400 font-mono">e</td><td class="p-3 text-neutral-300">Arquivar (resolved)</td><td class="p-3 text-neutral-500">Gmail</td></tr>
+            <tr><td class="p-3 text-purple-400 font-mono">/</td><td class="p-3 text-neutral-300">Focar busca</td><td class="p-3 text-neutral-500">Slack, GitHub</td></tr>
+            <tr><td class="p-3 text-purple-400 font-mono">⌘ K</td><td class="p-3 text-neutral-300">Command palette (tudo)</td><td class="p-3 text-neutral-500">Linear, Raycast</td></tr>
+            <tr><td class="p-3 text-purple-400 font-mono">?</td><td class="p-3 text-neutral-300">Mostrar todos os atalhos</td><td class="p-3 text-neutral-500">Gmail, GitHub</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-purple-400 mb-4">⚙️ Snippet — listener global</h3>
+        <pre class="bg-dark-900 rounded-lg p-4 overflow-x-auto text-xs text-neutral-300 leading-relaxed"><code>// hooks/useInboxKeybindings.ts
+useEffect(() =&gt; {
+  const handler = (e: KeyboardEvent) =&gt; {
+    // não dispara se tá digitando em input/textarea
+    if (e.target instanceof HTMLElement &amp;&amp;
+        ['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return;
+
+    if (e.key === 'j') selectNext();
+    if (e.key === 'k') selectPrev();
+    if (e.key === 'r') focusComposer();
+    if (e.key === 'e') resolveActive();
+    if ((e.metaKey || e.ctrlKey) &amp;&amp; e.key === 'k') openCommandPalette();
+  };
+  window.addEventListener('keydown', handler);
+  return () =&gt; window.removeEventListener('keydown', handler);
+}, []);</code></pre>
+      </div>
+
+      <div class="bg-purple-900/20 rounded-xl border border-purple-500/30 p-6">
+        <h3 class="text-lg font-semibold text-purple-400 mb-3">📌 A pegadinha: ignorar input/textarea</h3>
+        <p class="text-neutral-300">Sem o guard <code class="text-purple-400 bg-dark-700 px-1 rounded">if (input/textarea) return</code>, digitar "javascript" no composer arquiva 5 conversas e atribui a 2 pessoas. <strong>Esse é o bug clássico</strong> — sempre, sem exceção, ignora atalhos quando o foco está em campo de texto.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-purple-900/40 via-dark-800 to-dark-800 rounded-xl border border-purple-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Layout 3 colunas (1fr / 2fr / 1fr) é padrão consagrado</strong><span class="text-neutral-400"> — não reinventa, esse formato resolveu pra Slack, Linear, Intercom.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">7 componentes nomeados isolam mudança</strong><span class="text-neutral-400"> — ConversationItem, MessageBubble, ContactPanel etc.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Estado começa em Zustand, migra pra Convex</strong><span class="text-neutral-400"> — assinatura igual em ambos preserva os componentes.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Real-time mockado com setInterval destrava UX viva</strong><span class="text-neutral-400"> — animações, badges e scroll prontos antes do backend existir.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Multi-canal: badge cor + ícone juntos</strong><span class="text-neutral-400"> — operador identifica em milissegundos sem ler.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-purple-400 mt-1">✓</span><div><strong class="text-white">Atalhos de teclado j/k/r/a/e/⌘K transformam o produto</strong><span class="text-neutral-400"> — guard para inputs é OBRIGATÓRIO.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-purple-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">3.3 — CRM Kanban + Dashboard de Métricas: pipeline com drag-and-drop, card do deal, métricas que importam, charts com Recharts.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-3-1.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Image Gen 2</a>
+          <a href="modulo-3-3.html" class="flex-1 text-center px-6 py-3 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-500 transition-colors">Próximo: CRM Kanban →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 3.2 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

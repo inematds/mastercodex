@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4.4 — Auth Multi-tenant + Deploy | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-amber-400{color:#92400e;}
+    html:not(.dark) .bg-amber-500\/20{background-color:rgba(146,64,14,0.12);}
+    html:not(.dark) .bg-amber-500\/10{background-color:rgba(146,64,14,0.08);}
+    html:not(.dark) .border-amber-500\/30{border-color:rgba(146,64,14,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+    pre{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4 — Backend</a><span>/</span>
+      <span class="text-amber-400">Módulo 4.4</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.4</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🔐 Auth Multi-tenant + Deploy</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Multi-tenant blindado, login com Clerk, RLS pra isolar clientes, secrets corretamente, Vercel + Convex Cloud em produção e domínio próprio com SSL no automático — InboxAI ao vivo na web.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">75</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Deploy</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🏢 Multi-tenant: isolamento por cliente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Sem multi-tenant, você não vende SaaS — vende projeto. <strong class="text-amber-400">Multi-tenant bem feito permite cobrar 10 clientes no mesmo backend</strong> e escalar margem sem proporcionalmente escalar custo.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">PADRÃO 1</div>
+          <div class="text-3xl mb-3">🏞️</div>
+          <h4 class="font-bold text-blue-400 mb-2">Shared schema</h4>
+          <p class="text-sm text-neutral-400 mb-3">Uma tabela <code class="text-amber-400">contacts</code> pra todos. Filtra por <code class="text-amber-400">orgId</code>. Mais simples, melhor custo, requer RLS rigoroso.</p>
+          <div class="text-xs text-emerald-400">✓ Recomendado pra InboxAI</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">PADRÃO 2</div>
+          <div class="text-3xl mb-3">🏘️</div>
+          <h4 class="font-bold text-yellow-400 mb-2">Schema por tenant</h4>
+          <p class="text-sm text-neutral-400 mb-3">Cada cliente em schema/database próprio. Isolamento físico. Operação muito mais cara.</p>
+          <div class="text-xs text-yellow-400">! Apenas se compliance exigir</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">PADRÃO 3</div>
+          <div class="text-3xl mb-3">🏰</div>
+          <h4 class="font-bold text-red-400 mb-2">Silo (deploy isolado)</h4>
+          <p class="text-sm text-neutral-400 mb-3">Cada cliente tem instância completa. Boa pra enterprise, péssima pra micro-SaaS BR.</p>
+          <div class="text-xs text-red-400">✗ Mata margem</div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🧬 Mapeamento Clerk Org → InboxAI orgId</h3>
+        <svg viewBox="0 0 600 160" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="160" height="100" rx="6" fill="#1f2937" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="100" y="40" text-anchor="middle" fill="#a78bfa" font-size="11" font-weight="bold">Clerk Organization</text>
+          <text x="100" y="60" text-anchor="middle" fill="#9ca3af" font-size="9">org_2YxK...</text>
+          <text x="100" y="78" text-anchor="middle" fill="#9ca3af" font-size="9">"Clínica Vita"</text>
+          <text x="100" y="96" text-anchor="middle" fill="#9ca3af" font-size="9">3 membros</text>
+          <line x1="180" y1="70" x2="240" y2="70" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#m1)"/>
+          <text x="210" y="60" text-anchor="middle" fill="#f59e0b" font-size="9">webhook</text>
+          <rect x="240" y="20" width="160" height="100" rx="6" fill="#1f2937" stroke="#0ea5e9" stroke-width="1.5"/>
+          <text x="320" y="40" text-anchor="middle" fill="#0ea5e9" font-size="11" font-weight="bold">organizations</text>
+          <text x="320" y="60" text-anchor="middle" fill="#9ca3af" font-size="9">_id: orgs:abc123</text>
+          <text x="320" y="78" text-anchor="middle" fill="#9ca3af" font-size="9">clerkOrgId: org_2YxK</text>
+          <text x="320" y="96" text-anchor="middle" fill="#9ca3af" font-size="9">name: Clínica Vita</text>
+          <line x1="400" y1="70" x2="460" y2="70" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#m1)"/>
+          <text x="430" y="60" text-anchor="middle" fill="#f59e0b" font-size="9">FK</text>
+          <rect x="460" y="20" width="120" height="100" rx="6" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="520" y="40" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">contacts</text>
+          <text x="520" y="60" text-anchor="middle" fill="#9ca3af" font-size="9">orgId: orgs:abc</text>
+          <text x="520" y="78" text-anchor="middle" fill="#9ca3af" font-size="9">phone, name...</text>
+          <text x="520" y="96" text-anchor="middle" fill="#9ca3af" font-size="9">(N rows)</text>
+          <defs>
+            <marker id="m1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f59e0b"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 A regra de ouro multi-tenant</h3>
+        <p class="text-neutral-300 text-sm"><strong>Toda query do backend filtra por orgId. Sempre.</strong> Sem exceção. Se você se pegar escrevendo <code class="text-amber-400">db.query("contacts").collect()</code> sem o filtro, é bug de segurança grave. Crie um helper <code class="text-amber-400">scoped(ctx).query(...)</code> que injeta orgId automaticamente do usuário autenticado — e nunca use <code class="text-amber-400">db.query</code> direto.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🔑 Auth com Clerk</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Auth caseira é receita pra vazamento. <strong class="text-amber-400">Clerk resolve em horas o que levaria semanas</strong> — e libera você pra trabalhar no que diferencia o produto, não no login.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🧰 O que Clerk entrega out-of-the-box</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">📧</div><div class="text-amber-400 font-semibold text-xs">Magic link</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">🔵</div><div class="text-amber-400 font-semibold text-xs">Google OAuth</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">🐙</div><div class="text-amber-400 font-semibold text-xs">GitHub OAuth</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">🔐</div><div class="text-amber-400 font-semibold text-xs">2FA TOTP</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">🏢</div><div class="text-amber-400 font-semibold text-xs">Organizations</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">👥</div><div class="text-amber-400 font-semibold text-xs">Roles + invites</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">📦</div><div class="text-amber-400 font-semibold text-xs">User profile UI</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 text-center"><div class="text-2xl mb-1">🔔</div><div class="text-amber-400 font-semibold text-xs">Webhooks</div></div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 convex/auth.config.ts</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">export default {
+  providers: [
+    {
+      domain: process.env.CLERK_JWT_ISSUER_DOMAIN,
+      applicationID: "convex",
+    },
+  ],
+};</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Webhook Clerk → cria org no Convex</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">// convex/http.ts
+http.route({
+  path: "/webhooks/clerk", method: "POST",
+  handler: httpAction(async (ctx, req) =&gt; {
+    const sig = req.headers.get("svix-signature");
+    const payload = await req.text();
+    if (!verifyClerkSignature(payload, sig, process.env.CLERK_WEBHOOK_SECRET!))
+      return new Response("invalid", { status: 401 });
+
+    const event = JSON.parse(payload);
+
+    if (event.type === "organization.created") {
+      await ctx.runMutation(internal.orgs.create, {
+        clerkOrgId: event.data.id,
+        name: event.data.name,
+        plan: "free",
+      });
+    }
+
+    if (event.type === "organizationMembership.created") {
+      await ctx.runMutation(internal.users.create, {
+        clerkOrgId: event.data.organization.id,
+        clerkUserId: event.data.public_user_data.user_id,
+        email: event.data.public_user_data.identifier,
+        role: event.data.role.replace("org:", ""),
+      });
+    }
+
+    return new Response("ok");
+  }),
+});</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Roles que importam no InboxAI</h3>
+        <p class="text-neutral-300 text-sm"><strong>owner</strong> (mexe em billing, deleta org) · <strong>admin</strong> (gerencia usuários, configura agente) · <strong>agent</strong> (atende conversas, sem billing). Clerk Organizations já entrega esses 3 — você só checa em cada mutation se a role permite.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🛡️ Row-level security em Convex</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">RLS quebrada vira manchete: "SaaS X vazou dados de 200 clínicas". <strong class="text-amber-400">É a defesa final contra erro humano</strong> de query mal escrita.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 convex/lib/scoped.ts (helper RLS)</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">import { QueryCtx, MutationCtx } from "../_generated/server";
+
+export async function requireOrgId(
+  ctx: QueryCtx | MutationCtx
+): Promise&lt;Id&lt;"organizations"&gt;&gt; {
+  const identity = await ctx.auth.getUserIdentity();
+  if (!identity) throw new Error("unauthenticated");
+
+  const user = await ctx.db
+    .query("users")
+    .withIndex("by_clerk", q =&gt; q.eq("clerkId", identity.subject))
+    .unique();
+
+  if (!user) throw new Error("user not found");
+  return user.orgId;
+}
+
+export async function requireRole(
+  ctx: MutationCtx,
+  allowed: ("owner" | "admin" | "agent")[]
+) {
+  const orgId = await requireOrgId(ctx);
+  const identity = await ctx.auth.getUserIdentity();
+  const user = await ctx.db.query("users")
+    .withIndex("by_clerk", q =&gt; q.eq("clerkId", identity!.subject)).unique();
+  if (!allowed.includes(user!.role)) throw new Error("forbidden");
+  return { orgId, user };
+}</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Uso em cada query/mutation</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">// convex/conversations.ts
+export const list = query({
+  args: { status: v.string() },
+  handler: async (ctx, { status }) =&gt; {
+    const orgId = await requireOrgId(ctx);  // ← BLINDA
+    return await ctx.db
+      .query("conversations")
+      .withIndex("by_org_status", q =&gt; q.eq("orgId", orgId).eq("status", status))
+      .order("desc")
+      .take(50);
+  },
+});
+
+export const close = mutation({
+  args: { conversationId: v.id("conversations") },
+  handler: async (ctx, { conversationId }) =&gt; {
+    const { orgId } = await requireRole(ctx, ["owner", "admin", "agent"]);
+    const conv = await ctx.db.get(conversationId);
+    if (!conv || conv.orgId !== orgId) throw new Error("not found");  // ← double check
+    await ctx.db.patch(conversationId, { status: "closed" });
+  },
+});</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">📊 Equivalente em Supabase (SQL policy)</h3>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">-- habilita RLS na tabela
+alter table contacts enable row level security;
+
+-- política: usuário só vê linhas da sua org
+create policy "tenant_isolation" on contacts
+  for all
+  using (org_id = (auth.jwt() -&gt;&gt; 'org_id')::uuid)
+  with check (org_id = (auth.jwt() -&gt;&gt; 'org_id')::uuid);</pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Defense in depth</h3>
+        <p class="text-neutral-300 text-sm">Tenha <strong>3 camadas</strong> protegendo: (1) helper de query que filtra por orgId, (2) double-check do orgId no documento retornado antes de mutar, (3) testes automatizados que tentam acessar dados de outra org e devem falhar. <strong>Se uma quebrar, as outras seguram</strong> — é a paranoia que evita manchete.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔒 Variáveis de ambiente: secrets corretamente</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Secret no Git é a forma mais comum de invasão. <strong class="text-amber-400">5 minutos de checklist evita boleto de R$ 50k</strong> da AWS por mineração de cripto na sua conta vazada.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">📋 Checklist de secret hygiene</h3>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> <code class="text-amber-400">.env</code> e <code class="text-amber-400">.env.local</code> no <code class="text-amber-400">.gitignore</code> (commitado)</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> <code class="text-amber-400">.env.example</code> sem valores reais, só placeholders</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Secrets na Vercel separados por env: development / preview / production</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Secrets no Convex via <code class="text-amber-400">npx convex env set</code></div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> <code class="text-amber-400">gitleaks</code> rodando em pre-commit hook</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Rotação automática de Clerk + Anthropic + Evolution a cada 90 dias</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Variáveis client-side com prefixo <code class="text-amber-400">NEXT_PUBLIC_</code> só pra valores não-sensíveis</div>
+          <div class="flex items-center space-x-2"><span class="text-amber-400">☐</span> Acesso aos paineis (Vercel/Convex/Clerk) com 2FA obrigatório</div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Comandos de gerenciamento</h3>
+          <span class="text-xs text-neutral-500">bash</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># Convex Cloud — setar secret em produção
+npx convex env set ANTHROPIC_API_KEY sk-ant-...
+
+# listar todos
+npx convex env list
+
+# Vercel — setar pra prod
+vercel env add CLERK_SECRET_KEY production
+
+# scan local antes de commit
+gitleaks detect --source . --verbose
+
+# verificar se .env está realmente ignorado
+git check-ignore -v .env
+
+# se vazou: revogue IMEDIATAMENTE no painel do provedor,
+# rode git filter-repo pra limpar do histórico,
+# rotacione TODOS os secrets do mesmo .env (assuma que vazaram juntos)
+git filter-repo --path .env --invert-paths</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">⚠️ Secret vazou — protocolo de incidente</h3>
+        <p class="text-neutral-300 text-sm"><strong>Em 5 minutos:</strong> revogue a chave no painel do provedor (não tente "trocar depois"). <strong>Em 30 minutos:</strong> rotacione TODOS os secrets do mesmo .env — assuma que vazaram juntos. <strong>Em 24h:</strong> auditoria de uso da chave (pode ter virado bot de cripto). <strong>Em 7 dias:</strong> post-mortem honesto pro cliente afetado, se houver.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🚀 Deploy: Vercel + Convex Cloud</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cliente paga por produto online, não por código no GitHub. <strong class="text-amber-400">Em 3 comandos seu InboxAI está ao vivo</strong>, com preview de cada PR e rollback de 1 clique.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🛤️ Pipeline completa</h3>
+        <svg viewBox="0 0 600 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="80" width="100" height="50" rx="6" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="70" y="100" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">git push</text>
+          <text x="70" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">main</text>
+          <line x1="120" y1="105" x2="160" y2="105" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#m2)"/>
+          <rect x="160" y="60" width="100" height="40" rx="6" fill="#1f2937" stroke="#a78bfa" stroke-width="1.5"/>
+          <text x="210" y="80" text-anchor="middle" fill="#a78bfa" font-size="10" font-weight="bold">Vercel</text>
+          <text x="210" y="93" text-anchor="middle" fill="#9ca3af" font-size="7">build Next</text>
+          <rect x="160" y="110" width="100" height="40" rx="6" fill="#1f2937" stroke="#0ea5e9" stroke-width="1.5"/>
+          <text x="210" y="130" text-anchor="middle" fill="#0ea5e9" font-size="10" font-weight="bold">Convex</text>
+          <text x="210" y="143" text-anchor="middle" fill="#9ca3af" font-size="7">deploy backend</text>
+          <line x1="260" y1="80" x2="320" y2="80" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#m2)"/>
+          <line x1="260" y1="130" x2="320" y2="130" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#m2)"/>
+          <rect x="320" y="60" width="100" height="40" rx="6" fill="#1f2937" stroke="#facc15" stroke-width="1.5"/>
+          <text x="370" y="80" text-anchor="middle" fill="#facc15" font-size="10" font-weight="bold">Edge</text>
+          <text x="370" y="93" text-anchor="middle" fill="#9ca3af" font-size="7">CDN global</text>
+          <rect x="320" y="110" width="100" height="40" rx="6" fill="#1f2937" stroke="#facc15" stroke-width="1.5"/>
+          <text x="370" y="130" text-anchor="middle" fill="#facc15" font-size="10" font-weight="bold">Functions</text>
+          <text x="370" y="143" text-anchor="middle" fill="#9ca3af" font-size="7">serverless</text>
+          <line x1="420" y1="105" x2="460" y2="105" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#m2)"/>
+          <rect x="460" y="80" width="120" height="50" rx="6" fill="#1f2937" stroke="#ef4444" stroke-width="2"/>
+          <text x="520" y="100" text-anchor="middle" fill="#ef4444" font-size="11" font-weight="bold">app.cliente.com</text>
+          <text x="520" y="115" text-anchor="middle" fill="#9ca3af" font-size="8">SSL automático</text>
+          <text x="300" y="180" text-anchor="middle" fill="#6b7280" font-size="9">90 segundos do push até estar ao vivo · preview por PR · rollback 1-click</text>
+          <defs>
+            <marker id="m2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#f59e0b"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Setup inicial (uma vez)</h3>
+          <span class="text-xs text-neutral-500">bash</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># 1. logar nos serviços
+vercel login
+npx convex login
+
+# 2. linkar repo
+vercel link
+
+# 3. deploy do Convex pra produção (cria URL prod)
+npx convex deploy
+
+# 4. exportar URL pro Next consumir
+vercel env add NEXT_PUBLIC_CONVEX_URL production
+# (cola a URL https://serious-fox-123.convex.cloud)
+
+# 5. primeiro deploy
+vercel --prod
+
+# Daqui pra frente: git push main → CI/CD automático</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🔄 Rollback</h3>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># Vercel — rollback do frontend (1 clique no painel ou):
+vercel rollback &lt;deployment-id&gt;
+
+# Convex — rollback de funções (mantém dado)
+npx convex deployments
+npx convex deploy --rollback &lt;deploy-id&gt;</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Preview por PR é o segredo</h3>
+        <p class="text-neutral-300 text-sm">Cada PR no GitHub gera URL única tipo <code class="text-amber-400">inbox-ai-pr-42.vercel.app</code> conectada a um Convex preview deployment com banco isolado. <strong>Você manda esse link pro cliente revisar antes de mergear</strong>. Feature aprovada por cliente vai pra prod sem surpresa. Esse fluxo é o que faz cliente sentir que está dirigindo o produto junto.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🌐 Domínio próprio + SSL automático</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cliente sério não compra <code class="text-amber-400">.vercel.app</code>. Compra <code class="text-amber-400">app.suamarca.com.br</code>. <strong class="text-amber-400">Domínio próprio é o que separa MVP de produto vendável</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🛍️ Onde comprar (Brasil)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <div class="text-emerald-400 font-bold mb-1">Registro.br</div>
+            <div class="text-xs text-neutral-400 mb-2">.com.br oficial</div>
+            <ul class="text-xs text-neutral-300 space-y-1">
+              <li>• R$ 40/ano</li>
+              <li>• Exige CPF/CNPJ BR</li>
+              <li>• Confiança máxima local</li>
+            </ul>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <div class="text-blue-400 font-bold mb-1">Cloudflare</div>
+            <div class="text-xs text-neutral-400 mb-2">.com / .ai / .io</div>
+            <ul class="text-xs text-neutral-300 space-y-1">
+              <li>• Preço de custo</li>
+              <li>• DNS rápido global</li>
+              <li>• Zero markup, sem upsell</li>
+            </ul>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-4">
+            <div class="text-yellow-400 font-bold mb-1">Vercel Domains</div>
+            <div class="text-xs text-neutral-400 mb-2">tudo no mesmo painel</div>
+            <ul class="text-xs text-neutral-300 space-y-1">
+              <li>• Mais caro</li>
+              <li>• Setup zero clique</li>
+              <li>• Bom pra economizar tempo</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🔧 Apontar domínio externo pra Vercel</h3>
+        <div class="space-y-3 text-sm">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs">1</span>
+            <div>
+              <div class="font-semibold text-neutral-200">No painel Vercel: Settings → Domains → Add</div>
+              <div class="text-xs text-neutral-400">Insere <code class="text-amber-400">app.suamarca.com.br</code></div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs">2</span>
+            <div>
+              <div class="font-semibold text-neutral-200">No DNS do Registro.br/Cloudflare</div>
+              <div class="text-xs text-neutral-400">Cria CNAME <code class="text-amber-400">app</code> apontando pra <code class="text-amber-400">cname.vercel-dns.com</code></div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-xs">3</span>
+            <div>
+              <div class="font-semibold text-neutral-200">Aguarda propagação (5–60 min)</div>
+              <div class="text-xs text-neutral-400">Vercel valida automaticamente e emite SSL via Let's Encrypt</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">✓</span>
+            <div>
+              <div class="font-semibold text-emerald-400">Pronto: HTTPS ao vivo</div>
+              <div class="text-xs text-neutral-400">SSL renova sozinho a cada 90 dias. Você nunca mais toca.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🏷️ Subdomínio por cliente (white-label)</h3>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># Wildcard CNAME no DNS
+*.app.com.br  CNAME  cname.vercel-dns.com
+
+# Vercel: Add wildcard domain
+# *.app.com.br
+
+# Next middleware lê hostname e passa pra app
+// middleware.ts
+export function middleware(req) {
+  const host = req.headers.get("host"); // clinica-vita.app.com.br
+  const subdomain = host.split(".")[0]; // clinica-vita
+  req.headers.set("x-tenant", subdomain);
+}</pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> O efeito psicológico do .com.br</h3>
+        <p class="text-neutral-300 text-sm">Cliente brasileiro PME confia mais em <code class="text-amber-400">.com.br</code> do que em <code class="text-amber-400">.com</code>. Pra produto vendendo no Brasil, registre o <code class="text-amber-400">.com.br</code> mesmo se já tiver <code class="text-amber-400">.com</code>. <strong>Custa R$ 40/ano e dobra a credibilidade percebida</strong> em prospect que liga pra ver se "é coisa séria mesmo".</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Shared schema com orgId em toda query é o padrão pro micro-SaaS BR</strong><span class="text-neutral-400"> — silo só se compliance exigir.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Clerk entrega magic link, OAuth, 2FA, organizations e roles em horas</strong><span class="text-neutral-400"> — webhook cria org no Convex.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">RLS via helper requireOrgId em cada handler</strong><span class="text-neutral-400"> — defense in depth com 3 camadas.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Secrets corretamente: .env no gitignore, painel Vercel/Convex, gitleaks, rotação 90 dias</strong><span class="text-neutral-400"> — protocolo claro se vazar.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Vercel + Convex Cloud em 3 comandos com preview por PR</strong><span class="text-neutral-400"> — cliente revisa antes de mergear.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">.com.br + SSL automático = produto vendável</strong><span class="text-neutral-400"> — wildcard subdomínio destrava white-label.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-amber-400 mb-2">Próxima Trilha:</h3>
+          <p class="text-neutral-300">Trilha 5 — Sistemas Multiagente: orquestrar múltiplos agentes especializados, comunicação entre eles, supervisor pattern e quando vale a pena complicar.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Agente IA</a>
+          <a href="../trilha5/index.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Próxima Trilha: Multiagente →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 4.4 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

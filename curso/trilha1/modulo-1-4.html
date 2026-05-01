@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.4 — Seu Primeiro Fluxo Agentic: do Prompt à PR | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .bg-emerald-500\/20{background-color:rgba(5,150,105,0.12);}
+    html:not(.dark) .border-emerald-500\/30{border-color:rgba(5,150,105,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1 — Fundamentos</a><span>/</span>
+      <span class="text-emerald-400">Módulo 1.4</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.4</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🚀 Seu Primeiro Fluxo Agentic: do Prompt à PR</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Exercício prático completo: descrever uma ideia, deixar o agente construir, revisar o diff, abrir PR e ver a IA revisando a IA. O fluxo profissional inteiro em 60 minutos.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Base</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Hands-on</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">📱 O Exercício: App de Notas com IA</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">App web simples: criar notas, organizar por tags, e ter um botão "resumir com IA". <strong class="text-emerald-400">Pequeno o suficiente pra terminar em 1h, completo o suficiente pra exercitar o fluxo inteiro</strong>. Escolher o tamanho certo é parte da disciplina agentic.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">📐 Escopo do exercício — o que entra e o que NÃO entra</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div>
+            <div class="text-xs font-bold text-emerald-400 mb-3">✓ DENTRO (MVP)</div>
+            <ul class="space-y-2 text-sm text-neutral-300">
+              <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Criar/editar/excluir nota</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Lista de notas na tela inicial</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Tags simples (texto separado por vírgula)</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Botão "Resumir com IA" via OpenAI</span></li>
+              <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Persistência local (Convex ou localStorage)</span></li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-red-400 mb-3">✗ FORA (escopo creep)</div>
+            <ul class="space-y-2 text-sm text-neutral-300">
+              <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Login, autenticação, multi-usuário</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Compartilhamento, colaboração realtime</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Deploy em produção</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Mobile responsivo perfeito</span></li>
+              <li class="flex items-start space-x-2"><span class="text-red-400">✗</span><span>Dark/light mode, theming, i18n</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Por que esse tamanho</h3>
+        <p class="text-neutral-300">Grande demais (com auth, deploy, mobile), o agente se perde, você gasta 4 horas e não vê o fluxo todo. Pequeno demais (só Hello World), não exercita revisão de diff nem PR review. <strong>Notas + tags + IA bate o sweet spot</strong>: 5 arquivos, 200 linhas, 1 chamada externa.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">✍️ Prompt Inicial e Plan Mode</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Em vez de pedir "construa o app", você pede "proponha um plano em 5 etapas para construir o app". <strong class="text-emerald-400">O agente expõe a abordagem antes de escrever uma linha</strong>. Discutir o plano em 30 segundos evita refatorar 200 linhas depois.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div class="bg-red-900/20 rounded-xl border border-red-500/30 p-5">
+          <h4 class="font-bold text-red-400 mb-3">❌ Prompt ruim (vibe)</h4>
+          <div class="bg-dark-800 rounded p-3 text-xs font-mono text-neutral-300 mb-3">"Faz um app de notas com IA pra resumir"</div>
+          <ul class="text-xs text-neutral-400 space-y-1">
+            <li>• Sem stack definida</li>
+            <li>• Sem critério de pronto</li>
+            <li>• Agente decide tudo sozinho</li>
+            <li>• Você só descobre se errou no fim</li>
+          </ul>
+        </div>
+        <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-5">
+          <h4 class="font-bold text-emerald-400 mb-3">✓ Prompt bom (agentic)</h4>
+          <div class="bg-dark-800 rounded p-3 text-xs font-mono text-neutral-300 mb-3">"Antes de codar: proponha plano em 5 etapas pra app de notas. Stack: React + Vite + Convex. Inclua: schema, rotas, componentes, integração OpenAI, testes manuais."</div>
+          <ul class="text-xs text-neutral-400 space-y-1">
+            <li>✓ Stack explícita</li>
+            <li>✓ Plano antes de código</li>
+            <li>✓ Estrutura clara do plano</li>
+            <li>✓ Você aprova ou ajusta antes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> O ciclo plan-approve-execute</h3>
+        <p class="text-neutral-300">Plan mode é o equivalente agentic de "design review": você captura erros de abordagem antes que virem código. <strong>30 segundos lendo um plano de 5 bullets evita 20 minutos de retrabalho</strong>. Quando o plano vier errado, peça revisão: "Etapa 3 está errada, quero usar X em vez de Y. Reescreva o plano."</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">👀 Acompanhando o Agente Trabalhar</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Durante a execução, o agente lê arquivos, edita, roda comandos, abre o browser. Você observa em tempo real e intervém quando vê algo errado. <strong class="text-emerald-400">Saber quando intervir e quando deixar continuar é uma habilidade calibrada</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🚦 Sinais — quando interromper, quando aguardar</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-red-900/15 rounded-lg border border-red-500/20">
+            <span class="text-xl">🛑</span>
+            <div class="flex-1">
+              <div class="font-semibold text-red-400 text-sm mb-1">PARA AGORA</div>
+              <div class="text-xs text-neutral-300">Agente quer instalar 8 dependências; tenta criar arquivo fora do projeto; lê secrets do .env; escreve em arquivo que você não autorizou; vai por caminho que o plano não previa.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-amber-900/15 rounded-lg border border-amber-500/20">
+            <span class="text-xl">⚠️</span>
+            <div class="flex-1">
+              <div class="font-semibold text-amber-400 text-sm mb-1">FICA ATENTO</div>
+              <div class="text-xs text-neutral-300">Agente está há 3+ minutos no mesmo arquivo; teste falhou e ele tenta consertar com lib nova; nome de variável estranho; comentário "TODO: implementar depois".</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-emerald-900/15 rounded-lg border border-emerald-500/20">
+            <span class="text-xl">✅</span>
+            <div class="flex-1">
+              <div class="font-semibold text-emerald-400 text-sm mb-1">DEIXA TRABALHAR</div>
+              <div class="text-xs text-neutral-300">Edição contínua nos arquivos previstos; rodar testes (mesmo se falhar uma vez); rodar lint; criar componentes do plano; fazer chamadas internas pro próprio código.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📊 A regra da paciência produtiva</h3>
+        <p class="text-neutral-300">Iniciante interrompe demais — quebra o flow do agente, gera retrabalho. Veterano interrompe pouco — perde 20 minutos pro agente ir num caminho ruim. <strong>O ponto certo: 1 interrupção a cada 5–8 minutos quando algo te incomoda</strong>. Se está tudo no plano, deixa rodar.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🔍 Revisando o Diff Antes de Aprovar</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Antes de aceitar mudanças, você lê o diff. <strong class="text-emerald-400">É a última linha de defesa antes do código entrar no repo</strong>. 5 minutos de revisão evita horas de bug em produção.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="text-xs text-neutral-400 font-mono">diff — NoteList.tsx (revisão)</span>
+        </div>
+        <div class="p-5 font-mono text-xs space-y-0.5">
+          <div class="text-neutral-500">@@ src/components/NoteList.tsx @@</div>
+          <div class="bg-red-900/30 text-red-300">- import { useState } from 'react'</div>
+          <div class="bg-emerald-900/30 text-emerald-300">+ import { useState, useEffect } from 'react'</div>
+          <div class="bg-emerald-900/30 text-emerald-300">+ import OpenAI from 'openai'</div>
+          <div class="text-neutral-400 mt-2">  export function NoteList() {</div>
+          <div class="bg-emerald-900/30 text-emerald-300">+   const apiKey = "sk-proj-abc123..."  <span class="text-red-400 ml-2 not-italic">⚠️ SECRET HARDCODED!</span></div>
+          <div class="bg-emerald-900/30 text-emerald-300">+   const openai = new OpenAI({ apiKey })</div>
+          <div class="text-neutral-400">    const [notes, setNotes] = useState([])</div>
+          <div class="bg-emerald-900/30 text-emerald-300">+   // TODO: implementar paginação <span class="text-amber-400 ml-2 not-italic">⚠️ scope creep</span></div>
+          <div class="text-neutral-400">    return (</div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🔎 Checklist de revisão de diff</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Arquivos no diff são os esperados pelo plano?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Algum secret/API key hardcoded?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Comentários TODO ou "implementar depois"?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Lógica das condições faz sentido?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Nomes de variáveis/funções claros?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Tem console.log esquecido?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Dependências novas justificadas?</span></div>
+          <div class="text-sm text-neutral-300 flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Código morto ou comentado?</span></div>
+        </div>
+      </div>
+
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-3">⚠️ O bug clássico de IA: secret no código</h3>
+        <p class="text-neutral-300">Agentes às vezes hardcoded API keys porque "fica funcionando rápido". Se você commitar isso e fizer push pra repo público, <strong>OpenAI revoga sua key em minutos e seu cartão pode tomar cobrança não autorizada</strong>. Toda revisão começa por: "Tem alguma string que parece chave secreta?".</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">📝 Commit e Pull Request — O Agente Cuida da Papelada</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Você pede ao Codex para fazer commit com mensagem semântica e abrir PR no GitHub com descrição estruturada. <strong class="text-emerald-400">PRs bem descritas diferenciam código profissional de protótipo</strong>. O agente entrega isso de graça se você pedir corretamente.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <span class="text-xs text-neutral-400 font-mono">PR #1 — feat: app de notas com resumo via IA</span>
+        </div>
+        <div class="p-5 text-sm space-y-3">
+          <div>
+            <div class="text-emerald-400 font-bold text-xs mb-1">## Summary</div>
+            <ul class="text-neutral-300 text-xs space-y-1 ml-4 list-disc">
+              <li>Adiciona CRUD de notas com persistência via Convex</li>
+              <li>Implementa botão "Resumir com IA" usando GPT-4o-mini</li>
+              <li>Sistema de tags simples por separação de vírgula</li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-emerald-400 font-bold text-xs mb-1">## Test plan</div>
+            <ul class="text-neutral-300 text-xs space-y-1 ml-4">
+              <li>- [ ] Criar nota com título e corpo, verificar que aparece na lista</li>
+              <li>- [ ] Adicionar tag "urgente", filtrar por tag, validar resultado</li>
+              <li>- [ ] Clicar em "Resumir com IA", verificar que retorna 2-3 frases</li>
+              <li>- [ ] Refresh da página: notas persistem</li>
+            </ul>
+          </div>
+          <div>
+            <div class="text-emerald-400 font-bold text-xs mb-1">## Files changed</div>
+            <div class="text-neutral-400 text-xs">5 files • +247 / -12</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Conventional commits + template de PR</h3>
+        <p class="text-neutral-300">Peça sempre: <em class="text-emerald-400">"commit message no formato conventional commits, PR com seções Summary e Test plan"</em>. Isso vira <strong>release notes automáticas</strong> depois e facilita revisão por outros (humanos ou agentes). PR sem descrição é PR que ninguém revisa direito — você está perdendo a metade do valor.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">🤖 @codex review — A IA Revisando a IA</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Você comenta <code class="text-emerald-400 bg-dark-700 px-1.5 rounded">@codex review</code> na PR. Outro agente Codex (independente) lê o código, comenta sugestões, identifica bugs e aponta riscos. <strong class="text-emerald-400">Quando você está sozinho, ter um "segundo par de olhos" automatizado eleva a qualidade sem custo de tempo</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🔄 Ciclo write → review → merge</h3>
+        <svg viewBox="0 0 540 160" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="50" width="100" height="60" rx="8" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="70" y="75" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">Agente A</text>
+          <text x="70" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">escreve</text>
+          <text x="70" y="104" text-anchor="middle" fill="#9ca3af" font-size="9">o código</text>
+          <path d="M 120 80 L 165 80" stroke="#10b981" stroke-width="2" marker-end="url(#a1)"/>
+          <rect x="170" y="50" width="100" height="60" rx="8" fill="#1f2937" stroke="#3b82f6" stroke-width="1.5"/>
+          <text x="220" y="75" text-anchor="middle" fill="#3b82f6" font-size="10" font-weight="bold">Você</text>
+          <text x="220" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">revisa diff</text>
+          <text x="220" y="104" text-anchor="middle" fill="#9ca3af" font-size="9">+ abre PR</text>
+          <path d="M 270 80 L 315 80" stroke="#3b82f6" stroke-width="2" marker-end="url(#a2)"/>
+          <rect x="320" y="50" width="100" height="60" rx="8" fill="#1f2937" stroke="#a855f7" stroke-width="1.5"/>
+          <text x="370" y="75" text-anchor="middle" fill="#a855f7" font-size="10" font-weight="bold">Agente B</text>
+          <text x="370" y="92" text-anchor="middle" fill="#9ca3af" font-size="9">@codex</text>
+          <text x="370" y="104" text-anchor="middle" fill="#9ca3af" font-size="9">review</text>
+          <path d="M 420 80 L 465 80" stroke="#a855f7" stroke-width="2" marker-end="url(#a3)"/>
+          <rect x="470" y="50" width="60" height="60" rx="8" fill="#0f4c2e" stroke="#10b981" stroke-width="1.5"/>
+          <text x="500" y="75" text-anchor="middle" fill="#10b981" font-size="10" font-weight="bold">Merge</text>
+          <text x="500" y="92" text-anchor="middle" fill="#10b981" font-size="14">✓</text>
+          <text x="280" y="140" text-anchor="middle" fill="#6b7280" font-size="9">Independência: B nunca viu A trabalhando — revisa só pelo diff</text>
+          <defs>
+            <marker id="a1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0 0, 8 4, 0 8" fill="#10b981"/></marker>
+            <marker id="a2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0 0, 8 4, 0 8" fill="#3b82f6"/></marker>
+            <marker id="a3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><polygon points="0 0, 8 4, 0 8" fill="#a855f7"/></marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">💬 Exemplo de revisão automatizada</h3>
+        <div class="space-y-3 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-3 border-l-2 border-purple-500">
+            <div class="text-purple-400 font-semibold text-xs mb-1">@codex • src/api/summarize.ts:14</div>
+            <div class="text-neutral-300 text-xs">Falta tratar erro quando OpenAI retorna 429 (rate limit). Sugiro retry com exponential backoff usando p-retry. Sem isso, usuário vê erro genérico sem feedback.</div>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border-l-2 border-purple-500">
+            <div class="text-purple-400 font-semibold text-xs mb-1">@codex • src/components/NoteList.tsx:42</div>
+            <div class="text-neutral-300 text-xs">A lista de notas re-renderiza a cada keystroke do filtro. Considere debounce de 200ms em onSearch — em listas com 100+ notas vira lag perceptível.</div>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border-l-2 border-purple-500">
+            <div class="text-purple-400 font-semibold text-xs mb-1">@codex • approval</div>
+            <div class="text-neutral-300 text-xs">No geral, código limpo e bem estruturado. As 2 sugestões acima são opcionais — pode mergear se priorizar velocidade sobre polish.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Por que isso muda tudo</h3>
+        <p class="text-neutral-300">Dev solo nunca tem code reviewer. <strong>Com @codex review, você ganha um sênior automatizado que nunca dorme</strong>, lê 100% do diff e te aponta os 2–3 problemas reais. Custa quase nada e eleva qualidade de "freelancer médio" pra "agência boutique". Esse é o fim da Trilha 1: você agora tem o fluxo profissional inteiro rodando.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Tamanho de exercício é parte do método</strong><span class="text-neutral-400"> — notas+tags+IA é sweet spot pra exercitar o fluxo todo em 1h.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Plan mode antes de código</strong><span class="text-neutral-400"> — 30s lendo plano evita 20min de retrabalho; aprova ou ajusta antes de executar.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Paciência produtiva: 1 interrupção a cada 5–8min</strong><span class="text-neutral-400"> — interromper demais quebra flow; pouco gera retrabalho.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Revisão de diff é a última linha de defesa</strong><span class="text-neutral-400"> — secret hardcoded é o bug clássico; checklist de 8 itens elimina 90%.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">PR com Summary + Test plan diferencia profissional</strong><span class="text-neutral-400"> — agente entrega de graça se você pedir corretamente.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">@codex review é seu sênior automatizado</strong><span class="text-neutral-400"> — eleva qualidade sem custo de tempo; dev solo nunca mais sozinho.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Trilha 1 concluída! Próxima:</h3>
+          <p class="text-neutral-300">Trilha 2 — Agentes em Profundidade: AGENTS.md, skills, plan mode avançado, definition of done, e o método disciplinado que separa vibe de produto vendável.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-3.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Setup Completo</a>
+          <a href="../trilha2/index.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próximo: Trilha 2 — Agentes →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 1.4 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

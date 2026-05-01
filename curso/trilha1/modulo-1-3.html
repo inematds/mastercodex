@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 1.3 — Setup Completo do Ambiente | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-emerald-400{color:#059669;}
+    html:not(.dark) .bg-emerald-500\/20{background-color:rgba(5,150,105,0.12);}
+    html:not(.dark) .border-emerald-500\/30{border-color:rgba(5,150,105,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-emerald-400 bg-emerald-500/10"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="../trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-emerald-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-emerald-400">Trilha 1 — Fundamentos</a><span>/</span>
+      <span class="text-emerald-400">Módulo 1.3</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-emerald-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-4">MÓDULO 1.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">⚙️ Setup Completo do Ambiente</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">Conta, GitHub, sandbox, worktrees, banco de dados gratuito e o "hello agentic" que valida tudo de ponta a ponta. 60 minutos pra eliminar fricção pelo curso inteiro.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">60</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Base</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-emerald-400">Hands-on</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🔑 Conta ChatGPT e Pagamento Internacional</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Criação da conta, ativação de método de pagamento internacional, escolha do plano e download do app Codex. <strong class="text-emerald-400">A maioria dos brasileiros trava aqui</strong> — método de pagamento, validação de telefone. Resolver de uma vez por todas elimina fricção pelo curso inteiro.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">📋 Checklist de criação — passo a passo</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/40 rounded-lg">
+            <span class="text-emerald-400 mt-0.5">✓</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm">Cria conta em chatgpt.com com email pessoal</div>
+              <div class="text-xs text-neutral-400 mt-0.5">Use email principal. Validação de OTP por SMS internacional funciona com número BR.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/40 rounded-lg">
+            <span class="text-emerald-400 mt-0.5">✓</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm">Cartão internacional com IOF baixo</div>
+              <div class="text-xs text-neutral-400 mt-0.5">Wise, Nomad ou Inter Black. Cartões nacionais comuns rejeitam ou cobram 6,38% IOF.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/40 rounded-lg">
+            <span class="text-emerald-400 mt-0.5">✓</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm">Endereço de cobrança em inglês</div>
+              <div class="text-xs text-neutral-400 mt-0.5">Sem acentos. "Sao Paulo, SP, Brazil". Erros aqui causam 50% das rejeições.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/40 rounded-lg">
+            <span class="text-emerald-400 mt-0.5">✓</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm">Assina ChatGPT Plus ($20) pra começar</div>
+              <div class="text-xs text-neutral-400 mt-0.5">Free não dá Cloud. Plus libera tudo que você precisa nas próximas 4 trilhas.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/40 rounded-lg">
+            <span class="text-emerald-400 mt-0.5">✓</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm">Baixa o app Codex (Mac/Windows)</div>
+              <div class="text-xs text-neutral-400 mt-0.5">openai.com/codex/download. Login com mesma conta ChatGPT.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-amber-900/20 rounded-xl border border-amber-500/30 p-6">
+        <h3 class="text-lg font-semibold text-amber-400 mb-3">⚠️ Armadilhas comuns no BR</h3>
+        <p class="text-neutral-300">Cartão Nubank gold/black geralmente passa, mas alguns bancos travam compras OpenAI por padrão. <strong>Se rejeitar 2x, abre uma Wise (R$ 0 abertura) e cria um cartão virtual</strong> — resolve em 10 minutos. Não vale perder 1 hora brigando com gerente.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">🐙 Conectando GitHub e Permissões</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Autorização do Codex no seu GitHub via OAuth, escolha de quais repositórios o agente acessa, e configuração de escopos. <strong class="text-emerald-400">Configurar permissões corretas evita acidentes</strong> e destrava recursos como Codex Cloud e <code class="text-emerald-400 bg-dark-700 px-1.5 rounded">@codex review</code>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🔐 Modelo mental de escopos</h3>
+        <svg viewBox="0 0 520 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="160" height="160" rx="8" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="100" y="42" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">Sua conta GitHub</text>
+          <circle cx="100" cy="80" r="14" fill="#374151"/>
+          <text x="100" y="84" text-anchor="middle" fill="#d1d5db" font-size="9">👤</text>
+          <text x="100" y="115" text-anchor="middle" fill="#9ca3af" font-size="9">@seu-user</text>
+          <rect x="35" y="130" width="60" height="22" rx="3" fill="#0f4c2e" stroke="#10b981"/>
+          <text x="65" y="144" text-anchor="middle" fill="#10b981" font-size="8">repo-1 ✓</text>
+          <rect x="105" y="130" width="60" height="22" rx="3" fill="#0f4c2e" stroke="#10b981"/>
+          <text x="135" y="144" text-anchor="middle" fill="#10b981" font-size="8">repo-2 ✓</text>
+          <rect x="35" y="156" width="60" height="20" rx="3" fill="#1f2937" stroke="#4b5563"/>
+          <text x="65" y="169" text-anchor="middle" fill="#6b7280" font-size="8">repo-3 ✗</text>
+          <rect x="105" y="156" width="60" height="20" rx="3" fill="#1f2937" stroke="#4b5563"/>
+          <text x="135" y="169" text-anchor="middle" fill="#6b7280" font-size="8">repo-4 ✗</text>
+          <path d="M 180 100 L 220 100" stroke="#10b981" stroke-width="2" stroke-dasharray="4,3"/>
+          <text x="200" y="92" text-anchor="middle" fill="#10b981" font-size="8">OAuth</text>
+          <rect x="220" y="20" width="280" height="160" rx="8" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="360" y="42" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">Codex GitHub App</text>
+          <rect x="240" y="60" width="240" height="22" rx="3" fill="#0f4c2e"/>
+          <text x="248" y="74" fill="#10b981" font-size="9">✓ Read code (repos selecionados)</text>
+          <rect x="240" y="86" width="240" height="22" rx="3" fill="#0f4c2e"/>
+          <text x="248" y="100" fill="#10b981" font-size="9">✓ Write code &amp; push branches</text>
+          <rect x="240" y="112" width="240" height="22" rx="3" fill="#0f4c2e"/>
+          <text x="248" y="126" fill="#10b981" font-size="9">✓ Open Pull Requests</text>
+          <rect x="240" y="138" width="240" height="22" rx="3" fill="#3a2218" stroke="#ef4444"/>
+          <text x="248" y="152" fill="#ef4444" font-size="9">✗ NÃO concede admin nem secrets</text>
+        </svg>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Princípio do menor privilégio</h3>
+        <p class="text-neutral-300">Nunca conceda acesso a "all repositories". Selecione 1 ou 2 repos pra começar. Se o agente precisar mexer em outro, você adiciona em 30 segundos. <strong>Repo de cliente em produção: nunca conecte direto</strong> — use fork ou repo de staging. Acidente em repo cliente é dano de reputação que não se desfaz.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🔒 Modos de Sandbox: read-only, edit, full-access</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Codex permite restringir o que o agente pode fazer no seu sistema. <strong class="text-emerald-400">Calibrar por contexto é segurança operacional</strong>: full-access em código novo é seguro e mais rápido; em código de produção ou cliente, edit ou read-only protege você de surpresas.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5">
+          <div class="text-xs text-neutral-500 mb-1">MODO 1</div>
+          <div class="text-3xl mb-2">👁️</div>
+          <h4 class="font-bold text-blue-400 mb-2">read-only</h4>
+          <ul class="text-sm text-neutral-300 space-y-1.5 mb-3">
+            <li>✓ Lê arquivos</li>
+            <li>✗ Não edita</li>
+            <li>✗ Não roda comandos</li>
+          </ul>
+          <div class="text-xs text-neutral-400 pt-3 border-t border-dark-600"><strong class="text-blue-400">Use:</strong> auditar código de cliente, explicar codebase desconhecido, code review.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-amber-500/30 p-5 ring-1 ring-amber-500/20">
+          <div class="text-xs text-amber-400 mb-1">MODO 2 (default)</div>
+          <div class="text-3xl mb-2">✏️</div>
+          <h4 class="font-bold text-amber-400 mb-2">edit</h4>
+          <ul class="text-sm text-neutral-300 space-y-1.5 mb-3">
+            <li>✓ Lê arquivos</li>
+            <li>✓ Edita arquivos</li>
+            <li>⚠️ Pede permissão pra rodar shell</li>
+          </ul>
+          <div class="text-xs text-neutral-400 pt-3 border-t border-dark-600"><strong class="text-amber-400">Use:</strong> dia a dia, projetos médios, refactor controlado.</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-red-500/30 p-5">
+          <div class="text-xs text-red-400 mb-1">MODO 3</div>
+          <div class="text-3xl mb-2">🔓</div>
+          <h4 class="font-bold text-red-400 mb-2">full-access</h4>
+          <ul class="text-sm text-neutral-300 space-y-1.5 mb-3">
+            <li>✓ Tudo do edit</li>
+            <li>✓ Roda shell sem pedir</li>
+            <li>✓ Instala pacotes, rede</li>
+          </ul>
+          <div class="text-xs text-neutral-400 pt-3 border-t border-dark-600"><strong class="text-red-400">Use:</strong> projetos novos isolados, exploração rápida, sandbox descartável.</div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A regra da pasta nova</h3>
+        <p class="text-neutral-300">Em pasta vazia ou projeto novo do zero, <strong>full-access</strong> economiza 30% do tempo (sem 50 popups de "posso rodar npm install?"). Em pasta com código antigo, cliente ou produção, fica em <strong>edit</strong>. Em código que você nunca leu, começa em <strong>read-only</strong> pro agente explicar, depois sobe.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">🌳 Worktrees — 4 Agentes no Mesmo Repo Sem Conflito</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Git worktree permite ter múltiplas branches do mesmo repo checadas em pastas diferentes ao mesmo tempo. Cada agente trabalha numa worktree própria, sem pisar no outro. <strong class="text-emerald-400">É a base técnica do trabalho multiagente real</strong>.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <div class="bg-dark-700 px-4 py-2 flex items-center space-x-2 border-b border-dark-600">
+          <div class="flex space-x-1.5"><span class="w-2.5 h-2.5 rounded-full bg-red-500"></span><span class="w-2.5 h-2.5 rounded-full bg-yellow-500"></span><span class="w-2.5 h-2.5 rounded-full bg-green-500"></span></div>
+          <span class="text-xs text-neutral-400 font-mono">criando 3 worktrees pra 3 features paralelas</span>
+        </div>
+        <div class="p-5 font-mono text-sm space-y-1">
+          <div class="text-neutral-500"># estrutura: ~/projetos/inboxai (main) + 3 worktrees</div>
+          <div><span class="text-emerald-400">$</span> <span class="text-neutral-300">cd ~/projetos/inboxai</span></div>
+          <div><span class="text-emerald-400">$</span> <span class="text-neutral-300">git worktree add ../inboxai-auth feature/auth</span></div>
+          <div class="text-emerald-400">→ Preparing worktree (new branch 'feature/auth')</div>
+          <div><span class="text-emerald-400">$</span> <span class="text-neutral-300">git worktree add ../inboxai-billing feature/billing</span></div>
+          <div><span class="text-emerald-400">$</span> <span class="text-neutral-300">git worktree add ../inboxai-emails feature/emails</span></div>
+          <div class="mt-3"><span class="text-emerald-400">$</span> <span class="text-neutral-300">git worktree list</span></div>
+          <div class="text-neutral-300">~/projetos/inboxai          a3f9c1 [main]</div>
+          <div class="text-neutral-300">~/projetos/inboxai-auth     b2e8d4 [feature/auth]</div>
+          <div class="text-neutral-300">~/projetos/inboxai-billing  c1d7e9 [feature/billing]</div>
+          <div class="text-neutral-300">~/projetos/inboxai-emails   d0c6fa [feature/emails]</div>
+          <div class="mt-3 text-neutral-500"># abre 3 sessões Codex apontando pra cada pasta</div>
+          <div class="mt-2 text-neutral-500"># quando terminar: git worktree remove ../inboxai-auth</div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📊 Por que não só "branches separadas"?</h3>
+        <p class="text-neutral-300">Branches normais exigem checkout — você só tem uma checada de cada vez. Com worktrees, <strong>3 agentes editam 3 features simultâneas</strong> porque cada uma tem pasta física própria com seu node_modules e build state. Sem isso, é uma fila: você espera o agente A terminar pra começar o B. Com worktrees, é paralelo de verdade.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">🗄️ Convex (ou Supabase) — Banco Gratuito</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Criação de conta gratuita no Convex (ou Supabase), instalação da CLI, link com seu projeto local e validação. <strong class="text-emerald-400">Configurar agora elimina fricção depois</strong> — quando o InboxAI da Trilha 4 precisar de banco, é só plugar.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Critério</th>
+              <th class="text-center p-3 text-emerald-400 font-semibold">Convex</th>
+              <th class="text-center p-3 text-blue-400 font-semibold">Supabase</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-neutral-300">Modelo</td><td class="p-3 text-center text-neutral-300">Reativo (functions)</td><td class="p-3 text-center text-neutral-300">Postgres clássico</td></tr>
+            <tr><td class="p-3 text-neutral-300">Free tier</td><td class="p-3 text-center text-emerald-400">1M function calls/mês</td><td class="p-3 text-center text-blue-400">500MB DB + 2GB transfer</td></tr>
+            <tr><td class="p-3 text-neutral-300">Setup com Codex</td><td class="p-3 text-center text-emerald-400">Excelente</td><td class="p-3 text-center text-emerald-400">Excelente</td></tr>
+            <tr><td class="p-3 text-neutral-300">Realtime nativo</td><td class="p-3 text-center text-emerald-400">✓ default</td><td class="p-3 text-center text-blue-400">✓ via channels</td></tr>
+            <tr><td class="p-3 text-neutral-300">Auth integrado</td><td class="p-3 text-center text-amber-400">via Clerk</td><td class="p-3 text-center text-emerald-400">✓ embutido</td></tr>
+            <tr><td class="p-3 text-neutral-300">Curva de aprendizado</td><td class="p-3 text-center text-emerald-400">Suave</td><td class="p-3 text-center text-emerald-400">Suave (se conhece SQL)</td></tr>
+            <tr><td class="p-3 text-neutral-300">Recomendado pro curso</td><td class="p-3 text-center text-emerald-400 font-bold">✓ default</td><td class="p-3 text-center text-blue-400">alternativa válida</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Por que Convex como default</h3>
+        <p class="text-neutral-300">Convex foi feito pra agentic dev: schema declarado em TypeScript, function calls que o Codex entende sem doc, e zero config de migrations. <strong>Você gasta 8 minutos pra ter um banco funcionando</strong> contra 25–30 do Supabase com auth e RLS. Pra o InboxAI funcionar até o fim do curso, Convex é menor caminho.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">✅ "Hello Agentic" — Smoke Test End-to-End</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Mini-exercício de validação: pedir ao Codex pra criar um arquivo, fazer commit no GitHub e abrir uma PR. <strong class="text-emerald-400">Confirma que conta, repo, sandbox e GitHub estão conversando</strong>. Se algo está mal configurado, descobre aqui em 5 minutos, não no meio do projeto real.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-emerald-400 mb-4">🧪 Roteiro do smoke test</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center">1</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm mb-1">Cria repo público hello-agentic no GitHub</div>
+              <div class="text-xs text-neutral-400">Sem README, sem nada. Vazio mesmo.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center">2</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm mb-1">Abre Codex App e cola o prompt</div>
+              <div class="text-xs text-neutral-400 mt-1 italic">"Clone hello-agentic. Crie um README.md em português explicando que é um repo de teste agentic. Crie um arquivo hello.js que imprime 'Funciona' no console. Commite e abra uma PR."</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center">3</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm mb-1">Observa o agente trabalhar</div>
+              <div class="text-xs text-neutral-400">Ele clona, cria os arquivos, commita, faz push, abre PR. Total: ~90 segundos.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center">4</span>
+            <div class="flex-1">
+              <div class="font-semibold text-neutral-100 text-sm mb-1">Verifica no GitHub que a PR está lá</div>
+              <div class="text-xs text-neutral-400">Se chegou aqui: setup 100%. Pode partir pra Trilha 2 com tranquilidade.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-emerald-900/20 rounded-xl border border-emerald-500/30 p-6">
+        <h3 class="text-lg font-semibold text-emerald-400 mb-3">✅ Definition of Done do Setup</h3>
+        <ul class="space-y-2 text-sm text-neutral-300">
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>App Codex abre e loga sem erro</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>GitHub aparece nas integrações conectadas</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Worktree criada com sucesso e listada em <code class="bg-dark-700 px-1.5 rounded text-emerald-400">git worktree list</code></span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Convex CLI instalada e <code class="bg-dark-700 px-1.5 rounded text-emerald-400">npx convex dev</code> sobe sem erro</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>PR do hello-agentic aberta no GitHub</span></li>
+          <li class="flex items-start space-x-2"><span class="text-emerald-400">✓</span><span>Você sabe alternar entre modo edit e full-access</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-emerald-900/40 via-dark-800 to-dark-800 rounded-xl border border-emerald-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Pagamento internacional resolvido = 0 fricção pelo curso</strong><span class="text-neutral-400"> — Wise como plano B garantido.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">GitHub conectado com escopo mínimo</strong><span class="text-neutral-400"> — nunca "all repos"; cliente em produção fica fora.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">3 modos de sandbox: read-only, edit, full-access</strong><span class="text-neutral-400"> — calibra por contexto, não por preguiça.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Worktrees destravam multiagente real</strong><span class="text-neutral-400"> — 1 pasta por feature, sem fila, sem conflito.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Convex como banco default; Supabase como alternativa</strong><span class="text-neutral-400"> — 8 minutos pra estar online, free tier generoso.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-emerald-400 mt-1">✓</span><div><strong class="text-white">Hello agentic comprova setup ponta a ponta</strong><span class="text-neutral-400"> — PR no GitHub em 90 segundos, ou ajusta antes do projeto real.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-emerald-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">1.4 — Seu Primeiro Fluxo Agentic: app de notas com IA, do prompt ao plan mode até a PR revisada por outro Codex. O fluxo profissional inteiro em 60 minutos.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-1-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: As 4 Faces do Codex</a>
+          <a href="modulo-1-4.html" class="flex-1 text-center px-6 py-3 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-500 transition-colors">Próximo: Primeiro Fluxo Agentic →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 1.3 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>

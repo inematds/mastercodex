@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Módulo 4.3 — Agente IA Dentro do Produto | Master Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{primary:'#FACC15',dark:{900:'#111827',800:'#1f2937',700:'#374151',600:'#4b5563'}}}}}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body{font-family:'Inter',sans-serif;} .dark body{background-color:#111827;}
+    html:not(.dark) body{background-color:#f8fafc;}
+    html:not(.dark) .bg-dark-900{background-color:#ffffff;}
+    html:not(.dark) .bg-dark-800{background-color:#f9fafb;}
+    html:not(.dark) .bg-dark-700{background-color:#f3f4f6;}
+    html:not(.dark) .bg-dark-600{background-color:#e5e7eb;}
+    html:not(.dark) .text-neutral-100{color:#111827;}
+    html:not(.dark) .text-neutral-300{color:#4b5563;}
+    html:not(.dark) .text-neutral-400{color:#6b7280;}
+    html:not(.dark) .text-neutral-500{color:#9ca3af;}
+    html:not(.dark) .border-dark-600{border-color:#d1d5db;}
+    html:not(.dark) .border-dark-700{border-color:#e5e7eb;}
+    html:not(.dark) .text-amber-400{color:#92400e;}
+    html:not(.dark) .bg-amber-500\/20{background-color:rgba(146,64,14,0.12);}
+    html:not(.dark) .bg-amber-500\/10{background-color:rgba(146,64,14,0.08);}
+    html:not(.dark) .border-amber-500\/30{border-color:rgba(146,64,14,0.25);}
+    html:not(.dark) [class*="bg-gradient-to"]{background-image:none!important;}
+    html:not(.dark) .text-primary{color:#a16207;}
+    html:not(.dark) .bg-primary\/10{background-color:rgba(161,98,7,0.08);}
+    html:not(.dark) .border-primary\/40{border-color:rgba(161,98,7,0.25);}
+    html:not(.dark) .text-sky-400{color:#0369a1;}
+    html:not(.dark) .text-yellow-400{color:#a16207;}
+    html:not(.dark) .hover\:text-sky-300:hover{color:#0284c7;}
+    html:not(.dark) .hover\:text-yellow-300:hover{color:#854d0e;}
+    html:not(.dark) .bg-dark-900\/95{background-color:rgba(255,255,255,0.95);}
+    pre{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="../../index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300"><span class="text-2xl">⚡</span><span class="font-bold text-lg hidden sm:inline">Master Codex</span></a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="../trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors"><span class="sm:hidden">T1</span><span class="hidden sm:inline">Fundamentos</span></a>
+          <a href="../trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors"><span class="sm:hidden">T2</span><span class="hidden sm:inline">Agentes</span></a>
+          <a href="../trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors"><span class="sm:hidden">T3</span><span class="hidden sm:inline">Frontend</span></a>
+          <a href="index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-amber-400 bg-amber-500/10"><span class="sm:hidden">T4</span><span class="hidden sm:inline">Backend</span></a>
+          <a href="../trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors"><span class="sm:hidden">T5</span><span class="hidden sm:inline">Multiagente</span></a>
+          <a href="../trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"><span class="sm:hidden">T6</span><span class="hidden sm:inline">Escala</span></a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex items-center space-x-2 text-sm text-neutral-400">
+      <a href="../../index.html" class="hover:text-amber-400">Início</a><span>/</span>
+      <a href="index.html" class="hover:text-amber-400">Trilha 4 — Backend</a><span>/</span>
+      <span class="text-amber-400">Módulo 4.3</span>
+    </div>
+  </nav>
+
+  <header class="bg-gradient-to-br from-amber-900/30 via-dark-800 to-dark-800 py-12 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">MÓDULO 4.3</span>
+      <h1 class="text-3xl sm:text-4xl font-bold mb-4">🤖 Agente IA Dentro do Produto</h1>
+      <p class="text-lg text-neutral-400 max-w-3xl">System prompt que qualifica leads, function calling pra criar deals, handoff humano nos gatilhos certos, custo otimizado com cache e observabilidade pra LGPD — o agente que justifica os R$ 2.000/mês do cliente.</p>
+      <div class="grid grid-cols-4 gap-4 mt-8 max-w-lg">
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">6</div><div class="text-xs text-neutral-400">Tópicos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">75</div><div class="text-xs text-neutral-400">Minutos</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">Avançado</div><div class="text-xs text-neutral-400">Nível</div></div>
+        <div class="bg-dark-800/50 rounded-lg p-3 border border-dark-600"><div class="text-xl font-bold text-amber-400">IA</div><div class="text-xs text-neutral-400">Tipo</div></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+
+    <!-- TÓPICO 1 -->
+    <section id="topico-1" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">1</span>
+        <h2 class="text-2xl font-bold">🎯 System prompt do qualificador</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">90% dos agentes ruins têm system prompt ruim. <strong class="text-amber-400">Estrutura clara em 5 blocos</strong> é a diferença entre "vendedor virtual" e "chatbot esquisito que cliente xinga". Aqui está o template real do qualificador do InboxAI.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🧱 Anatomia do system prompt</h3>
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-3 border border-amber-500/30"><div class="text-amber-400 font-bold mb-1">1. PERSONA</div><div class="text-neutral-400 text-xs">Quem é, tom, nível de formalidade</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border border-amber-500/30"><div class="text-amber-400 font-bold mb-1">2. OBJETIVO</div><div class="text-neutral-400 text-xs">Meta única e mensurável</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border border-amber-500/30"><div class="text-amber-400 font-bold mb-1">3. FERRAMENTAS</div><div class="text-neutral-400 text-xs">O que pode chamar e quando</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border border-amber-500/30"><div class="text-amber-400 font-bold mb-1">4. RESTRIÇÕES</div><div class="text-neutral-400 text-xs">O que nunca fazer</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border border-amber-500/30"><div class="text-amber-400 font-bold mb-1">5. FORMATO</div><div class="text-neutral-400 text-xs">Tamanho, exemplos, idioma</div></div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Exemplo real — Qualificador da Clínica</h3>
+          <span class="text-xs text-neutral-500">prompt</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto"># PERSONA
+Você é Sofia, atendente virtual da Clínica Vita.
+Tom: caloroso, direto, brasileiro. Português coloquial mas educado.
+Nunca diga "como IA" ou se refira a si como bot.
+
+# OBJETIVO
+Qualificar lead que chegou pelo WhatsApp em 3 informações:
+1) Procedimento de interesse (ex: harmonização, botox, limpeza)
+2) Convênio ou particular
+3) Cidade / disponibilidade pra ir até a clínica
+
+Após coletar as 3, chame `createDeal` e `scheduleCall`.
+
+# FERRAMENTAS DISPONÍVEIS
+- updateContact(name, email, tags): use ao saber dado novo
+- createDeal(title, value, stage): após qualificar
+- scheduleCall(datetime, contactId): após createDeal
+- transferToHuman(reason): se cliente irritado, valor &gt; 5k, ou loop
+
+# RESTRIÇÕES
+- NUNCA prometa preço exato. Diga "valor varia, a Dra. confirma na avaliação".
+- NUNCA dê diagnóstico ou orientação médica.
+- NUNCA invente horário sem chamar `scheduleCall`.
+- Se o lead falar de dor aguda, transferToHuman imediatamente.
+
+# FORMATO
+- Resposta máx 2 frases curtas.
+- 1 pergunta por vez. Não despeje 3 perguntas juntas.
+- Emoji só se o cliente usar primeiro.
+- Sempre confirme a próxima ação ("posso agendar amanhã 14h?").</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 O segredo das 2 frases</h3>
+        <p class="text-neutral-300 text-sm">Cliente brasileiro no WhatsApp não lê parágrafo. Forçar "máx 2 frases" no prompt corta 80% das respostas longas e desnaturais. <strong>Mensagem curta + pergunta direta = conversão</strong>. Mensagem longa = lead some.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 2 -->
+    <section id="topico-2" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">2</span>
+        <h2 class="text-2xl font-bold">📚 Contexto: histórico + dados do contato</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Mandar contexto cru a cada turno custa caro e degrada qualidade. <strong class="text-amber-400">Estratégia em camadas</strong>: cache do system prompt, resumo do histórico antigo, janela das últimas N mensagens, perfil estruturado do contato.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🧅 Camadas do contexto enviado</h3>
+        <svg viewBox="0 0 600 200" class="w-full" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="40" width="560" height="35" rx="4" fill="#1f2937" stroke="#10b981" stroke-width="1.5"/>
+          <text x="30" y="62" fill="#10b981" font-size="11" font-weight="bold">SYSTEM PROMPT (cached)</text>
+          <text x="500" y="62" fill="#9ca3af" font-size="9" text-anchor="end">~2k tokens · 90% cache hit</text>
+          <rect x="40" y="85" width="540" height="25" rx="4" fill="#1f2937" stroke="#a78bfa" stroke-width="1.2"/>
+          <text x="50" y="102" fill="#a78bfa" font-size="10" font-weight="bold">PERFIL DO CONTATO (JSON estruturado)</text>
+          <text x="500" y="102" fill="#9ca3af" font-size="8" text-anchor="end">~200 tokens</text>
+          <rect x="60" y="120" width="520" height="25" rx="4" fill="#1f2937" stroke="#0ea5e9" stroke-width="1.2"/>
+          <text x="70" y="137" fill="#0ea5e9" font-size="10" font-weight="bold">RESUMO HISTÓRICO (sumarizado se &gt; 20 msgs)</text>
+          <text x="500" y="137" fill="#9ca3af" font-size="8" text-anchor="end">~300 tokens</text>
+          <rect x="80" y="155" width="500" height="25" rx="4" fill="#1f2937" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="90" y="172" fill="#f59e0b" font-size="10" font-weight="bold">ÚLTIMAS 10 MENSAGENS (literal)</text>
+          <text x="500" y="172" fill="#9ca3af" font-size="8" text-anchor="end">~800 tokens</text>
+          <text x="300" y="20" text-anchor="middle" fill="#6b7280" font-size="10">Total: ~3.3k tokens · custo cache hit: ~$0.0008/turno</text>
+        </svg>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Montagem do contexto</h3>
+          <span class="text-xs text-neutral-500">TypeScript</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">async function buildContext(ctx, conversationId) {
+  const conv = await ctx.db.get(conversationId);
+  const contact = await ctx.db.get(conv.contactId);
+
+  // últimas 10 mensagens em ordem cronológica
+  const recent = await ctx.db
+    .query("messages")
+    .withIndex("by_conversation", q =&gt; q.eq("conversationId", conversationId))
+    .order("desc")
+    .take(10);
+
+  // se a conversa tem &gt; 30 mensagens, gera resumo do que vem antes
+  const total = await ctx.db.query("messages")
+    .withIndex("by_conversation", q =&gt; q.eq("conversationId", conversationId))
+    .collect();
+
+  let summary = "";
+  if (total.length &gt; 20) {
+    summary = conv.summaryCache ?? await summarizeOldMessages(total.slice(0, -10));
+  }
+
+  return {
+    contactProfile: {
+      name: contact.name,
+      tags: contact.tags,
+      lastSeenAt: contact.lastSeenAt,
+      knownDeals: await dealsByContact(ctx, contact._id),
+    },
+    summary,
+    messages: recent.reverse().map(m =&gt; ({
+      role: m.sender === "contact" ? "user" : "assistant",
+      content: m.body,
+    })),
+  };
+}</pre>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> A regra dos 30k</h3>
+        <p class="text-neutral-300 text-sm">Mantenha o input total &lt; 30k tokens por turno. Acima disso, qualidade cai (lost-in-the-middle) e custo dispara linearmente. Se a conversa explode, sumarize a parte antiga e descarte. <strong>Mais contexto não é melhor agente — é agente mais caro e mais confuso</strong>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 3 -->
+    <section id="topico-3" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">3</span>
+        <h2 class="text-2xl font-bold">🛠️ Function calling</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Sem function calling, agente é só chatbot bonito. Com, ele <strong class="text-amber-400">atua de fato no produto</strong> — cria deal, marca calendário, atualiza contato, transfere pra humano. Aí vira valor pago.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-semibold text-amber-400">📄 Schema das funções (formato Anthropic)</h3>
+          <span class="text-xs text-neutral-500">JSON</span>
+        </div>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">[
+  {
+    "name": "updateContact",
+    "description": "Atualiza dados do contato quando descoberta nova informação.",
+    "input_schema": {
+      "type": "object",
+      "properties": {
+        "name":  { "type": "string", "description": "Nome completo se informado" },
+        "email": { "type": "string", "format": "email" },
+        "tags":  { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  {
+    "name": "createDeal",
+    "description": "Cria oportunidade após qualificar lead com procedimento + convênio + cidade.",
+    "input_schema": {
+      "type": "object",
+      "required": ["title", "stage", "estimatedValue"],
+      "properties": {
+        "title":          { "type": "string" },
+        "stage":          { "type": "string", "enum": ["qualified", "proposal"] },
+        "estimatedValue": { "type": "number", "minimum": 0 },
+        "notes":          { "type": "string" }
+      }
+    }
+  },
+  {
+    "name": "scheduleCall",
+    "description": "Agenda call/avaliação. Use somente após cliente confirmar horário.",
+    "input_schema": {
+      "type": "object",
+      "required": ["datetimeISO"],
+      "properties": {
+        "datetimeISO": { "type": "string", "format": "date-time" },
+        "duration":    { "type": "integer", "default": 30 }
+      }
+    }
+  },
+  {
+    "name": "transferToHuman",
+    "description": "Transfere pra humano. Use em: irritação, valor &gt; 5k, dor aguda, loop.",
+    "input_schema": {
+      "type": "object",
+      "required": ["reason"],
+      "properties": {
+        "reason":  { "type": "string", "enum": ["angry","high_value","medical","loop","explicit_request"] },
+        "summary": { "type": "string", "description": "Resumo de 1 frase pro humano" }
+      }
+    }
+  }
+]</pre>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🔄 Loop agentic dentro do Convex</h3>
+<pre class="text-xs text-neutral-300 bg-dark-900 rounded-lg p-4 overflow-x-auto">while (true) {
+  const res = await anthropic.messages.create({ model, system, tools, messages });
+  if (res.stop_reason === "end_turn") {
+    await sendMessage(instance, phone, { kind: "text", text: res.content[0].text });
+    break;
+  }
+  // executa cada tool_use e devolve tool_result
+  const toolUse = res.content.find(c =&gt; c.type === "tool_use");
+  const result = await TOOLS[toolUse.name](ctx, toolUse.input);
+  messages.push({ role: "assistant", content: res.content });
+  messages.push({ role: "user", content: [{ type: "tool_result", tool_use_id: toolUse.id, content: JSON.stringify(result) }] });
+  if (++loops &gt; 6) { await transferToHuman("loop"); break; }
+}</pre>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">⚠️ Sempre limite o loop</h3>
+        <p class="text-neutral-300 text-sm">Sem teto, agente em loop infinito custa <strong>R$ 50 numa conversa</strong> e nunca responde o cliente. Cap de 6 iterações + escalada automática pra humano é o cinto de segurança que evita susto na fatura.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 4 -->
+    <section id="topico-4" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">4</span>
+        <h2 class="text-2xl font-bold">👋 Handoff humano</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Agente que insiste num cliente irritado vira <strong class="text-amber-400">reclamação no Reclame Aqui</strong>. Handoff fluido protege a marca do seu cliente e é o que separa produto profissional de bot de feirinha.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">🚨 Gatilhos automáticos de escalada</h3>
+        <div class="space-y-3">
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">😡</span>
+            <div>
+              <div class="font-semibold text-red-400 text-sm">Irritação detectada</div>
+              <div class="text-xs text-neutral-400">Palavras-chave (cancelar, processar, péssimo) ou sentiment negativo 2 turnos seguidos. Para o bot, alerta humano em &lt; 30s.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">💰</span>
+            <div>
+              <div class="font-semibold text-amber-400 text-sm">Valor alto</div>
+              <div class="text-xs text-neutral-400">Deal estimado &gt; R$ 5k. Bot qualifica mas humano fecha. Aumenta conversão e protege ticket.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">🔁</span>
+            <div>
+              <div class="font-semibold text-blue-400 text-sm">Loop sem progresso</div>
+              <div class="text-xs text-neutral-400">3 turnos sem function call útil ou cliente repetindo a mesma pergunta. Bot reconhece "vou chamar alguém".</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">🏥</span>
+            <div>
+              <div class="font-semibold text-purple-400 text-sm">Tópico sensível</div>
+              <div class="text-xs text-neutral-400">Domínio-específico: dor aguda em clínica, jurídico em advocacia, financeiro em contabilidade. Lista por nicho.</div>
+            </div>
+          </div>
+          <div class="flex items-start space-x-3 p-3 bg-dark-700/50 rounded-lg">
+            <span class="text-2xl">🙋</span>
+            <div>
+              <div class="font-semibold text-emerald-400 text-sm">Pedido explícito</div>
+              <div class="text-xs text-neutral-400">"Quero falar com humano", "atendente". Imediato. Sem questionar.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🎬 UX da transição (mensagem que o cliente vê)</h3>
+        <div class="space-y-3 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-3 border-l-4 border-emerald-500">
+            <div class="text-emerald-400 font-semibold text-xs mb-1">✓ BOM</div>
+            <div class="text-neutral-300">"Vou te conectar com a Carla, do nosso time, que vai te ajudar. Já passei o contexto pra ela. ✨"</div>
+          </div>
+          <div class="bg-dark-700/50 rounded-lg p-3 border-l-4 border-red-500">
+            <div class="text-red-400 font-semibold text-xs mb-1">✗ RUIM</div>
+            <div class="text-neutral-300">"Não consigo te ajudar com isso. Aguarde."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> O resumo de uma frase</h3>
+        <p class="text-neutral-300 text-sm">Quando transferToHuman é chamada, sempre passa um <code class="text-amber-400">summary</code> de 1 frase. Humano abre e em 3 segundos sabe a situação. Sem isso, ele lê 30 mensagens e demora 5 min. <strong>É o detalhe que faz a equipe do cliente amar o produto</strong>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 5 -->
+    <section id="topico-5" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">5</span>
+        <h2 class="text-2xl font-bold">💰 Custos: cache, modelo, batch</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Custo de IA é o que mata margem do SaaS. <strong class="text-amber-400">A diferença entre R$ 8/cliente e R$ 80/cliente é só engenharia de custo</strong>. Aqui você aprende a fazer 90% de redução.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 overflow-hidden mb-6">
+        <table class="w-full text-sm">
+          <thead class="bg-dark-700">
+            <tr>
+              <th class="text-left p-3 text-neutral-400 font-semibold">Técnica</th>
+              <th class="text-left p-3 text-neutral-400 font-semibold">O que é</th>
+              <th class="text-center p-3 text-amber-400 font-semibold">Redução</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-dark-600">
+            <tr><td class="p-3 text-amber-400 font-mono text-xs">Prompt caching</td><td class="p-3 text-neutral-300">System prompt e tools cacheados — 90% de desconto no input repetido</td><td class="p-3 text-center text-emerald-400">~75%</td></tr>
+            <tr><td class="p-3 text-amber-400 font-mono text-xs">Model routing</td><td class="p-3 text-neutral-300">Haiku pra triagem (classificar intent), Sonnet só na resposta complexa</td><td class="p-3 text-center text-emerald-400">~60%</td></tr>
+            <tr><td class="p-3 text-amber-400 font-mono text-xs">Batch API</td><td class="p-3 text-neutral-300">Análise pós-fato (sentiment, qualificação retroativa) com 50% de desconto</td><td class="p-3 text-center text-emerald-400">~50%</td></tr>
+            <tr><td class="p-3 text-amber-400 font-mono text-xs">Sumarização</td><td class="p-3 text-neutral-300">Histórico longo &gt; 20 msgs vira resumo de 300 tokens</td><td class="p-3 text-center text-emerald-400">~40%</td></tr>
+            <tr><td class="p-3 text-amber-400 font-mono text-xs">Stop early</td><td class="p-3 text-neutral-300">Cap de 6 loops e max_tokens=300 cortam loop perdido</td><td class="p-3 text-center text-emerald-400">~20%</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🧮 Custo unitário real (Claude Sonnet 4.6, 2026)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div class="bg-red-900/20 rounded-lg p-4 border border-red-500/30">
+            <div class="text-red-400 font-bold mb-1">SEM otimização</div>
+            <div class="text-2xl font-bold text-red-400">R$ 0,42</div>
+            <div class="text-xs text-neutral-400 mt-1">por conversa de 8 turnos</div>
+          </div>
+          <div class="bg-yellow-900/20 rounded-lg p-4 border border-yellow-500/30">
+            <div class="text-yellow-400 font-bold mb-1">COM cache</div>
+            <div class="text-2xl font-bold text-yellow-400">R$ 0,11</div>
+            <div class="text-xs text-neutral-400 mt-1">só prompt caching ativado</div>
+          </div>
+          <div class="bg-emerald-900/20 rounded-lg p-4 border border-emerald-500/30">
+            <div class="text-emerald-400 font-bold mb-1">COM tudo</div>
+            <div class="text-2xl font-bold text-emerald-400">R$ 0,04</div>
+            <div class="text-xs text-neutral-400 mt-1">cache + routing + sumarização</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-blue-900/20 rounded-xl border border-blue-500/30 p-6">
+        <h3 class="text-lg font-semibold text-blue-400 mb-3">📌 Unit economics do InboxAI</h3>
+        <p class="text-neutral-300 text-sm">Cliente pagando R$ 1.500/mês com média de 800 conversas/mês. Custo IA otimizado: <strong>R$ 32/mês</strong>. Custo IA não-otimizado: <strong>R$ 336/mês</strong>. A diferença não é técnica — é econômica. Margem de 95% vs 78%. <strong>Esse delta é o que paga seu próprio salário</strong>.</p>
+      </div>
+    </section>
+
+    <!-- TÓPICO 6 -->
+    <section id="topico-6" class="mb-16">
+      <div class="flex items-center space-x-4 mb-6">
+        <span class="flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/20 text-amber-400 font-bold text-xl">6</span>
+        <h2 class="text-2xl font-bold">👁️ Observabilidade</h2>
+      </div>
+      <p class="text-neutral-300 mb-6 leading-relaxed">Cliente vai perguntar "por que o bot disse isso?". Sem log, você fica mudo. <strong class="text-amber-400">LGPD obriga rastreabilidade</strong> — sem ela, multa de até 2% do faturamento. Painel de auditoria não é luxo, é compliance.</p>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-4">📋 O que logar a cada turno</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">conversationId</span><div class="text-neutral-400 text-xs mt-1">Cross-reference com a thread</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">model + temperature</span><div class="text-neutral-400 text-xs mt-1">Reproduzir ou comparar versão</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">inputTokens / outputTokens</span><div class="text-neutral-400 text-xs mt-1">Custo por turno e por cliente</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">cacheHitTokens</span><div class="text-neutral-400 text-xs mt-1">Saúde do prompt caching</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">toolsCalled[]</span><div class="text-neutral-400 text-xs mt-1">Auditoria do que o agente fez</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">latencyMs</span><div class="text-neutral-400 text-xs mt-1">SLA percebido</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">stopReason</span><div class="text-neutral-400 text-xs mt-1">end_turn, tool_use, max_tokens</div></div>
+          <div class="bg-dark-700/50 rounded-lg p-3"><span class="text-amber-400 font-mono text-xs">redactedPrompt</span><div class="text-neutral-400 text-xs mt-1">PII mascarada antes de salvar</div></div>
+        </div>
+      </div>
+
+      <div class="bg-dark-800 rounded-xl border border-dark-600 p-6 mb-6">
+        <h3 class="text-base font-semibold text-amber-400 mb-3">🛡️ Direitos LGPD (titular = contato)</h3>
+        <div class="space-y-2 text-sm text-neutral-300">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">📤</span><div><strong>Portabilidade</strong> — endpoint <code class="text-amber-400">GET /lgpd/export?phone=...</code> retorna JSON com toda mensagem e log do contato.</div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">🗑️</span><div><strong>Esquecimento</strong> — <code class="text-amber-400">POST /lgpd/forget</code> apaga ou anonimiza mensagens, mantém só audit trail mínimo legal.</div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">📜</span><div><strong>Acesso</strong> — cliente operador pode ver tudo do contato dele (já tem). ANPD pode requisitar.</div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 font-bold">⏰</span><div><strong>Retenção</strong> — política de delete automático após 24 meses sem interação. Configurável por cliente.</div></div>
+        </div>
+      </div>
+
+      <div class="bg-primary/10 rounded-xl border border-primary/40 p-6">
+        <h3 class="text-lg font-semibold text-primary mb-3 flex items-center"><span class="mr-2">💡</span> Painel de auditoria interno</h3>
+        <p class="text-neutral-300 text-sm">Crie uma tela <code class="text-amber-400">/admin/agent-audit/:conversationId</code> que mostra timeline: cada turno, prompt completo enviado, resposta, tools chamadas, custo, latência. <strong>Isso reduz suporte em 80%</strong> — você não precisa abrir banco pra responder "por que ele fez X". É a diferença de operação amadora vs profissional.</p>
+      </div>
+    </section>
+
+    <!-- RESUMO -->
+    <section class="mb-12">
+      <div class="bg-gradient-to-br from-amber-900/40 via-dark-800 to-dark-800 rounded-xl border border-amber-500/30 p-8">
+        <h2 class="text-2xl font-bold mb-6 flex items-center"><span class="mr-3">✅</span> O que Aprendemos</h2>
+        <div class="space-y-4 mb-8">
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">System prompt em 5 blocos: persona, objetivo, ferramentas, restrições, formato</strong><span class="text-neutral-400"> — máx 2 frases por resposta no WhatsApp BR.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Contexto em camadas mantém input &lt; 30k tokens</strong><span class="text-neutral-400"> — system cached + perfil + resumo + janela.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Function calling transforma chatbot em agente que age</strong><span class="text-neutral-400"> — createDeal, scheduleCall, transferToHuman.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">5 gatilhos de handoff humano protegem a marca</strong><span class="text-neutral-400"> — irritação, valor alto, loop, tópico sensível, pedido.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Cache + routing + sumarização cortam custo em 90%</strong><span class="text-neutral-400"> — R$ 0,42 vira R$ 0,04 por conversa.</span></div></div>
+          <div class="flex items-start space-x-3"><span class="text-amber-400 mt-1">✓</span><div><strong class="text-white">Logs estruturados + endpoints LGPD = compliance</strong><span class="text-neutral-400"> — painel de auditoria reduz suporte em 80%.</span></div></div>
+        </div>
+        <div class="bg-dark-800/50 rounded-lg p-4 mb-8">
+          <h3 class="font-semibold text-amber-400 mb-2">Próximo Módulo:</h3>
+          <p class="text-neutral-300">4.4 — Auth multi-tenant + Deploy: Clerk, RLS, secrets, Vercel + Convex Cloud, domínio próprio com SSL e InboxAI ao vivo na web.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="modulo-4-2.html" class="flex-1 text-center px-6 py-3 bg-dark-700 text-neutral-300 rounded-lg font-semibold hover:bg-dark-600 transition-colors">← Anterior: Evolution API</a>
+          <a href="modulo-4-4.html" class="flex-1 text-center px-6 py-3 bg-amber-600 text-white rounded-lg font-semibold hover:bg-amber-500 transition-colors">Próximo: Auth + Deploy →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm"><p>Master Codex — Módulo 4.3 — 2026</p></div>
+  </footer>
+
+  <script>
+    const tt=document.getElementById('theme-toggle');const di=document.getElementById('theme-toggle-dark-icon');const li=document.getElementById('theme-toggle-light-icon');const html=document.documentElement;
+    if(localStorage.getItem('theme')==='light'){di.classList.remove('hidden');html.classList.remove('dark');}else{li.classList.remove('hidden');}
+    tt.addEventListener('click',()=>{di.classList.toggle('hidden');li.classList.toggle('hidden');html.classList.toggle('dark');localStorage.setItem('theme',html.classList.contains('dark')?'dark':'light');});
+  </script>
+</body>
+</html>
