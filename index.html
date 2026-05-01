@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Master Codex — Curso completo de desenvolvimento agentic com ChatGPT 5.5 Codex</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#FACC15',
+            dark: { 900: '#111827', 800: '#1f2937', 700: '#374151', 600: '#4b5563' }
+          }
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .dark body { background-color: #111827; }
+
+    /* Light mode overrides - OBRIGATORIO */
+    html:not(.dark) body { background-color: #f8fafc; }
+    html:not(.dark) .bg-dark-900 { background-color: #ffffff; }
+    html:not(.dark) .bg-dark-800 { background-color: #f9fafb; }
+    html:not(.dark) .bg-dark-700 { background-color: #f3f4f6; }
+    html:not(.dark) .bg-dark-600 { background-color: #e5e7eb; }
+    html:not(.dark) .text-neutral-100 { color: #111827; }
+    html:not(.dark) .text-neutral-300 { color: #4b5563; }
+    html:not(.dark) .text-neutral-400 { color: #6b7280; }
+    html:not(.dark) .text-neutral-500 { color: #9ca3af; }
+    html:not(.dark) .border-dark-600 { border-color: #d1d5db; }
+    html:not(.dark) .border-dark-700 { border-color: #e5e7eb; }
+
+    /* Light mode - emerald */
+    html:not(.dark) .text-emerald-400 { color: #059669; }
+    html:not(.dark) .bg-emerald-500\/20 { background-color: rgba(5,150,105,0.12); }
+    html:not(.dark) .border-emerald-500\/30 { border-color: rgba(5,150,105,0.25); }
+    html:not(.dark) .hover\:text-emerald-400:hover { color: #059669; }
+    html:not(.dark) .hover\:bg-emerald-500\/10:hover { background-color: rgba(5,150,105,0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-emerald-400 { color: #059669; }
+
+    /* Light mode - blue */
+    html:not(.dark) .text-blue-400 { color: #2563eb; }
+    html:not(.dark) .bg-blue-500\/20 { background-color: rgba(37,99,235,0.12); }
+    html:not(.dark) .border-blue-500\/30 { border-color: rgba(37,99,235,0.25); }
+    html:not(.dark) .hover\:text-blue-400:hover { color: #2563eb; }
+    html:not(.dark) .hover\:bg-blue-500\/10:hover { background-color: rgba(37,99,235,0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-blue-400 { color: #2563eb; }
+
+    /* Light mode - purple */
+    html:not(.dark) .text-purple-400 { color: #7c3aed; }
+    html:not(.dark) .bg-purple-500\/20 { background-color: rgba(124,58,237,0.12); }
+    html:not(.dark) .border-purple-500\/30 { border-color: rgba(124,58,237,0.25); }
+    html:not(.dark) .hover\:text-purple-400:hover { color: #7c3aed; }
+    html:not(.dark) .hover\:bg-purple-500\/10:hover { background-color: rgba(124,58,237,0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-purple-400 { color: #7c3aed; }
+
+    /* Light mode - amber */
+    html:not(.dark) .text-amber-400 { color: #92400e; }
+    html:not(.dark) .bg-amber-500\/20 { background-color: rgba(146,64,14,0.12); }
+    html:not(.dark) .border-amber-500\/30 { border-color: rgba(146,64,14,0.25); }
+    html:not(.dark) .hover\:text-amber-400:hover { color: #92400e; }
+    html:not(.dark) .hover\:bg-amber-500\/10:hover { background-color: rgba(146,64,14,0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-amber-400 { color: #92400e; }
+
+    /* Light mode - teal */
+    html:not(.dark) .text-teal-400 { color: #0f766e; }
+    html:not(.dark) .bg-teal-500\/20 { background-color: rgba(15,118,110,0.12); }
+    html:not(.dark) .border-teal-500\/30 { border-color: rgba(15,118,110,0.25); }
+    html:not(.dark) .hover\:text-teal-400:hover { color: #0f766e; }
+    html:not(.dark) .hover\:bg-teal-500\/10:hover { background-color: rgba(15,118,110,0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-teal-400 { color: #0f766e; }
+
+    /* Light mode - rose */
+    html:not(.dark) .text-rose-400 { color: #9f1239; }
+    html:not(.dark) .bg-rose-500\/20 { background-color: rgba(159,18,57,0.12); }
+    html:not(.dark) .border-rose-500\/30 { border-color: rgba(159,18,57,0.25); }
+    html:not(.dark) .hover\:text-rose-400:hover { color: #9f1239; }
+    html:not(.dark) .hover\:bg-rose-500\/10:hover { background-color: rgba(159,18,57,0.08); }
+    html:not(.dark) .group:hover .group-hover\:text-rose-400 { color: #9f1239; }
+
+    /* Light mode - remove gradientes */
+    html:not(.dark) [class*="bg-gradient-to"] { background-image: none !important; }
+
+    /* Light mode - cores especiais */
+    html:not(.dark) .text-primary { color: #a16207; }
+    html:not(.dark) .text-sky-400 { color: #0369a1; }
+    html:not(.dark) .text-yellow-400 { color: #a16207; }
+    html:not(.dark) .hover\:text-sky-300:hover { color: #0284c7; }
+    html:not(.dark) .hover\:text-yellow-300:hover { color: #854d0e; }
+
+    /* Light mode - nav */
+    html:not(.dark) .bg-dark-900\/95 { background-color: rgba(255,255,255,0.95); }
+  </style>
+</head>
+<body class="bg-dark-900 text-neutral-100 min-h-screen">
+
+  <!-- NAVIGATION -->
+  <nav class="sticky top-0 z-50 bg-dark-900/95 backdrop-blur-sm border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-14">
+        <div class="flex items-center space-x-4">
+          <a href="index.html" class="flex items-center space-x-2 text-yellow-400 hover:text-yellow-300">
+            <span class="text-2xl">⚡</span>
+            <span class="font-bold text-lg hidden sm:inline">Master Codex</span>
+          </a>
+          <span class="text-neutral-600">|</span>
+          <a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300 text-sm font-medium">INEMA.CLUB</a>
+        </div>
+        <div class="flex items-center space-x-1 sm:space-x-2">
+          <a href="curso/trilha1/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+            <span class="sm:hidden">T1</span>
+            <span class="hidden sm:inline">Fundamentos</span>
+          </a>
+          <a href="curso/trilha2/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-blue-400 hover:bg-blue-500/10 transition-colors">
+            <span class="sm:hidden">T2</span>
+            <span class="hidden sm:inline">Agentes</span>
+          </a>
+          <a href="curso/trilha3/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-purple-400 hover:bg-purple-500/10 transition-colors">
+            <span class="sm:hidden">T3</span>
+            <span class="hidden sm:inline">Frontend</span>
+          </a>
+          <a href="curso/trilha4/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-amber-400 hover:bg-amber-500/10 transition-colors">
+            <span class="sm:hidden">T4</span>
+            <span class="hidden sm:inline">Backend</span>
+          </a>
+          <a href="curso/trilha5/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-teal-400 hover:bg-teal-500/10 transition-colors">
+            <span class="sm:hidden">T5</span>
+            <span class="hidden sm:inline">Multiagente</span>
+          </a>
+          <a href="curso/trilha6/index.html" class="px-3 py-1.5 rounded-lg text-sm font-semibold text-neutral-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors">
+            <span class="sm:hidden">T6</span>
+            <span class="hidden sm:inline">Escala</span>
+          </a>
+          <button id="theme-toggle" class="p-2 rounded-lg bg-dark-700 hover:bg-dark-600 transition-colors ml-2">
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5 text-neutral-300" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="bg-gradient-to-br from-yellow-900/20 via-dark-800 to-dark-900 py-16 border-b border-dark-600">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <span class="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-semibold rounded-full mb-6">CURSO PREMIUM</span>
+          <h1 class="text-4xl sm:text-5xl font-bold mb-6 leading-tight">⚡ Master Codex — A Fábrica de SaaS com Agentes de IA</h1>
+          <p class="text-lg text-neutral-400 mb-8 leading-relaxed">
+            De "vibe coder" curioso a operador de uma fábrica de software com agentes — em 6 trilhas, com um SaaS real (InboxAI) publicado e vendável ao final.
+          </p>
+          <div class="grid grid-cols-3 gap-4 mb-8">
+            <div class="bg-dark-800 rounded-lg p-4 border border-dark-600 text-center">
+              <div class="text-2xl font-bold text-primary">6</div>
+              <div class="text-xs text-neutral-400 mt-1">Trilhas</div>
+            </div>
+            <div class="bg-dark-800 rounded-lg p-4 border border-dark-600 text-center">
+              <div class="text-2xl font-bold text-primary">24</div>
+              <div class="text-xs text-neutral-400 mt-1">Módulos</div>
+            </div>
+            <div class="bg-dark-800 rounded-lg p-4 border border-dark-600 text-center">
+              <div class="text-2xl font-bold text-primary">144</div>
+              <div class="text-xs text-neutral-400 mt-1">Tópicos</div>
+            </div>
+          </div>
+          <div class="flex justify-start">
+            <a href="curso/trilha1/index.html" class="px-6 py-3 bg-primary text-dark-900 font-bold rounded-lg hover:bg-yellow-300 transition-colors">
+              Começar pela Trilha 1 →
+            </a>
+          </div>
+        </div>
+
+        <!-- HERO ILLUSTRATION: Agentic Factory -->
+        <div class="flex justify-center">
+          <svg viewBox="0 0 480 380" class="w-full max-w-md" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="brainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#FACC15;stop-opacity:1"/>
+                <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0.9"/>
+              </linearGradient>
+            </defs>
+
+            <!-- DIRECTOR / HUMAN -->
+            <g transform="translate(20, 140)">
+              <rect x="0" y="0" width="100" height="100" rx="14" fill="#1f2937" stroke="#FACC15" stroke-width="2"/>
+              <text x="50" y="22" text-anchor="middle" fill="#FACC15" font-size="11" font-weight="bold">VOCÊ</text>
+              <text x="50" y="36" text-anchor="middle" fill="#9ca3af" font-size="8">Diretor</text>
+              <text x="50" y="68" text-anchor="middle" font-size="36">🧠</text>
+              <text x="50" y="92" text-anchor="middle" fill="#9ca3af" font-size="8">de Agentes</text>
+            </g>
+
+            <!-- ARROWS RADIATING -->
+            <g stroke="#FACC15" stroke-width="1.5" fill="none">
+              <path d="M 125 165 L 175 80" stroke-dasharray="4,3"/>
+              <path d="M 125 175 L 175 145" stroke-dasharray="4,3"/>
+              <path d="M 125 195 L 175 215" stroke-dasharray="4,3"/>
+              <path d="M 125 215 L 175 290" stroke-dasharray="4,3"/>
+            </g>
+
+            <!-- AGENT 1: Frontend -->
+            <g transform="translate(180, 50)">
+              <rect x="0" y="0" width="120" height="60" rx="10" fill="#1f2937" stroke="#a78bfa" stroke-width="1.5"/>
+              <text x="60" y="20" text-anchor="middle" fill="#a78bfa" font-size="9" font-weight="bold">AGENTE FRONTEND</text>
+              <text x="60" y="38" text-anchor="middle" font-size="20">🎨</text>
+              <text x="60" y="52" text-anchor="middle" fill="#9ca3af" font-size="7">UI + componentes</text>
+            </g>
+
+            <!-- AGENT 2: Backend -->
+            <g transform="translate(180, 120)">
+              <rect x="0" y="0" width="120" height="60" rx="10" fill="#1f2937" stroke="#fbbf24" stroke-width="1.5"/>
+              <text x="60" y="20" text-anchor="middle" fill="#fbbf24" font-size="9" font-weight="bold">AGENTE BACKEND</text>
+              <text x="60" y="38" text-anchor="middle" font-size="20">⚙️</text>
+              <text x="60" y="52" text-anchor="middle" fill="#9ca3af" font-size="7">DB + API</text>
+            </g>
+
+            <!-- AGENT 3: QA -->
+            <g transform="translate(180, 190)">
+              <rect x="0" y="0" width="120" height="60" rx="10" fill="#1f2937" stroke="#2dd4bf" stroke-width="1.5"/>
+              <text x="60" y="20" text-anchor="middle" fill="#2dd4bf" font-size="9" font-weight="bold">AGENTE QA</text>
+              <text x="60" y="38" text-anchor="middle" font-size="20">🔍</text>
+              <text x="60" y="52" text-anchor="middle" fill="#9ca3af" font-size="7">testa no browser</text>
+            </g>
+
+            <!-- AGENT 4: Marketing -->
+            <g transform="translate(180, 260)">
+              <rect x="0" y="0" width="120" height="60" rx="10" fill="#1f2937" stroke="#fb7185" stroke-width="1.5"/>
+              <text x="60" y="20" text-anchor="middle" fill="#fb7185" font-size="9" font-weight="bold">AGENTE MARKETING</text>
+              <text x="60" y="38" text-anchor="middle" font-size="20">📣</text>
+              <text x="60" y="52" text-anchor="middle" fill="#9ca3af" font-size="7">vídeo + landing</text>
+            </g>
+
+            <!-- ARROWS TO PRODUCT -->
+            <g stroke="#10b981" stroke-width="1.5" fill="none">
+              <path d="M 305 80 L 355 175" stroke-dasharray="4,3"/>
+              <path d="M 305 150 L 355 180" stroke-dasharray="4,3"/>
+              <path d="M 305 220 L 355 195" stroke-dasharray="4,3"/>
+              <path d="M 305 290 L 355 200" stroke-dasharray="4,3"/>
+            </g>
+
+            <!-- PRODUCT: SaaS -->
+            <g transform="translate(360, 140)">
+              <rect x="0" y="0" width="100" height="100" rx="14" fill="#1f2937" stroke="#10b981" stroke-width="2"/>
+              <text x="50" y="22" text-anchor="middle" fill="#10b981" font-size="11" font-weight="bold">SAAS</text>
+              <text x="50" y="36" text-anchor="middle" fill="#9ca3af" font-size="8">publicado</text>
+              <text x="50" y="68" text-anchor="middle" font-size="36">🚀</text>
+              <text x="50" y="92" text-anchor="middle" fill="#10b981" font-size="8">vendável</text>
+            </g>
+
+            <!-- BOTTOM LABEL -->
+            <text x="240" y="365" text-anchor="middle" fill="#FACC15" font-size="10" font-weight="bold">Você comanda. Os agentes constroem.</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TRILHAS -->
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold mb-4">As 6 Trilhas do Master Codex</h2>
+      <p class="text-neutral-400 max-w-2xl mx-auto">Caminho progressivo do nivelamento à fábrica de micro-SaaS, com o produto-âncora <strong class="text-primary">InboxAI</strong> sendo construído ao longo das trilhas 3, 4 e 5.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- TRILHA 1 -->
+      <a href="curso/trilha1/index.html" class="group block bg-dark-800 rounded-xl border border-dark-600 hover:border-emerald-500/30 transition-all duration-200 hover:bg-emerald-500/5 p-6">
+        <div class="text-4xl mb-4">🌱</div>
+        <div class="inline-block px-2 py-0.5 bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-full mb-3">TRILHA 1</div>
+        <h3 class="text-xl font-bold mb-2 group-hover:text-emerald-400 transition-colors">Fundamentos do Desenvolvimento Agentic</h3>
+        <p class="text-neutral-400 text-sm mb-4 leading-relaxed">Mindset de diretor de agentes, as 4 superfícies do Codex, setup completo do ambiente e seu primeiro fluxo agentic do prompt à PR.</p>
+        <div class="flex items-center justify-between text-xs text-neutral-500">
+          <span>4 módulos</span>
+          <span>~4h</span>
+          <span class="text-emerald-400 font-semibold">Nivelamento →</span>
+        </div>
+      </a>
+
+      <!-- TRILHA 2 -->
+      <a href="curso/trilha2/index.html" class="group block bg-dark-800 rounded-xl border border-dark-600 hover:border-blue-500/30 transition-all duration-200 hover:bg-blue-500/5 p-6">
+        <div class="text-4xl mb-4">📜</div>
+        <div class="inline-block px-2 py-0.5 bg-blue-500/20 text-blue-400 text-xs font-semibold rounded-full mb-3">TRILHA 2</div>
+        <h3 class="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">A Linguagem dos Agentes</h3>
+        <p class="text-neutral-400 text-sm mb-4 leading-relaxed">AGENTS.md como manual operacional, skills reutilizáveis, reverse prompting, definition of done, plan mode, sandbox e worktrees.</p>
+        <div class="flex items-center justify-between text-xs text-neutral-500">
+          <span>4 módulos</span>
+          <span>~5h</span>
+          <span class="text-blue-400 font-semibold">Disciplina →</span>
+        </div>
+      </a>
+
+      <!-- TRILHA 3 -->
+      <a href="curso/trilha3/index.html" class="group block bg-dark-800 rounded-xl border border-dark-600 hover:border-purple-500/30 transition-all duration-200 hover:bg-purple-500/5 p-6">
+        <div class="text-4xl mb-4">🎨</div>
+        <div class="inline-block px-2 py-0.5 bg-purple-500/20 text-purple-400 text-xs font-semibold rounded-full mb-3">TRILHA 3</div>
+        <h3 class="text-xl font-bold mb-2 group-hover:text-purple-400 transition-colors">Design e Frontend com IA</h3>
+        <p class="text-neutral-400 text-sm mb-4 leading-relaxed">Image Gen 2 para UIs, construção do inbox unificado do InboxAI, kanban de CRM, dashboard de métricas e iteração visual no browser embutido.</p>
+        <div class="flex items-center justify-between text-xs text-neutral-500">
+          <span>4 módulos</span>
+          <span>~6h</span>
+          <span class="text-purple-400 font-semibold">InboxAI UI →</span>
+        </div>
+      </a>
+
+      <!-- TRILHA 4 -->
+      <a href="curso/trilha4/index.html" class="group block bg-dark-800 rounded-xl border border-dark-600 hover:border-amber-500/30 transition-all duration-200 hover:bg-amber-500/5 p-6">
+        <div class="text-4xl mb-4">⚙️</div>
+        <div class="inline-block px-2 py-0.5 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-3">TRILHA 4</div>
+        <h3 class="text-xl font-bold mb-2 group-hover:text-amber-400 transition-colors">Backend, WhatsApp e Agente IA</h3>
+        <p class="text-neutral-400 text-sm mb-4 leading-relaxed">Convex + modelagem de dados, integração com WhatsApp via Evolution API, agente IA dentro do produto, auth multi-tenant e deploy na Vercel.</p>
+        <div class="flex items-center justify-between text-xs text-neutral-500">
+          <span>4 módulos</span>
+          <span>~6h</span>
+          <span class="text-amber-400 font-semibold">InboxAI Live →</span>
+        </div>
+      </a>
+
+      <!-- TRILHA 5 -->
+      <a href="curso/trilha5/index.html" class="group block bg-dark-800 rounded-xl border border-dark-600 hover:border-teal-500/30 transition-all duration-200 hover:bg-teal-500/5 p-6">
+        <div class="text-4xl mb-4">🤝</div>
+        <div class="inline-block px-2 py-0.5 bg-teal-500/20 text-teal-400 text-xs font-semibold rounded-full mb-3">TRILHA 5</div>
+        <h3 class="text-xl font-bold mb-2 group-hover:text-teal-400 transition-colors">Múltiplos Agentes em Paralelo</h3>
+        <p class="text-neutral-400 text-sm mb-4 leading-relaxed">Arquitetura multiagente sem caos, Browser Use + Computer Use, Remotion para vídeo de lançamento, landing + copy + posts pelo agente de marketing.</p>
+        <div class="flex items-center justify-between text-xs text-neutral-500">
+          <span>4 módulos</span>
+          <span>~5h</span>
+          <span class="text-teal-400 font-semibold">Equipe Solo →</span>
+        </div>
+      </a>
+
+      <!-- TRILHA 6 -->
+      <a href="curso/trilha6/index.html" class="group block bg-dark-800 rounded-xl border border-dark-600 hover:border-rose-500/30 transition-all duration-200 hover:bg-rose-500/5 p-6">
+        <div class="text-4xl mb-4">🏭</div>
+        <div class="inline-block px-2 py-0.5 bg-rose-500/20 text-rose-400 text-xs font-semibold rounded-full mb-3">TRILHA 6</div>
+        <h3 class="text-xl font-bold mb-2 group-hover:text-rose-400 transition-colors">Fábrica de Micro-SaaS</h3>
+        <p class="text-neutral-400 text-sm mb-4 leading-relaxed">Codex Cloud + GitHub PRs + @codex review, automations recorrentes, criando suas próprias skills e o método para lançar 1 micro-SaaS por semana.</p>
+        <div class="flex items-center justify-between text-xs text-neutral-500">
+          <span>4 módulos</span>
+          <span>~5h</span>
+          <span class="text-rose-400 font-semibold">Escala →</span>
+        </div>
+      </a>
+    </div>
+
+    <!-- O MÉTODO -->
+    <div class="mt-20 mb-8">
+      <h2 class="text-2xl font-bold mb-2 text-center">🧭 O Método Master Codex Full-Stack Agentic Build</h2>
+      <p class="text-neutral-400 text-center mb-8">Cinco pilares que se repetem em todo projeto que você vai construir</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 text-center">
+          <div class="text-3xl mb-2">🗺️</div>
+          <div class="text-emerald-400 font-bold mb-1">1. Planejar</div>
+          <div class="text-xs text-neutral-400">Transformar ideia em escopo testável</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 text-center">
+          <div class="text-3xl mb-2">🎨</div>
+          <div class="text-purple-400 font-bold mb-1">2. Projetar</div>
+          <div class="text-xs text-neutral-400">UI gerada por IA + arquitetura clara</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 text-center">
+          <div class="text-3xl mb-2">🔨</div>
+          <div class="text-amber-400 font-bold mb-1">3. Construir</div>
+          <div class="text-xs text-neutral-400">Frontend + backend + banco + APIs</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 text-center">
+          <div class="text-3xl mb-2">✅</div>
+          <div class="text-teal-400 font-bold mb-1">4. Validar</div>
+          <div class="text-xs text-neutral-400">Testes, browser, revisão por agente</div>
+        </div>
+        <div class="bg-dark-800 rounded-xl border border-dark-600 p-5 text-center">
+          <div class="text-3xl mb-2">🚀</div>
+          <div class="text-rose-400 font-bold mb-1">5. Lançar</div>
+          <div class="text-xs text-neutral-400">Marketing, deploy, automações</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJETO ANCORA -->
+    <div class="mt-16 bg-gradient-to-br from-amber-900/20 via-dark-800 to-dark-800 rounded-2xl border border-amber-500/30 p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+        <div>
+          <span class="inline-block px-3 py-1 bg-amber-500/20 text-amber-400 text-xs font-semibold rounded-full mb-4">PROJETO-ÂNCORA</span>
+          <h2 class="text-3xl font-bold mb-4">📨 InboxAI</h2>
+          <p class="text-neutral-300 mb-6 leading-relaxed">Plataforma omnichannel de atendimento e vendas com agentes de IA. WhatsApp, Instagram, email e web chat numa caixa única, com agente que qualifica leads 24/7 e pipeline de CRM completo.</p>
+          <ul class="space-y-2 text-sm text-neutral-300">
+            <li>📱 WhatsApp via Evolution API (sem aprovação Meta)</li>
+            <li>🤖 Agente IA qualificador, follow-up e pós-venda</li>
+            <li>📊 Pipeline de CRM com kanban drag-and-drop</li>
+            <li>🏢 Multi-tenant: revendável white-label como serviço</li>
+          </ul>
+        </div>
+        <div class="bg-dark-900 rounded-xl border border-dark-600 p-6">
+          <div class="text-xs text-neutral-500 mb-3">CONSTRUÍDO AO LONGO DE</div>
+          <div class="space-y-2">
+            <div class="flex items-center space-x-3">
+              <span class="text-purple-400 font-bold text-sm">T3</span>
+              <span class="text-neutral-300 text-sm">Frontend e UI</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-amber-400 font-bold text-sm">T4</span>
+              <span class="text-neutral-300 text-sm">Backend, WhatsApp, agente IA, deploy</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-teal-400 font-bold text-sm">T5</span>
+              <span class="text-neutral-300 text-sm">Marketing, vídeo, landing, copy</span>
+            </div>
+            <div class="flex items-center space-x-3">
+              <span class="text-rose-400 font-bold text-sm">T6</span>
+              <span class="text-neutral-300 text-sm">Variações verticais, white-label</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="border-t border-dark-600 py-8 mt-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500 text-sm">
+      <p>Master Codex — Desenvolvimento Agentic com ChatGPT 5.5 Codex — 2026</p>
+      <p class="mt-2"><a href="https://inema.club" target="_blank" class="text-sky-400 hover:text-sky-300">INEMA.CLUB</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const html = document.documentElement;
+    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && !html.classList.contains('dark'))) {
+      themeToggleDarkIcon.classList.remove('hidden');
+      html.classList.remove('dark');
+    } else {
+      themeToggleLightIcon.classList.remove('hidden');
+    }
+    themeToggle.addEventListener('click', () => {
+      themeToggleDarkIcon.classList.toggle('hidden');
+      themeToggleLightIcon.classList.toggle('hidden');
+      html.classList.toggle('dark');
+      localStorage.setItem('theme', html.classList.contains('dark') ? 'dark' : 'light');
+    });
+  </script>
+</body>
+</html>
